@@ -3,8 +3,6 @@ package com.romansun.gui.controller.impl;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
@@ -15,8 +13,6 @@ import javafx.scene.layout.AnchorPane;
 import com.romansun.gui.controller.AbstractController;
 
 public class MainWindowController extends AbstractController implements Initializable {
-	
-	private static Map<String, String> data = new HashMap<String, String>();
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -34,18 +30,6 @@ public class MainWindowController extends AbstractController implements Initiali
 			System.out.println("Ошибка при загрузке Tabs: " + ex.getMessage());
 			ex.printStackTrace();
 		}
-	}
-
-	@Override
-	public Map<String, String> getData() {
-		// TODO Auto-generated method stub
-		return data;
-	}
-
-	@Override
-	public void setData(Map<String, String> data) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	@FXML
