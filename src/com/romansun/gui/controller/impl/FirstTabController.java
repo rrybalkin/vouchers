@@ -3,8 +3,6 @@ package com.romansun.gui.controller.impl;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 import javafx.beans.value.ChangeListener;
@@ -27,11 +25,8 @@ import com.romansun.hibernate.logic.Talon;
 import com.romansun.hibernate.logic.Visitor;
 
 public class FirstTabController extends AbstractController implements Initializable {
-	
-	private static Map<String, String> data = new HashMap<String, String>();
 	private static Visitor chooseVisitor;
 	private static Association chooseFilter;
-	
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -61,14 +56,6 @@ public class FirstTabController extends AbstractController implements Initializa
 					loadVisitors();
 				}
 			}});
-	}
-	
-	public Map<String, String> getData() {
-		return data;
-	}
-
-	public void setData(Map<String, String> data) {
-	
 	}
 	
 	@FXML
@@ -105,6 +92,7 @@ public class FirstTabController extends AbstractController implements Initializa
 	private Button btnRemove;
 	@FXML
 	private TitledPane titledPane;
+	
 	@FXML
 	private void addTalon(ActionEvent event) {
 		Integer lunches = countLunches.getValue();
@@ -121,10 +109,7 @@ public class FirstTabController extends AbstractController implements Initializa
 		countDinners.getSelectionModel().selectFirst();
 		loadInfoAboutVisitor();
 	}
-	@FXML 
-	private void setMask(ActionEvent event) {
 
-	}
 	@FXML 
 	private void changeFilter(ActionEvent event) {
 		Association newFilter = filter.getValue();
@@ -133,6 +118,7 @@ public class FirstTabController extends AbstractController implements Initializa
 			loadVisitors();
 		}
 	}
+	
 	@FXML
 	private void updateVisitor(ActionEvent event) {
 		Visitor newVisitor = new Visitor();
@@ -161,6 +147,7 @@ public class FirstTabController extends AbstractController implements Initializa
 	private void deleteVisitor(ActionEvent event) {
 		try {
 			dao.getVisitorDAO().deleteVisitor(chooseVisitor);
+			loadVisitors();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
