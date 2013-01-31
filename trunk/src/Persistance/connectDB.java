@@ -192,7 +192,7 @@ public class connectDB {
 			// connecting... and return object to connectivity
 			conn = DriverManager
 					.getConnection("jdbc:oracle:thin:@localhost:1521:xe",
-							"system", "1a2b3c4d");
+							"system", "admin");
 
 			if (conn == null) {
 				System.out.println("Нет соединения с БД!");
