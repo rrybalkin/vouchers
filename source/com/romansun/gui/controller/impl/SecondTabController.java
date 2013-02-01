@@ -3,6 +3,8 @@ package com.romansun.gui.controller.impl;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.ResourceBundle;
 
 import name.antonsmirnov.javafx.dialog.Dialog;
@@ -10,17 +12,9 @@ import name.antonsmirnov.javafx.dialog.Dialog;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBoxBuilder;
-import javafx.scene.text.Text;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import com.romansun.gui.controller.AbstractController;
 import com.romansun.hibernate.logic.Association;
@@ -28,17 +22,21 @@ import com.romansun.hibernate.logic.Talon;
 import com.romansun.hibernate.logic.Visitor;
 
 public class SecondTabController extends AbstractController implements Initializable {
+	
+	private static Observable observable = new Observable() {
+		public void notifyObservers(Object arg) {
+			setChanged();
+			super.notifyObservers(arg);
+		}
+	};
+	
+	public static void addObserver(Observer o) {
+		observable.addObserver(o);
+	}
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		try {
-			Collection<Association> associations = dao.getAssociationDAO().getAllAssociations();
-			cbGroup.getItems().clear();
-			cbGroup.getItems().setAll(associations);
-			cbGroup.getSelectionModel().selectFirst();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		loadGroups();
 	}
 	
 	@FXML
@@ -83,10 +81,11 @@ public class SecondTabController extends AbstractController implements Initializ
 				dao.getTalonDAO().addTalon(talon);
 				dao.getVisitorDAO().addVisitor(visitor);
 				Dialog.showInfo("Ура, все добавилось", "Новый посетитель успешно добавлен в базу данных!");
+				observable.notifyObservers();
 			}catch (SQLException e) {
 				e.printStackTrace();
 			}finally{
-				reset();
+				reset("visitor");
 			}
 		}else{
 			Dialog.showError("Упс, Ошибка", "Необходимо заполнить обзательные поля,\nпомеченные звездочкой *!");
@@ -104,10 +103,11 @@ public class SecondTabController extends AbstractController implements Initializ
 			try {
 				dao.getAssociationDAO().addAssociation(group);
 				Dialog.showInfo("Ура, все добавилось", "Новая группа успешно добавлена в базу данных!");
+				observable.notifyObservers();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}finally{
-				reset();
+				reset("group");
 			}
 		}
 		else {
@@ -116,14 +116,27 @@ public class SecondTabController extends AbstractController implements Initializ
 	}
 	
 	// Reset text in all fields
-	private void reset() {
-		txtLastname.clear();
-		txtFirstname.clear();
-		txtMiddlename.clear();
-		cbGroup.getSelectionModel().selectFirst();
-		taVisitorDescription.clear();
-		
-		txtGroupName.clear();
-		taGroupDescription.clear();
+	private void reset(String type) {
+		if (type.equals("visitor")) {
+			txtLastname.clear();
+			txtFirstname.clear();
+			txtMiddlename.clear();
+			cbGroup.getSelectionModel().selectFirst();
+			taVisitorDescription.clear();
+		} else {
+			txtGroupName.clear();
+			taGroupDescription.clear();
+		}
+	}
+	
+	private void loadGroups() {
+		try {
+			Collection<Association> associations = dao.getAssociationDAO().getAllAssociations();
+			cbGroup.getItems().clear();
+			cbGroup.getItems().setAll(associations);
+			cbGroup.getSelectionModel().selectFirst();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }

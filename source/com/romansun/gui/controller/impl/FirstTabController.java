@@ -3,6 +3,8 @@ package com.romansun.gui.controller.impl;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.ResourceBundle;
 
 import javafx.beans.value.ChangeListener;
@@ -24,12 +26,14 @@ import com.romansun.hibernate.logic.Association;
 import com.romansun.hibernate.logic.Talon;
 import com.romansun.hibernate.logic.Visitor;
 
-public class FirstTabController extends AbstractController implements Initializable {
+public class FirstTabController extends AbstractController implements Initializable, Observer {
 	private static Visitor chooseVisitor;
 	private static Association chooseFilter;
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		// Add observer in SecondTabController
+		SecondTabController.addObserver(this);
 		// Initialize ComboBox "Filter", ComboBox "Groups"
 		loadFilters();
 		// Initialize ListView "Visitors"
@@ -109,7 +113,7 @@ public class FirstTabController extends AbstractController implements Initializa
 	@FXML 
 	private void changeFilter(ActionEvent event) {
 		Association newFilter = filter.getValue();
-		if (chooseFilter != null && !newFilter.getName().equals(chooseFilter.getName())) {
+		if (chooseFilter != null && newFilter != null && !newFilter.getName().equals(chooseFilter.getName())) {
 			chooseFilter = newFilter;
 			loadVisitors();
 		}
@@ -184,7 +188,6 @@ public class FirstTabController extends AbstractController implements Initializa
 		listVisitors.getItems().clear();
 		try {
 			Collection<Visitor> visitors = null;
-			System.out.println(chooseFilter.getId());
 			if (chooseFilter.getId() == -1L) {
 				visitors = dao.getVisitorDAO().getAllVisitors();
 			}
@@ -240,5 +243,11 @@ public class FirstTabController extends AbstractController implements Initializa
 		btnAdd.setDisable(false);
 		countLunches.setDisable(false);
 		countDinners.setDisable(false);
+	}
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		loadFilters();
+		loadVisitors();
 	}
 }

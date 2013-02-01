@@ -80,7 +80,7 @@ public class AssociationDAOImpl implements AssociationDAO {
 			associations = session.createCriteria(Association.class).list();
 		}
 		catch (Exception ex) {
-			System.out.println("Ошибка 'getAll'" + ex);
+			System.out.println("Ошибка 'getAll'");
 			ex.printStackTrace();
 		}
 		finally {
@@ -101,7 +101,7 @@ public class AssociationDAOImpl implements AssociationDAO {
 			session.getTransaction().commit();
 		}
 		catch (Exception ex) {
-			System.out.println("Ошибка при добавлении элемента." + ex);
+			System.out.println("Ошибка при добавлении элемента.");
 		}
 		finally {
 			if (session != null && session.isOpen()) {
