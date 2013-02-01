@@ -13,6 +13,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
@@ -53,6 +54,10 @@ public class SecondTabController extends AbstractController implements Initializ
 	private TextField txtGroupName;
 	@FXML
 	private TextArea taGroupDescription;
+	@FXML
+	private ComboBox<Association> cbDelGroups;
+	@FXML
+	private Label lblDelGroup;
 	
 	@FXML
 	protected void addVisitor(ActionEvent event) {
@@ -104,6 +109,7 @@ public class SecondTabController extends AbstractController implements Initializ
 				dao.getAssociationDAO().addAssociation(group);
 				Dialog.showInfo("Ура, все добавилось", "Новая группа успешно добавлена в базу данных!");
 				observable.notifyObservers();
+				loadGroups();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}finally{
@@ -112,6 +118,32 @@ public class SecondTabController extends AbstractController implements Initializ
 		}
 		else {
 			Dialog.showError("Упс, Ошибка", "Необходимо заполнить обзательные поля,\nпомеченные звездочкой *!");
+		}
+	}
+	
+	@FXML
+	private void deleteGroup() {
+		Association delGroup = cbDelGroups.getValue();
+		if (delGroup != null) {
+			try {
+				dao.getAssociationDAO().deleteAssociation(delGroup);
+				Dialog.showInfo("Ура, все удалилось", "Группа " + delGroup.getName() + " была успешно удалена!");
+				observable.notifyObservers();
+				loadGroups();
+			}catch (SQLException e){
+				Dialog.showError("Упс, Ошибка", "Не удалось удалить группу.");
+				e.printStackTrace();
+			}finally{
+				lblDelGroup.setText("");
+			}
+		}
+	}
+	
+	@FXML
+	private void chooseDelGroup() {
+		Association delGroup = cbDelGroups.getValue();
+		if (delGroup != null) {
+			lblDelGroup.setText("Удаляемая группа: \"" + delGroup.getName() + "\"");
 		}
 	}
 	
@@ -135,6 +167,9 @@ public class SecondTabController extends AbstractController implements Initializ
 			cbGroup.getItems().clear();
 			cbGroup.getItems().setAll(associations);
 			cbGroup.getSelectionModel().selectFirst();
+			
+			cbDelGroups.getItems().clear();
+			cbDelGroups.getItems().addAll(associations);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

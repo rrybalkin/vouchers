@@ -12,7 +12,7 @@
     <TabPane fx:id="tabPane" layoutY="24.0" prefHeight="541.0" prefWidth="653.0" tabClosingPolicy="UNAVAILABLE">
       <tabs>
         <Tab fx:id="firstTab" text="Работа с посетителями" />
-        <Tab fx:id="secondTab" text="Добавление новых посетителей" />
+        <Tab fx:id="secondTab" text="Добавление новых" />
         <Tab fx:id="thirdTab" text="Предыдущие отчеты" />
       </tabs>
     </TabPane>

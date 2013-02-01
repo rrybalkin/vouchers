@@ -20,11 +20,7 @@ public class AssociationDAOImpl implements AssociationDAO {
 			session.beginTransaction();
 			session.save(association);
 			session.getTransaction().commit();
-		}
-		catch (Exception ex) {
-			System.out.println("Ошибка при добавлении элемента." + ex);
-		}
-		finally {
+		}finally{
 			if (session != null && session.isOpen()) {
 				session.close();
 			}
@@ -40,11 +36,7 @@ public class AssociationDAOImpl implements AssociationDAO {
 			session.beginTransaction();
 			session.update(newAssociation);
 			session.getTransaction().commit();
-		}
-		catch (Exception ex) {
-			System.out.println("Ошибка при добавлении элемента." + ex);
-		}
-		finally {
+		}finally{
 			if (session != null && session.isOpen()) {
 				session.close();
 			}
@@ -59,11 +51,7 @@ public class AssociationDAOImpl implements AssociationDAO {
 		try {
 			session = Factory.getSessionFactory().openSession();
 			association = (Association) session.load(Association.class, association_id);
-		}
-		catch (Exception ex) {
-			System.out.println("Ошибка 'findById'" + ex);
-		}
-		finally {
+		}finally{
 			if (session != null && session.isOpen()) {
 				session.close();
 			}
@@ -78,12 +66,7 @@ public class AssociationDAOImpl implements AssociationDAO {
 		try {
 			session = Factory.getSessionFactory().openSession();
 			associations = session.createCriteria(Association.class).list();
-		}
-		catch (Exception ex) {
-			System.out.println("Ошибка 'getAll'");
-			ex.printStackTrace();
-		}
-		finally {
+		}finally{
 			if (session != null && session.isOpen()) {
 				session.close();
 			}
@@ -99,11 +82,7 @@ public class AssociationDAOImpl implements AssociationDAO {
 			session.beginTransaction();
 			session.delete(association);
 			session.getTransaction().commit();
-		}
-		catch (Exception ex) {
-			System.out.println("Ошибка при добавлении элемента.");
-		}
-		finally {
+		}finally{
 			if (session != null && session.isOpen()) {
 				session.close();
 			}

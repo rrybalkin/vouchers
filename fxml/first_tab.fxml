@@ -6,6 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="510.0" prefWidth="653.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.romansun.gui.controller.impl.FirstTabController">
   <children>
@@ -29,26 +30,30 @@
         </AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="508.0" prefWidth="337.0">
           <children>
-            <TitledPane animated="false" collapsible="false" prefHeight="125.0" prefWidth="348.0" text="Информация о посетителе">
+            <TitledPane animated="false" collapsible="false" prefHeight="144.0" prefWidth="348.0" text="Информация о посетителе">
               <content>
-                <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="115.0" prefWidth="344.0">
                   <children>
-                    <Label fx:id="lblFIO" layoutX="14.0" layoutY="6.0" text="ФИО:" />
-                    <Label fx:id="lblGroup" layoutX="14.0" layoutY="30.0" text="Группа:" />
-                    <Label fx:id="lblLaunches" layoutX="14.0" layoutY="53.0" text="Колличество обедов:" />
-                    <Label fx:id="lblDinners" layoutX="14.0" layoutY="77.0" text="Колличество ужинов:" />
+                    <Label fx:id="lblFIO" layoutX="13.0" layoutY="6.0" text="ФИО:">
+                      <font>
+                        <Font size="14.0" fx:id="x1" />
+                      </font>
+                    </Label>
+                    <Label fx:id="lblGroup" font="$x1" layoutX="13.0" layoutY="33.0" text="Группа:" />
+                    <Label fx:id="lblLaunches" font="$x1" layoutX="14.0" layoutY="61.0" text="Колличество обедов:" />
+                    <Label fx:id="lblDinners" font="$x1" layoutX="14.0" layoutY="87.0" text="Колличество ужинов:" />
                   </children>
                 </AnchorPane>
               </content>
             </TitledPane>
-            <TitledPane animated="false" collapsible="false" layoutY="124.0" prefHeight="161.0" prefWidth="348.0" text="Добавление обедов и ужинов">
+            <TitledPane animated="false" collapsible="false" layoutY="144.0" prefHeight="141.0" prefWidth="348.0" text="Добавление обедов и ужинов">
               <content>
                 <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                   <children>
-                    <Label layoutX="14.0" layoutY="19.0" text="Колличество обедов:" />
-                    <Label layoutX="14.0" layoutY="66.0" text="Колличество ужинов:" />
-                    <Button fx:id="btnAdd" disable="true" layoutX="136.0" layoutY="105.0" mnemonicParsing="false" onAction="#addTalon" text="Добавить" />
-                    <ComboBox id="countLaunches" fx:id="countLunches" disable="true" layoutX="149.0" layoutY="17.0">
+                    <Label font="$x1" layoutX="13.0" layoutY="13.0" text="Колличество обедов:" />
+                    <Label font="$x1" layoutX="14.0" layoutY="51.0" text="Колличество ужинов:" />
+                    <Button fx:id="btnAdd" disable="true" layoutX="136.0" layoutY="88.0" mnemonicParsing="false" onAction="#addTalon" text="Добавить" />
+                    <ComboBox id="countLaunches" fx:id="countLunches" disable="true" layoutX="161.0" layoutY="13.0">
                       <items>
                         <FXCollections fx:factory="observableArrayList">
                           <String fx:value="Item 1" />
@@ -57,7 +62,7 @@
                         </FXCollections>
                       </items>
                     </ComboBox>
-                    <ComboBox fx:id="countDinners" disable="true" layoutX="149.0" layoutY="64.0">
+                    <ComboBox fx:id="countDinners" disable="true" layoutX="161.0" layoutY="51.0">
                       <items>
                         <FXCollections fx:factory="observableArrayList">
                           <String fx:value="Item 1" />

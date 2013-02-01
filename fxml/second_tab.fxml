@@ -10,7 +10,7 @@
 
 <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="510.0" prefWidth="653.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.romansun.gui.controller.impl.SecondTabController">
   <children>
-    <TitledPane animated="false" collapsible="false" prefHeight="510.0" prefWidth="653.0" text="Добавление нового посетителя или группы посетителей">
+    <TitledPane animated="false" collapsible="false" prefHeight="510.0" prefWidth="653.0">
       <content>
         <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
           <children>
@@ -27,7 +27,7 @@
                     <TextField fx:id="txtLastname" layoutX="81.0" layoutY="60.0" prefWidth="200.0" />
                     <Label layoutX="19.0" layoutY="110.0" text="*Имя:" />
                     <TextField fx:id="txtFirstname" layoutX="81.0" layoutY="107.0" prefWidth="200.0" />
-                    <Label layoutX="19.0" layoutY="156.0" text="*Отчетсво:" />
+                    <Label layoutX="19.0" layoutY="156.0" text="*Отчество:" />
                     <TextField fx:id="txtMiddlename" layoutX="81.0" layoutY="153.0" prefWidth="200.0" />
                     <Label layoutX="19.0" layoutY="204.0" text="Группа:" />
                     <ComboBox fx:id="cbGroup" layoutX="81.0" layoutY="202.0" prefHeight="21.0" prefWidth="200.0">
@@ -39,19 +39,33 @@
                         </FXCollections>
                       </items>
                     </ComboBox>
-                    <Button id="иетФввМшышещк" fx:id="btnAddVisitor" layoutX="92.0" layoutY="371.0" mnemonicParsing="false" onAction="#addVisitor" text="Добавить посетителя" />
-                    <TextArea id="taDescription" fx:id="taVisitorDescription" layoutX="78.0" layoutY="241.0" prefHeight="101.0" prefWidth="200.0" wrapText="true" />
-                    <Label layoutX="16.0" layoutY="278.0" text="Описание:" />
+                    <Button id="иетФввМшышещк" fx:id="btnAddVisitor" layoutX="92.0" layoutY="434.0" mnemonicParsing="false" onAction="#addVisitor" text="Добавить посетителя" />
+                    <TextArea id="taDescription" fx:id="taVisitorDescription" layoutX="19.0" layoutY="276.0" prefHeight="101.0" prefWidth="266.0" wrapText="true" />
+                    <Label layoutX="19.0" layoutY="250.0" text="Описание посетителя (необязательно):" />
                   </children>
                 </AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                   <children>
-                    <Label layoutX="14.0" layoutY="133.0" text="Описание группы (необязательно):" />
+                    <ComboBox id="cbGroup" fx:id="cbDelGroups" layoutX="16.0" layoutY="353.0" onAction="#chooseDelGroup" prefHeight="21.0" prefWidth="262.0">
+                      <items>
+                        <FXCollections fx:factory="observableArrayList">
+                          <String fx:value="Item 1" />
+                          <String fx:value="Item 2" />
+                          <String fx:value="Item 3" />
+                        </FXCollections>
+                      </items>
+                    </ComboBox>
+                    <Label layoutX="14.0" layoutY="117.0" text="Описание группы (необязательно):" />
                     <TextField fx:id="txtGroupName" layoutX="14.0" layoutY="85.0" prefWidth="266.0" />
-                    <Button fx:id="btnAddGroup" layoutX="92.0" layoutY="372.0" mnemonicParsing="false" onAction="#addGroup" text="Добавить группу" />
+                    <Button fx:id="btnAddGroup" layoutX="90.0" layoutY="252.0" mnemonicParsing="false" onAction="#addGroup" text="Добавить группу" />
                     <Label font="$x1" layoutX="61.0" layoutY="14.0" text="Создание новой группы:" />
                     <Label layoutX="14.0" layoutY="60.0" text="*Название группы:" />
-                    <TextArea fx:id="taGroupDescription" layoutX="17.0" layoutY="157.0" prefHeight="93.0" prefWidth="263.0" wrapText="true" />
+                    <TextArea fx:id="taGroupDescription" layoutX="14.0" layoutY="141.0" prefHeight="93.0" prefWidth="263.0" wrapText="true" />
+                    <Button id="btnAddGroup" fx:id="btnDeleteGroup" layoutX="93.0" layoutY="434.0" mnemonicParsing="false" onAction="#deleteGroup" text="Удалить группу" />
+                    <Label layoutX="16.0" layoutY="328.0" text="*Выберите группу, которую нужно удалить:" />
+                    <Label fx:id="lblDelGroup" layoutX="16.0" layoutY="394.0" />
+                    <Separator layoutY="289.0" prefHeight="7.0" prefWidth="321.0" />
+                    <Label font="$x1" layoutX="42.0" layoutY="296.0" text="Удаление существующей группы:" />
                   </children>
                 </AnchorPane>
               </items>

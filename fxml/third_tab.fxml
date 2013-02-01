@@ -2,12 +2,53 @@
 
 <?import java.lang.*?>
 <?import java.util.*?>
+<?import javafx.collections.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="510.0" prefWidth="653.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.romansun.gui.controller.impl.ThirdTabController">
   <children>
-    <Button layoutX="272.0" layoutY="190.0" mnemonicParsing="false" text="Button" />
+    <SplitPane dividerPositions="0.423963133640553" focusTraversable="true" prefHeight="510.0" prefWidth="653.0">
+      <items>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+          <children>
+            <TitledPane animated="false" collapsible="false" prefWidth="263.0" text="Данные о требуемомо отчете">
+              <content>
+                <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="484.0" prefWidth="273.0">
+                  <children>
+                    <Label layoutX="14.0" layoutY="24.0" text="Выберите дату требуемого отчета:">
+                      <font>
+                        <Font name="System Bold" size="12.0" fx:id="x1" />
+                      </font>
+                    </Label>
+                    <ComboBox fx:id="cbMonth" layoutX="14.0" layoutY="75.0" prefHeight="21.0" prefWidth="115.0" />
+                    <ComboBox fx:id="cbYear" layoutX="161.0" layoutY="75.0" prefHeight="21.0" prefWidth="96.0" />
+                    <Label layoutX="161.0" layoutY="53.0" text="Год:" />
+                    <Label layoutX="14.0" layoutY="50.0" text="Месяц:" />
+                    <Label font="$x1" layoutX="14.0" layoutY="131.0" text="Выберите нужный отчет из сохраненных:" />
+                    <ListView fx:id="lvReports" layoutX="14.0" layoutY="159.0" prefHeight="219.0" prefWidth="243.0" />
+                    <Button fx:id="btnShow" layoutX="86.0" layoutY="411.0" mnemonicParsing="false" text="Показать отчет" />
+                  </children>
+                </AnchorPane>
+              </content>
+            </TitledPane>
+          </children>
+        </AnchorPane>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+          <children>
+            <TableView fx:id="tbReport" layoutX="10.0" layoutY="48.0" prefHeight="448.0" prefWidth="354.0">
+              <columns>
+                <TableColumn editable="false" prefWidth="204.0" sortable="false" text="ФИО" />
+                <TableColumn prefWidth="75.0" text="Обеды" />
+                <TableColumn prefWidth="75.0" text="Ужины" />
+              </columns>
+            </TableView>
+            <TextField fx:id="txtMask" layoutX="10.0" layoutY="8.0" prefHeight="30.0" prefWidth="354.0" text="Начните вводить ФИО для поиска..." />
+          </children>
+        </AnchorPane>
+      </items>
+    </SplitPane>
   </children>
 </AnchorPane>
