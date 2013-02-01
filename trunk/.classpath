@@ -10,6 +10,9 @@
 	<classpathentry kind="lib" path="D:/NetCracker/workspace/Talons/orai18n.jar"/>
 	<classpathentry kind="lib" path="C:/Program Files/Oracle/JavaFX Scene Builder 1.0/lib/jfxrt.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Hibernate"/>
-	<classpathentry kind="lib" path="D:/NetCracker/workspace/Vouchers/lib/JavaFxDialog-master.zip"/>
+	<classpathentry kind="lib" path="D:/Workspace for Eclipse/Vouchers/lib/jaxb-api-2.1.jar"/>
+	<classpathentry kind="lib" path="D:/Workspace for Eclipse/Vouchers/lib/jaxb-impl-2.1.jar"/>
+	<classpathentry kind="lib" path="D:/Workspace for Eclipse/Vouchers/lib/jaxb-xjc-2.0.jar"/>
+	<classpathentry kind="lib" path="D:/Workspace for Eclipse/Vouchers/lib/jfxmessagebox-1.1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
