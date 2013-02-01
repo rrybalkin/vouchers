@@ -1,6 +1,7 @@
 package com.romansun.reports;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -17,8 +18,8 @@ public class ReportBuilder {
 	public Report buildReport(List<Visitor> visitors) {
 		Report report = new Report();
 		// Getting attributes for report
-		Integer curMonth = new Date().getMonth();
-		Integer curYear = new Date().getYear();
+		Integer curMonth = Calendar.MONTH;
+		Integer curYear = Calendar.YEAR;
 		report.setMonth(curMonth);
 		report.setYear(curYear);
 		
@@ -34,7 +35,24 @@ public class ReportBuilder {
 			infoVisitors.add(info);
 		}
 		report.setVisitors(infoVisitors);
+		report.setName(getName());
 		
 		return report;
+	}
+	
+	private String getName() {
+		StringBuilder name = new StringBuilder(100);
+		name.append(Calendar.DAY_OF_MONTH);
+		name.append("_");
+		name.append(Calendar.MONTH);
+		name.append("_");
+		name.append(Calendar.YEAR);
+		name.append("_");
+		name.append(Calendar.HOUR);
+		name.append(":");
+		name.append(Calendar.MINUTE);
+		name.append(".xml");
+		
+		return name.toString();
 	}
 }

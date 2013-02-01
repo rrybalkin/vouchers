@@ -3,7 +3,14 @@ package com.romansun.gui.controller.impl;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.ResourceBundle;
+
+import org.logicalcobwebs.cglib.core.CollectionUtils;
+
+import name.antonsmirnov.javafx.dialog.Dialog;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,6 +18,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.AnchorPane;
 import com.romansun.gui.controller.AbstractController;
+import com.romansun.hibernate.logic.Visitor;
+import com.romansun.reports.ReportBuilder;
+import com.romansun.reports.ReportsSaver;
+import com.romansun.reports.logic.Report;
 
 public class MainWindowController extends AbstractController implements Initializable {
 	
@@ -38,6 +49,23 @@ public class MainWindowController extends AbstractController implements Initiali
 	private Tab secondTab;
 	@FXML
 	private Tab thirdTab;
+	
+	@FXML
+	private void resetTalons() {
+		// Create report
+		Report report = null;
+		try {
+			Collection<Visitor> visitors = dao.getVisitorDAO().getAllVisitors();
+			ReportBuilder builder = new ReportBuilder();
+			report = builder.buildReport(new ArrayList<Visitor>(visitors));
+			ReportsSaver saver = new ReportsSaver(PATH_TO_REPORTS, report);
+			saver.saveReport();
+			// Reset talons
+			dao.getTalonDAO().resetAllTalons();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	// method for loading Tab from fxml-file
 	private AnchorPane loadTab(String path_to_tab, Object controller) throws IOException {

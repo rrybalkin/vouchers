@@ -9,4 +9,5 @@ public interface TalonDAO {
 	public void addTalon(Talon talon) throws SQLException;
 	public void updateTalonForVisitor(Visitor visitor, Talon newTalon) throws SQLException;
 	public void deleteTalon(Talon talon) throws SQLException;
+	public void resetAllTalons() throws SQLException;
 }

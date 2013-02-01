@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Root xmlns="http://www.example.org/SaveFormalSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.example.org/SaveFormalSchema schema/ReportSchema.xsd ">
-  <Root>
-    <Report>
-      <Visitors>
-        <Visitor>
-          <FIO>FIO</FIO>
-          <Lunches>0</Lunches>
-          <Dinners>0</Dinners>
-        </Visitor>
-      </Visitors>
-    </Report>
-  </Root>
+  <Report month="1" year="2013">
+    <Visitors>
+      <Visitor>
+        <FIO>FIO</FIO>
+        <Lunches>0</Lunches>
+        <Dinners>0</Dinners>
+      </Visitor>
+    </Visitors>
+  </Report>
 </Root>

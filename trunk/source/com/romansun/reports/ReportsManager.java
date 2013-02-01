@@ -8,7 +8,6 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Unmarshaller;
 
-import com.romansun.reports.jaxb.InfoVisitorType;
 import com.romansun.reports.jaxb.ReportType;
 import com.romansun.reports.jaxb.RootType;
 import com.romansun.reports.jaxb.VisitorType;
@@ -82,11 +81,10 @@ public class ReportsManager {
 		
 		List<InfoVisitor> infoVisitors = new ArrayList<InfoVisitor>();
 		for (VisitorType visitor : visitors) {
-			InfoVisitorType info = visitor.getInfoVisitor();
 			InfoVisitor infoVisitor = new InfoVisitor();
-			infoVisitor.setFIO(info.getFIO());
-			infoVisitor.setLunches(info.getLunches());
-			infoVisitor.setDinners(info.getDinners());
+			infoVisitor.setFIO(visitor.getFIO());
+			infoVisitor.setLunches(visitor.getLunches());
+			infoVisitor.setDinners(visitor.getDinners());
 			
 			infoVisitors.add(infoVisitor);
 		}
@@ -97,6 +95,7 @@ public class ReportsManager {
 		report.setMonth(month);
 		report.setYear(year);
 		report.setVisitors(infoVisitors);
+		report.setName(xmlReport.getName());
 		
 		return report;
 	}

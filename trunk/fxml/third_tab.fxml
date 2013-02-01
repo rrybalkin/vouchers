@@ -28,7 +28,7 @@
                     <Label layoutX="161.0" layoutY="53.0" text="Год:" />
                     <Label layoutX="14.0" layoutY="50.0" text="Месяц:" />
                     <Label font="$x1" layoutX="14.0" layoutY="131.0" text="Выберите нужный отчет из сохраненных:" />
-                    <ListView fx:id="lvReports" layoutX="14.0" layoutY="159.0" prefHeight="219.0" prefWidth="243.0" />
+                    <ListView fx:id="lvReports" layoutX="14.0" layoutY="159.0" prefHeight="219.0" prefWidth="248.0" />
                     <Button fx:id="btnShow" layoutX="86.0" layoutY="411.0" mnemonicParsing="false" text="Показать отчет" />
                   </children>
                 </AnchorPane>
