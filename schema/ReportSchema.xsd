@@ -18,7 +18,9 @@
 
     <complexType name="VisitorType">
     	<sequence>
-    		<element name="InfoVisitor" type="tns:InfoVisitorType" minOccurs="1" maxOccurs="1"></element>
+    		<element name="FIO" type="string"></element>
+    		<element name="Lunches" type="int"></element>
+    		<element name="Dinners" type="int"></element>
     	</sequence>
     </complexType>
     
@@ -41,11 +43,4 @@
     
     <element name="Root" type="tns:RootType"></element>
 
-    <complexType name="InfoVisitorType">
-    	<sequence>
-    		<element name="FIO" type="string" minOccurs="1" maxOccurs="1"></element>
-    		<element name="Lunches" type="int" minOccurs="1" maxOccurs="1"></element>
-    		<element name="Dinners" type="int" minOccurs="1" maxOccurs="1"></element>
-    	</sequence>
-    </complexType>
 </schema>

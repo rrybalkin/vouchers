@@ -10,7 +10,6 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
 
-import com.romansun.reports.jaxb.InfoVisitorType;
 import com.romansun.reports.jaxb.ObjectFactory;
 import com.romansun.reports.jaxb.ReportType;
 import com.romansun.reports.jaxb.RootType;
@@ -21,15 +20,15 @@ import com.romansun.reports.logic.Report;
 
 
 public class ReportsSaver {
-	private String nameXmlFile;
 	private String pathToReports;
+	private Report report;
 	
-	public ReportsSaver(String nameXmlFile, String pathToReports) {
-		this.nameXmlFile = nameXmlFile;
+	public ReportsSaver(String pathToReports, Report report) {
 		this.pathToReports = pathToReports;
+		this.report = report;
 	}
 	
-	public void saveReport(Report report) {
+	public void saveReport() throws Exception {
 		ObjectFactory of = new ObjectFactory();
 		RootType rootElement = new RootType();
 		ReportType reportElement = new ReportType();
@@ -39,12 +38,10 @@ public class ReportsSaver {
 		List<InfoVisitor> infoVisitors = report.getVisitors();
 		for (InfoVisitor info : infoVisitors) {
 			VisitorType visitor = new VisitorType();
-			InfoVisitorType infoVisitor = new InfoVisitorType();
-			infoVisitor.setFIO(info.getFIO());
-			infoVisitor.setLunches(info.getLunches());
-			infoVisitor.setDinners(info.getDinners());
+			visitor.setFIO(info.getFIO());
+			visitor.setLunches(info.getLunches());
+			visitor.setDinners(info.getDinners());
 			
-			visitor.setInfoVisitor(infoVisitor);
 			visitors.add(visitor);
 		}
 		// Adding all visitors with info
@@ -54,26 +51,25 @@ public class ReportsSaver {
 		reportElement.setMonth(report.getMonth());
 		reportElement.setYear(report.getYear());
 		rootElement.setReport(reportElement);
-		try {
-			JAXBElement<RootType> root = of.createRoot(rootElement);
-			JAXBContext jc = JAXBContext.newInstance("com.romansun.reports.jaxb");
-			Marshaller marshaller = jc.createMarshaller();
-			File dstFile = getSaveFile();
-			FileOutputStream out = new FileOutputStream(dstFile);
-			marshaller.marshal(root, out);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		
+		// Start JAXB
+		JAXBElement<RootType> root = of.createRoot(rootElement);
+		JAXBContext jc = JAXBContext.newInstance("com.romansun.reports.jaxb");
+		Marshaller marshaller = jc.createMarshaller();
+		File dstFile = getSaveFile();
+		FileOutputStream out = new FileOutputStream(dstFile);
+		marshaller.marshal(root, out);
 	}
 	
 	private File getSaveFile() throws IOException {
 		StringBuilder fullPath = new StringBuilder(1000);
 		fullPath.append(pathToReports);
-		if (pathToReports.lastIndexOf("\"") != pathToReports.length()) 
-			fullPath.append("\"");
-		fullPath.append(nameXmlFile);
+		if (pathToReports.lastIndexOf("\\") != pathToReports.length()) 
+			fullPath.append("\\");
+		fullPath.append(report.getName().replace(" ", "_"));
 		
 		File file = new File(fullPath.toString());
+		System.out.println(fullPath.toString());
 		if (file!=null && file.exists()) {
 			return file;
 		}else if(file != null && !file.exists()) {
