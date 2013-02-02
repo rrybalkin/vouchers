@@ -12,14 +12,19 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Window;
+import jfx.messagebox.MessageBox;
 
 import com.romansun.gui.controller.AbstractController;
 import com.romansun.hibernate.logic.Association;
@@ -144,12 +149,23 @@ public class FirstTabController extends AbstractController implements Initializa
 	}
 	
 	@FXML
-	private void deleteVisitor(ActionEvent event) {
-		try {
-			dao.getVisitorDAO().deleteVisitor(chooseVisitor);
-			loadVisitors();
-		} catch (SQLException e) {
-			e.printStackTrace();
+	private void keyPressed(KeyEvent event) {
+		if (event.getCode() == KeyCode.DELETE) {
+			Window wnd = ((Node) event.getTarget()).getScene().getWindow();
+			int answer = MessageBox.show(wnd,
+					"Вы уверены, что хотите удалить выбранного посетителя?",
+					"Ого, Опасно", MessageBox.ICON_QUESTION | MessageBox.YES
+							| MessageBox.NO);
+			if (answer == MessageBox.YES) {
+				try {
+					Visitor visitor = listVisitors.getSelectionModel().getSelectedItem();
+					dao.getVisitorDAO().deleteVisitor(visitor);
+					dao.getTalonDAO().deleteTalon(visitor.getTalon());
+					loadVisitors();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 

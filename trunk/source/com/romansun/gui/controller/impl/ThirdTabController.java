@@ -1,39 +1,58 @@
 package com.romansun.gui.controller.impl;
 
 import java.net.URL;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.ResourceBundle;
+
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Window;
 import javafx.util.StringConverter;
+import jfx.messagebox.MessageBox;
+
+import org.joda.time.DateTime;
 
 import com.romansun.gui.controller.AbstractController;
+import com.romansun.reports.logic.InfoVisitor;
 import com.romansun.reports.logic.Report;
 
-public class ThirdTabController extends AbstractController implements Initializable {
+public class ThirdTabController extends AbstractController implements Initializable, Observer {
 	private Integer month;
 	private Integer year;
 	{
-		month = new Date().getMonth();
-		year = new Date().getYear() + 1900;
+		month = new DateTime().getMonthOfYear()-1;
+		year = new DateTime().getYear();
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		// add observer for Main Window
+		MainWindowController.addObserver(this);
 		loadReports();
 		cbMonth.setConverter(new MonthConverter());
 		Integer[] months = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
 		cbMonth.getItems().addAll(months);
-		cbMonth.getSelectionModel().select(month-1);
+		cbMonth.getSelectionModel().select(new Integer(month));
 		
 		cbYear.setConverter(new YearConverter());
 		Integer[] years = {2012, 2013};
@@ -53,6 +72,28 @@ public class ThirdTabController extends AbstractController implements Initializa
 				year = newValue;
 				loadReports();
 			}});
+		
+		// Initialize table for report
+		TableColumn columnFIO = tbReport.getColumns().get(0);
+		TableColumn columnLunches = tbReport.getColumns().get(1);
+		TableColumn columnDinners = tbReport.getColumns().get(2);
+		columnFIO.setCellValueFactory((new PropertyValueFactory<InfoVisitor, String>("FIO")));
+		columnLunches.setCellValueFactory((new PropertyValueFactory<InfoVisitor, Integer>("lunches")));
+		columnDinners.setCellValueFactory((new PropertyValueFactory<InfoVisitor, Integer>("dinners")));
+		
+		// Initialize listener for input mask
+		txtMask.caretPositionProperty().addListener(new ChangeListener<Number>(){
+			public void changed(ObservableValue<? extends Number> arg0,
+					Number oldValue, Number newValue) {
+				String mask = txtMask.getText();
+				Report report = lvReports.getSelectionModel().getSelectedItem();
+				tbReport.getItems().clear();
+				if (mask!=null && !mask.isEmpty()) {
+					tbReport.getItems().addAll(filterByMask(report.getVisitors(), mask));
+				} else {
+					tbReport.getItems().addAll(report.getVisitors());
+				}
+			}});
 	}
 	
 	@FXML
@@ -63,6 +104,35 @@ public class ThirdTabController extends AbstractController implements Initializa
 	private ListView<Report> lvReports;
 	@FXML
 	private TextField txtMask;
+	@FXML
+	private TableView<InfoVisitor> tbReport;
+	
+	@FXML
+	private void chooseReport(MouseEvent mouseEvent) {
+		if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+			if (mouseEvent.getClickCount() == 2) {
+				tbReport.getItems().clear();
+				Report report = lvReports.getSelectionModel().getSelectedItem();
+				tbReport.getItems().addAll(report.getVisitors());
+			}
+		}
+	}
+	
+	@FXML
+	private void keyPressed(KeyEvent event) {
+		if (event.getCode() == KeyCode.DELETE) {
+			Window wnd = ((Node) event.getTarget()).getScene().getWindow();
+			int answer = MessageBox.show(wnd,
+					"Вы уверены, что хотите удалить выбранный отчет?",
+					"Ого, Опасно", MessageBox.ICON_QUESTION | MessageBox.YES
+							| MessageBox.NO);
+			if (answer == MessageBox.YES) {
+				Report report = lvReports.getSelectionModel().getSelectedItem();
+				report.getFile().delete();
+				loadReports();
+			}
+		}
+	}
 	
 	private void loadReports() {
 		List<Report> reports = reportsManager.getReportsByDate(month, year);
@@ -70,6 +140,21 @@ public class ThirdTabController extends AbstractController implements Initializa
 		lvReports.getItems().addAll(reports);
 	}
 	
+	private List<InfoVisitor> filterByMask(List<InfoVisitor> visitors, String mask) {
+		List<InfoVisitor> filterList = new ArrayList<InfoVisitor>();
+		for (InfoVisitor v : visitors) {
+			String fio = v.getFIO();
+			if (fio.toLowerCase().contains(mask.toLowerCase())) {
+				filterList.add(v);
+			}
+		}
+		
+		return filterList;
+	}
+	
+	/*
+	 * Class Converter for ComboBox "Month"
+	 */
 	private class MonthConverter extends StringConverter<Integer> {
 
 		private Map<String, Integer> months = new HashMap<String, Integer>();
@@ -104,6 +189,9 @@ public class ThirdTabController extends AbstractController implements Initializa
 		}
 	}
 	
+	/*
+	 * Class Converter for ComboBox "Year"
+	 */
 	private class YearConverter extends StringConverter<Integer> {
 		
 		@Override
@@ -115,5 +203,10 @@ public class ThirdTabController extends AbstractController implements Initializa
 		public String toString(Integer month) {
 			return month.toString();
 		}
+	}
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		loadReports();
 	}
 }

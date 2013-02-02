@@ -30,6 +30,14 @@ public class Talon {
 	
 	public Talon() {}
 	
+	public Long getTalon_id() {
+		return talon_id;
+	}
+
+	public void setTalon_id(Long talon_id) {
+		this.talon_id = talon_id;
+	}
+	
 	public Visitor getVisitor() {
 		return visitor;
 	}

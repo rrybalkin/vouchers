@@ -19,7 +19,6 @@ public class ReportsManager {
 	
 	private List<Report> reports;
 	private String pathToReports;
-	private boolean loading = false;
 	
 	public ReportsManager(String pathToReports) {
 		this.pathToReports = pathToReports;
@@ -37,23 +36,18 @@ public class ReportsManager {
 					reports.add(report);
 				}
 			}
-			loading = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
 	public List<Report> getReports() {
-		if (!loading) {
-			loadReports();
-		}
+		loadReports();
 		return reports;
 	}
 	
 	public List<Report> getReportsByDate(Integer month, Integer year) {
-		if (!loading) {
-			loadReports();
-		}
+		loadReports();
 		List<Report> needReports = new ArrayList<Report>();
 		for (Report report : reports) {
 			Integer curMonth = report.getMonth();
@@ -80,11 +74,8 @@ public class ReportsManager {
 		List<VisitorType> visitors = visitorsElement.getVisitor();
 		
 		List<InfoVisitor> infoVisitors = new ArrayList<InfoVisitor>();
-		for (VisitorType visitor : visitors) {
-			InfoVisitor infoVisitor = new InfoVisitor();
-			infoVisitor.setFIO(visitor.getFIO());
-			infoVisitor.setLunches(visitor.getLunches());
-			infoVisitor.setDinners(visitor.getDinners());
+		for (VisitorType v : visitors) {
+			InfoVisitor infoVisitor = new InfoVisitor(v.getFIO(), v.getLunches(), v.getDinners());
 			
 			infoVisitors.add(infoVisitor);
 		}
@@ -96,6 +87,7 @@ public class ReportsManager {
 		report.setYear(year);
 		report.setVisitors(infoVisitors);
 		report.setName(xmlReport.getName());
+		report.setFile(xmlReport);
 		
 		return report;
 	}

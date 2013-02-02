@@ -7,15 +7,15 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
 
-import name.antonsmirnov.javafx.dialog.Dialog;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import jfx.messagebox.MessageBox;
 
 import com.romansun.gui.controller.AbstractController;
 import com.romansun.hibernate.logic.Association;
@@ -85,7 +85,9 @@ public class SecondTabController extends AbstractController implements Initializ
 			try {
 				dao.getTalonDAO().addTalon(talon);
 				dao.getVisitorDAO().addVisitor(visitor);
-				Dialog.showInfo("Ура, все добавилось", "Новый посетитель успешно добавлен в базу данных!");
+				MessageBox.show(((Node) event.getTarget()).getScene().getWindow(),
+						"Новый посетитель успешно добавлен в базу данных!",
+						"Ура, все добавилось", MessageBox.ICON_QUESTION | MessageBox.OK);
 				observable.notifyObservers();
 			}catch (SQLException e) {
 				e.printStackTrace();
@@ -93,7 +95,9 @@ public class SecondTabController extends AbstractController implements Initializ
 				reset("visitor");
 			}
 		}else{
-			Dialog.showError("Упс, Ошибка", "Необходимо заполнить обзательные поля,\nпомеченные звездочкой *!");
+			MessageBox.show(((Node) event.getTarget()).getScene().getWindow(),
+					"Необходимо заполнить обзательные поля, помеченные звездочкой *!",
+					"Упс, Ошибка", MessageBox.ICON_QUESTION | MessageBox.OK);
 		}
 	}
 	
@@ -107,7 +111,9 @@ public class SecondTabController extends AbstractController implements Initializ
 			group.setDescription(description);	
 			try {
 				dao.getAssociationDAO().addAssociation(group);
-				Dialog.showInfo("Ура, все добавилось", "Новая группа успешно добавлена в базу данных!");
+				MessageBox.show(((Node) event.getTarget()).getScene().getWindow(),
+						"Новая группа успешно добавлена в базу данных!",
+						"Ура, все добавилось", MessageBox.ICON_QUESTION | MessageBox.OK);
 				observable.notifyObservers();
 				loadGroups();
 			} catch (SQLException e) {
@@ -117,21 +123,24 @@ public class SecondTabController extends AbstractController implements Initializ
 			}
 		}
 		else {
-			Dialog.showError("Упс, Ошибка", "Необходимо заполнить обзательные поля,\nпомеченные звездочкой *!");
+			MessageBox.show(((Node) event.getTarget()).getScene().getWindow(),
+					"Необходимо заполнить обзательные поля,\nпомеченные звездочкой *!",
+					"Упс, Ошибка", MessageBox.ICON_QUESTION | MessageBox.OK);
 		}
 	}
 	
 	@FXML
-	private void deleteGroup() {
+	private void deleteGroup(ActionEvent event) {
 		Association delGroup = cbDelGroups.getValue();
 		if (delGroup != null) {
 			try {
 				dao.getAssociationDAO().deleteAssociation(delGroup);
-				Dialog.showInfo("Ура, все удалилось", "Группа " + delGroup.getName() + " была успешно удалена!");
+				MessageBox.show(((Node) event.getTarget()).getScene().getWindow(),
+						"Группа " + delGroup.getName() + " была успешно удалена!",
+						"Ура, все удалилось", MessageBox.ICON_QUESTION | MessageBox.OK);
 				observable.notifyObservers();
 				loadGroups();
 			}catch (SQLException e){
-				Dialog.showError("Упс, Ошибка", "Не удалось удалить группу.");
 				e.printStackTrace();
 			}finally{
 				lblDelGroup.setText("");
