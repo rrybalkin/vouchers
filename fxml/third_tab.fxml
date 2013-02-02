@@ -28,8 +28,7 @@
                     <Label layoutX="161.0" layoutY="53.0" text="Год:" />
                     <Label layoutX="14.0" layoutY="50.0" text="Месяц:" />
                     <Label font="$x1" layoutX="14.0" layoutY="131.0" text="Выберите нужный отчет из сохраненных:" />
-                    <ListView fx:id="lvReports" layoutX="14.0" layoutY="159.0" prefHeight="219.0" prefWidth="248.0" />
-                    <Button fx:id="btnShow" layoutX="86.0" layoutY="411.0" mnemonicParsing="false" text="Показать отчет" />
+                    <ListView fx:id="lvReports" layoutX="14.0" layoutY="159.0" onKeyPressed="#keyPressed" onMouseClicked="#chooseReport" prefHeight="241.0" prefWidth="248.0" />
                   </children>
                 </AnchorPane>
               </content>
@@ -38,14 +37,14 @@
         </AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
           <children>
-            <TableView fx:id="tbReport" layoutX="10.0" layoutY="48.0" prefHeight="448.0" prefWidth="354.0">
+            <TableView fx:id="tbReport" layoutX="10.0" layoutY="48.0" prefHeight="448.0" prefWidth="355.0">
               <columns>
-                <TableColumn editable="false" prefWidth="204.0" sortable="false" text="ФИО" />
-                <TableColumn prefWidth="75.0" text="Обеды" />
-                <TableColumn prefWidth="75.0" text="Ужины" />
+                <TableColumn editable="false" prefWidth="254.0" sortable="false" text="ФИО (Группа)" />
+                <TableColumn prefWidth="50.0" text="Обеды" />
+                <TableColumn prefWidth="50.0" text="Ужины" />
               </columns>
             </TableView>
-            <TextField fx:id="txtMask" layoutX="10.0" layoutY="8.0" prefHeight="30.0" prefWidth="354.0" text="Начните вводить ФИО для поиска..." />
+            <TextField fx:id="txtMask" layoutX="10.0" layoutY="8.0" prefHeight="30.0" prefWidth="354.0" />
           </children>
         </AnchorPane>
       </items>

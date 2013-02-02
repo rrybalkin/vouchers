@@ -1,15 +1,12 @@
 package com.romansun.hibernate.DAO.impl;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 
 import com.romansun.hibernate.DAO.TalonDAO;
 import com.romansun.hibernate.factory.Factory;
-import com.romansun.hibernate.logic.Association;
 import com.romansun.hibernate.logic.Talon;
 import com.romansun.hibernate.logic.Visitor;
 
@@ -80,7 +77,7 @@ public class TalonDAOImpl implements TalonDAO {
 			session = Factory.getSessionFactory().openSession();
 			session.beginTransaction();
 		    Query query = session.createQuery(
-		          " update Talons t set count_lunches=0, count_dinners=0");
+		          " update Talon t set t.count_lunch=0, t.count_dinner=0 ");
 		    query.executeUpdate();
 			session.getTransaction().commit();
 		} catch (Exception e) {

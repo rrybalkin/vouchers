@@ -1,5 +1,6 @@
 package com.romansun.reports.logic;
 
+import java.io.File;
 import java.util.List;
 
 public class Report {
@@ -7,6 +8,7 @@ public class Report {
 	private Integer month;
 	private Integer year;
 	private String name;
+	private File file;
 	
 	public Report() { 
 		
@@ -44,6 +46,14 @@ public class Report {
 
 	public void setVisitors(List<InfoVisitor> visitors) {
 		this.visitors = visitors;
+	}
+
+	public File getFile() {
+		return file;
+	}
+
+	public void setFile(File file) {
+		this.file = file;
 	}
 
 	@Override

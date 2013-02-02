@@ -56,6 +56,7 @@ public class ReportsSaver {
 		JAXBElement<RootType> root = of.createRoot(rootElement);
 		JAXBContext jc = JAXBContext.newInstance("com.romansun.reports.jaxb");
 		Marshaller marshaller = jc.createMarshaller();
+		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 		File dstFile = getSaveFile();
 		FileOutputStream out = new FileOutputStream(dstFile);
 		marshaller.marshal(root, out);
@@ -67,16 +68,8 @@ public class ReportsSaver {
 		if (pathToReports.lastIndexOf("\\") != pathToReports.length()) 
 			fullPath.append("\\");
 		fullPath.append(report.getName().replace(" ", "_"));
-		
 		File file = new File(fullPath.toString());
-		System.out.println(fullPath.toString());
-		if (file!=null && file.exists()) {
-			return file;
-		}else if(file != null && !file.exists()) {
-			file.createNewFile();
-			return file;
-		}else{
-			throw new RuntimeException("Ошибка при создании xml-файла!");
-		}
+		
+		return file;
 	}
 }
