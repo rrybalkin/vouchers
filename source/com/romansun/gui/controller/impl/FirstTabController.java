@@ -12,7 +12,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -23,10 +22,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Window;
-import jfx.messagebox.MessageBox;
 
 import com.romansun.gui.controller.AbstractController;
+import com.romansun.gui.utils.Dialog;
 import com.romansun.hibernate.logic.Association;
 import com.romansun.hibernate.logic.Talon;
 import com.romansun.hibernate.logic.Visitor;
@@ -151,12 +149,8 @@ public class FirstTabController extends AbstractController implements Initializa
 	@FXML
 	private void keyPressed(KeyEvent event) {
 		if (event.getCode() == KeyCode.DELETE) {
-			Window wnd = ((Node) event.getTarget()).getScene().getWindow();
-			int answer = MessageBox.show(wnd,
-					"Вы уверены, что хотите удалить выбранного посетителя?",
-					"Ого, Опасно", MessageBox.ICON_QUESTION | MessageBox.YES
-							| MessageBox.NO);
-			if (answer == MessageBox.YES) {
+			int answer = Dialog.showQuestion("Вы уверены, что хотите удалить выбранного посетителя?", event);
+			if (answer == 1 /*YES*/) {
 				try {
 					Visitor visitor = listVisitors.getSelectionModel().getSelectedItem();
 					dao.getVisitorDAO().deleteVisitor(visitor);
@@ -174,9 +168,11 @@ public class FirstTabController extends AbstractController implements Initializa
 		if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
 			if (mouseEvent.getClickCount() == 2) {
 				Visitor visitor = listVisitors.getSelectionModel().getSelectedItem();
-				FirstTabController.chooseVisitor = visitor;
-				loadInfoAboutVisitor();
-				clickOnTitledPane(null);
+				if (visitor != null) {
+					FirstTabController.chooseVisitor = visitor;
+					loadInfoAboutVisitor();
+					clickOnTitledPane(null);
+				}
 			}
 		}
 	}
