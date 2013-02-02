@@ -173,9 +173,14 @@ public class SecondTabController extends AbstractController implements Initializ
 	private void loadGroups() {
 		try {
 			Collection<Association> associations = dao.getAssociationDAO().getAllAssociations();
+			Association withoutGroup = null;
+			for (Association a : associations) {
+				if (a.getId().equals(0L))
+					withoutGroup = a;
+			}
 			cbGroup.getItems().clear();
 			cbGroup.getItems().setAll(associations);
-			cbGroup.getSelectionModel().selectFirst();
+			cbGroup.getSelectionModel().select(withoutGroup);
 			
 			cbDelGroups.getItems().clear();
 			cbDelGroups.getItems().addAll(associations);
