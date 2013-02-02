@@ -2,6 +2,7 @@ package com.romansun.reports;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.joda.time.DateTime;
 
@@ -46,7 +47,7 @@ public class ReportBuilder {
 		DateTime dt = new DateTime();
 		name.append(dt.getDayOfMonth());
 		name.append("_");
-		name.append(dt.monthOfYear().getAsText());
+		name.append(dt.monthOfYear().getAsText(new Locale("ru")));
 		name.append("_");
 		name.append(dt.getYear());
 		name.append("_");

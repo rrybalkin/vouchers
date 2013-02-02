@@ -14,9 +14,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.AnchorPane;
-import jfx.messagebox.MessageBox;
 
 import com.romansun.gui.controller.AbstractController;
+import com.romansun.gui.utils.Dialog;
 import com.romansun.hibernate.logic.Visitor;
 import com.romansun.reports.ReportBuilder;
 import com.romansun.reports.ReportsSaver;
@@ -62,11 +62,8 @@ public class MainWindowController extends AbstractController implements Initiali
 	
 	@FXML
 	private void resetTalons() {
-		int answer = MessageBox.show(null,
-				"Вы уверены, что хотите сбросить обеды и ужины для всех посетителей?",
-				"Ого, Опасно", MessageBox.ICON_QUESTION | MessageBox.YES
-						| MessageBox.NO);
-		if (answer == MessageBox.YES) {
+		int answer = Dialog.showQuestion("Вы уверены, что хотите сбросить обеды и ужины для всех посетителей?", null);
+		if (answer == 1 /*YES*/) {
 			// Create report
 			Report report = null;
 			try {

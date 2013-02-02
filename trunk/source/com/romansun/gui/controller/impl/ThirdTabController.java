@@ -27,11 +27,11 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Window;
 import javafx.util.StringConverter;
-import jfx.messagebox.MessageBox;
 
 import org.joda.time.DateTime;
 
 import com.romansun.gui.controller.AbstractController;
+import com.romansun.gui.utils.Dialog;
 import com.romansun.reports.logic.InfoVisitor;
 import com.romansun.reports.logic.Report;
 
@@ -122,11 +122,8 @@ public class ThirdTabController extends AbstractController implements Initializa
 	private void keyPressed(KeyEvent event) {
 		if (event.getCode() == KeyCode.DELETE) {
 			Window wnd = ((Node) event.getTarget()).getScene().getWindow();
-			int answer = MessageBox.show(wnd,
-					"Вы уверены, что хотите удалить выбранный отчет?",
-					"Ого, Опасно", MessageBox.ICON_QUESTION | MessageBox.YES
-							| MessageBox.NO);
-			if (answer == MessageBox.YES) {
+			int answer = Dialog.showQuestion("Вы уверены, что хотите удалить выбранный отчет?", event);
+			if (answer == 1 /*YES*/) {
 				Report report = lvReports.getSelectionModel().getSelectedItem();
 				report.getFile().delete();
 				loadReports();
