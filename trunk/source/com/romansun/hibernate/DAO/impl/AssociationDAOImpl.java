@@ -20,6 +20,8 @@ public class AssociationDAOImpl implements AssociationDAO {
 			session.beginTransaction();
 			session.save(association);
 			session.getTransaction().commit();
+		}catch (Exception ex) {
+			ex.printStackTrace();
 		}finally{
 			if (session != null && session.isOpen()) {
 				session.close();
@@ -51,6 +53,8 @@ public class AssociationDAOImpl implements AssociationDAO {
 		try {
 			session = Factory.getSessionFactory().openSession();
 			association = (Association) session.load(Association.class, association_id);
+		}catch (Exception ex) {
+			ex.printStackTrace();
 		}finally{
 			if (session != null && session.isOpen()) {
 				session.close();
