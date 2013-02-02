@@ -6,13 +6,17 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="D:/NetCracker/workspace/Talons/ojdbc6.jar"/>
-	<classpathentry kind="lib" path="D:/NetCracker/workspace/Talons/orai18n.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files/Oracle/JavaFX Scene Builder 1.0/lib/jfxrt.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Hibernate"/>
-	<classpathentry kind="lib" path="D:/Workspace for Eclipse/Vouchers/lib/jaxb-api-2.1.jar"/>
-	<classpathentry kind="lib" path="D:/Workspace for Eclipse/Vouchers/lib/jaxb-impl-2.1.jar"/>
-	<classpathentry kind="lib" path="D:/Workspace for Eclipse/Vouchers/lib/jaxb-xjc-2.0.jar"/>
-	<classpathentry kind="lib" path="D:/Workspace for Eclipse/Vouchers/lib/jfxmessagebox-1.1.0.jar"/>
+	<classpathentry kind="lib" path="lib/jaxb-api-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/jaxb-impl-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/jaxb-xjc-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jfxmessagebox-1.1.0.jar"/>
+	<classpathentry kind="lib" path="lib/joda-time-2.1-sources.jar"/>
+	<classpathentry kind="lib" path="lib/joda-time-2.1.jar"/>
+	<classpathentry kind="lib" path="D:/NetCracker/workspace/Vouchers/lib/commons-io-2.0.1.jar"/>
+	<classpathentry kind="lib" path="D:/NetCracker/workspace/Vouchers/lib/commons-io-2.0.1-sources.jar"/>
+	<classpathentry kind="lib" path="D:/NetCracker/workspace/Vouchers/lib/jfxrt.jar"/>
+	<classpathentry kind="lib" path="D:/NetCracker/workspace/Vouchers/lib/ojdbc6.jar"/>
+	<classpathentry kind="lib" path="D:/NetCracker/workspace/Vouchers/lib/orai18n.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
