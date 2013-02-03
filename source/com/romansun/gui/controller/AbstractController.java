@@ -1,19 +1,25 @@
 package com.romansun.gui.controller;
 
 import com.romansun.hibernate.factory.DAOFactory;
-import com.romansun.reports.ReportsManager;
 
 public abstract class AbstractController {
 	
-	protected static DAOFactory dao; 
-	
-	protected static ReportsManager reportsManager;
-	
 	protected final static String PATH_TO_REPORTS = "reports";
+	protected static DAOFactory dao; 
 	
 	static {
 		dao = DAOFactory.getInstance();
-		reportsManager = new ReportsManager(PATH_TO_REPORTS);
-		reportsManager.loadReports();
+	}
+	
+	protected static String upFirst(String str) {
+		StringBuilder res = new StringBuilder(1000);
+		if (str != null && !str.isEmpty()) {
+		res.append(str.substring(0, 1).toUpperCase());
+		res.append(str.substring(1).toLowerCase());
+		
+		return res.toString();
+		} else {
+			return "?";
+		}
 	}
 }

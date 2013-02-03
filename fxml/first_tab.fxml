@@ -81,9 +81,9 @@
                   <children>
                     <Label layoutX="14.0" layoutY="134.0" text="Группа:" />
                     <TextField fx:id="txtLastname" layoutX="14.0" layoutY="26.0" prefWidth="200.0" />
-                    <Label layoutX="14.0" layoutY="6.0" text="Фамимлия:" />
+                    <Label layoutX="14.0" layoutY="6.0" text="*Фамимлия:" />
                     <TextField fx:id="txtFirstname" layoutX="14.0" layoutY="68.0" prefWidth="200.0" />
-                    <Label layoutX="14.0" layoutY="48.0" text="Имя:" />
+                    <Label layoutX="14.0" layoutY="48.0" text="*Имя:" />
                     <TextField fx:id="txtMiddlename" layoutX="14.0" layoutY="110.0" prefWidth="200.0" />
                     <Label layoutX="14.0" layoutY="90.0" text="Отчество:" />
                     <ComboBox id="cbGroup" fx:id="cbGroups" layoutX="14.0" layoutY="152.0" prefHeight="21.0" prefWidth="198.0">

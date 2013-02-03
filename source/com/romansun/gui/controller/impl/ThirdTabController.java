@@ -2,6 +2,9 @@ package com.romansun.gui.controller.impl;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,17 +31,24 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Window;
 import javafx.util.StringConverter;
 
+import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 
 import com.romansun.gui.controller.AbstractController;
 import com.romansun.gui.utils.Dialog;
+import com.romansun.reports.ReportsManager;
 import com.romansun.reports.logic.InfoVisitor;
 import com.romansun.reports.logic.Report;
 
 public class ThirdTabController extends AbstractController implements Initializable, Observer {
+	private final static Logger LOG = Logger.getLogger(ThirdTabController.class);
 	private Integer month;
 	private Integer year;
+	private ReportsManager reportsManager;
+	
 	{
+		reportsManager = new ReportsManager(PATH_TO_REPORTS);
+		reportsManager.loadReports();
 		month = new DateTime().getMonthOfYear()-1;
 		year = new DateTime().getYear();
 	}
@@ -49,6 +59,7 @@ public class ThirdTabController extends AbstractController implements Initializa
 		// add observer for Main Window
 		MainWindowController.addObserver(this);
 		loadReports();
+		
 		cbMonth.setConverter(new MonthConverter());
 		Integer[] months = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
 		cbMonth.getItems().addAll(months);
@@ -113,7 +124,7 @@ public class ThirdTabController extends AbstractController implements Initializa
 			if (mouseEvent.getClickCount() == 2) {
 				tbReport.getItems().clear();
 				Report report = lvReports.getSelectionModel().getSelectedItem();
-				tbReport.getItems().addAll(report.getVisitors());
+				tbReport.getItems().addAll(sortCollection(report.getVisitors()));
 			}
 		}
 	}
@@ -125,8 +136,15 @@ public class ThirdTabController extends AbstractController implements Initializa
 			int answer = Dialog.showQuestion("Вы уверены, что хотите удалить выбранный отчет?", event);
 			if (answer == 1 /*YES*/) {
 				Report report = lvReports.getSelectionModel().getSelectedItem();
-				report.getFile().delete();
-				loadReports();
+				boolean result = report.getFile().delete();
+				if (result) {
+					loadReports();
+					LOG.info("Отчет " + report.getName()
+							+ " был успешно удален");
+				} else {
+					LOG.error("При удалении отчета " + report.getName()
+							+ " возникли проблемы. Отчет не был удален");
+				}
 			}
 		}
 	}
@@ -147,6 +165,15 @@ public class ThirdTabController extends AbstractController implements Initializa
 		}
 		
 		return filterList;
+	}
+	
+	private List<InfoVisitor> sortCollection(Collection<InfoVisitor> collection) {
+		List<InfoVisitor> visitors = new ArrayList<InfoVisitor>(collection);
+		Collections.sort(visitors, new Comparator<InfoVisitor>(){
+			public int compare(InfoVisitor v1, InfoVisitor v2) {
+				return v1.getFIO().compareTo(v2.getFIO());
+			}});
+		return visitors;
 	}
 	
 	/*

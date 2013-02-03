@@ -30,11 +30,11 @@ public class Talon {
 	
 	public Talon() {}
 	
-	public Long getTalon_id() {
+	public Long getId() {
 		return talon_id;
 	}
 
-	public void setTalon_id(Long talon_id) {
+	public void setId(Long talon_id) {
 		this.talon_id = talon_id;
 	}
 	
