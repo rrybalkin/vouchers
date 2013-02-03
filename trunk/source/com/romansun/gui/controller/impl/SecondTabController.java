@@ -1,11 +1,12 @@
 package com.romansun.gui.controller.impl;
 
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
+
+import org.apache.log4j.Logger;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,6 +23,8 @@ import com.romansun.hibernate.logic.Talon;
 import com.romansun.hibernate.logic.Visitor;
 
 public class SecondTabController extends AbstractController implements Initializable {
+	
+	private final static Logger LOG = Logger.getLogger(SecondTabController.class);
 	
 	private static Observable observable = new Observable() {
 		public void notifyObservers(Object arg) {
@@ -62,18 +65,15 @@ public class SecondTabController extends AbstractController implements Initializ
 	protected void addVisitor(ActionEvent event) {
 		Visitor visitor = new Visitor();
 		String lastname = txtLastname.getText();
-		System.out.println(lastname);
 		String firstname = txtFirstname.getText();
-		System.out.println(firstname);
 		String middlename = txtMiddlename.getText();
-		System.out.println(middlename);
 		Association group = cbGroup.getValue();
 		String description = taVisitorDescription.getText();
 		
-		if (!lastname.isEmpty() && !firstname.isEmpty() && !middlename.isEmpty()) {
-			visitor.setLastname(lastname);
-			visitor.setFirstname(firstname);
-			visitor.setMiddlename(middlename);
+		if (!lastname.isEmpty() && !firstname.isEmpty()) {
+			visitor.setLastname(upFirst(lastname));
+			visitor.setFirstname(upFirst(firstname));
+			visitor.setMiddlename(upFirst(middlename));
 			visitor.setAssociation(group);
 			visitor.setDescription(description);
 			
@@ -86,8 +86,9 @@ public class SecondTabController extends AbstractController implements Initializ
 				dao.getVisitorDAO().addVisitor(visitor);
 				Dialog.showInfo("Новый посетитель успешно добавлен!");
 				observable.notifyObservers();
-			}catch (SQLException e) {
-				e.printStackTrace();
+				LOG.info("Новый посетитель " + lastname + " " + firstname + " " + middlename + " был успешно добавлен");
+			}catch (Exception e) {
+				LOG.error("Ошибка при добавлении нового посетителя: " + e.getStackTrace());
 			}finally{
 				reset("visitor");
 			}
@@ -102,15 +103,16 @@ public class SecondTabController extends AbstractController implements Initializ
 		String name = txtGroupName.getText();
 		String description = taGroupDescription.getText();
 		if(!name.isEmpty()) {
-			group.setName(name);
+			group.setName(upFirst(name));
 			group.setDescription(description);	
 			try {
 				dao.getAssociationDAO().addAssociation(group);
 				Dialog.showInfo("Новая группа успешно добавлена!");
 				observable.notifyObservers();
 				loadGroups();
-			} catch (SQLException e) {
-				e.printStackTrace();
+				LOG.info("Новая группа " + name + " была успешно добавлена");
+			} catch (Exception e) {
+				LOG.error("Ошибка при добавлении новой группы: " + e.getStackTrace());
 			}finally{
 				reset("group");
 			}
@@ -129,8 +131,9 @@ public class SecondTabController extends AbstractController implements Initializ
 				Dialog.showInfo("Группа " + delGroup.getName() + " была успешно удалена!");
 				observable.notifyObservers();
 				loadGroups();
-			}catch (SQLException e){
-				e.printStackTrace();
+				LOG.info("Группа " + delGroup.getName() + " была успешно удалена");
+			}catch (Exception e){
+				LOG.error("Ошибка при удалении группы: " + e.getStackTrace());
 			}finally{
 				lblDelGroup.setText("");
 			}
@@ -176,8 +179,9 @@ public class SecondTabController extends AbstractController implements Initializ
 			cbDelGroups.getItems().clear();
 			associations.remove(withoutGroup);
 			cbDelGroups.getItems().addAll(associations);
-		} catch (SQLException e) {
-			e.printStackTrace();
+			LOG.info("Группы были успешно загружены");
+		} catch (Exception e) {
+			LOG.error("Ошибка при загрузке групп: " + e.getStackTrace());
 		}
 	}
 }

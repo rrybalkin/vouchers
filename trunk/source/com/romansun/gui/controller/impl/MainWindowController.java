@@ -9,6 +9,8 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
 
+import org.apache.log4j.Logger;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -23,6 +25,7 @@ import com.romansun.reports.ReportsSaver;
 import com.romansun.reports.logic.Report;
 
 public class MainWindowController extends AbstractController implements Initializable {
+	private final static Logger LOG = Logger.getLogger(MainWindowController.class);
 	
 	private static Observable observable = new Observable() {
 		public void notifyObservers(Object arg) {
@@ -47,9 +50,9 @@ public class MainWindowController extends AbstractController implements Initiali
 			firstTab.setContent(loadTab(PATH_TO_FIRST_TAB, null));
 			secondTab.setContent(loadTab(PATH_TO_SECOND_TAB, null));
 			thirdTab.setContent(loadTab(PATH_TO_THIRD_TAB, null));
+			LOG.info("Все табы были успешно загружены");
 		} catch (Exception ex) {
-			System.out.println("Ошибка при загрузке Tabs: " + ex.getMessage());
-			ex.printStackTrace();
+			LOG.error("Ошибка при загрузке Tabs: " + ex.getStackTrace());
 		}
 	}
 	
@@ -76,8 +79,9 @@ public class MainWindowController extends AbstractController implements Initiali
 				dao.getTalonDAO().resetAllTalons();
 				// Call to observer
 				observable.notifyObservers();
+				LOG.info("Все обеды и ужины были сброшены, отчет " + report.getName() + " сформирован");
 			} catch (Exception e) {
-				e.printStackTrace();
+				LOG.error("Ошибка при сбросе талонов и создании отчета: " + e.getStackTrace());
 			}
 		}
 		
@@ -87,7 +91,7 @@ public class MainWindowController extends AbstractController implements Initiali
 	private AnchorPane loadTab(String path_to_tab, Object controller) throws IOException {
 		File file = new File(path_to_tab);
 		if(!file.exists()) 
-			throw new IOException("Cannot load file or file is not exist: " + path_to_tab);
+			LOG.error("Невозможно загрузить файл либо он не существует: " + path_to_tab);
 		
     	URL fxmlURL = file.toURL();
     	FXMLLoader fxmlLoader = new FXMLLoader(fxmlURL);

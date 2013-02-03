@@ -18,5 +18,7 @@
 	<classpathentry kind="lib" path="D:/NetCracker/workspace/Vouchers/lib/jfxrt.jar"/>
 	<classpathentry kind="lib" path="D:/NetCracker/workspace/Vouchers/lib/ojdbc6.jar"/>
 	<classpathentry kind="lib" path="D:/NetCracker/workspace/Vouchers/lib/orai18n.jar"/>
+	<classpathentry kind="lib" path="D:/NetCracker/workspace/Vouchers/lib/log4j.jar"/>
+	<classpathentry kind="lib" path="D:/NetCracker/workspace/Vouchers/lib/jline-1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
