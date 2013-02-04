@@ -104,7 +104,7 @@ public class SecondTabController extends AbstractController implements Initializ
 		String description = taGroupDescription.getText();
 		if(!name.isEmpty()) {
 			group.setName(upFirst(name));
-			group.setDescription(description);	
+			group.setDescription(description);
 			try {
 				dao.getAssociationDAO().addAssociation(group);
 				Dialog.showInfo("Новая группа успешно добавлена!");
@@ -156,7 +156,7 @@ public class SecondTabController extends AbstractController implements Initializ
 			txtLastname.clear();
 			txtFirstname.clear();
 			txtMiddlename.clear();
-			cbGroup.getSelectionModel().selectFirst();
+			loadGroups();
 			taVisitorDescription.clear();
 		} else {
 			txtGroupName.clear();

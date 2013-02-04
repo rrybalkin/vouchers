@@ -6,7 +6,7 @@ import javafx.stage.Window;
 import jfx.messagebox.MessageBox;
 
 public class Dialog {
-	private static boolean show = false;
+	private static boolean show = true;
 	
 	public static void showError(String message) {
 		if (show) MessageBox.show(null, message, "”ÔÒ, Œ¯Ë·Í‡", MessageBox.ICON_ERROR | MessageBox.OK);
