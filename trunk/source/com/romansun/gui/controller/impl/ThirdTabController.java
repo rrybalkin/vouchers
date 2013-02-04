@@ -17,7 +17,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
@@ -28,7 +27,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Window;
 import javafx.util.StringConverter;
 
 import org.apache.log4j.Logger;
@@ -132,7 +130,6 @@ public class ThirdTabController extends AbstractController implements Initializa
 	@FXML
 	private void keyPressed(KeyEvent event) {
 		if (event.getCode() == KeyCode.DELETE) {
-			Window wnd = ((Node) event.getTarget()).getScene().getWindow();
 			int answer = Dialog.showQuestion("Вы уверены, что хотите удалить выбранный отчет?", event);
 			if (answer == 1 /*YES*/) {
 				Report report = lvReports.getSelectionModel().getSelectedItem();

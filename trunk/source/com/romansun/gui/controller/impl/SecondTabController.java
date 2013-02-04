@@ -88,7 +88,7 @@ public class SecondTabController extends AbstractController implements Initializ
 				observable.notifyObservers();
 				LOG.info("Новый посетитель " + lastname + " " + firstname + " " + middlename + " был успешно добавлен");
 			}catch (Exception e) {
-				LOG.error("Ошибка при добавлении нового посетителя: " + e.getStackTrace());
+				LOG.error("Ошибка при добавлении нового посетителя: ", e);
 			}finally{
 				reset("visitor");
 			}
@@ -112,7 +112,7 @@ public class SecondTabController extends AbstractController implements Initializ
 				loadGroups();
 				LOG.info("Новая группа " + name + " была успешно добавлена");
 			} catch (Exception e) {
-				LOG.error("Ошибка при добавлении новой группы: " + e.getStackTrace());
+				LOG.error("Ошибка при добавлении новой группы: ", e);
 			}finally{
 				reset("group");
 			}
@@ -133,7 +133,7 @@ public class SecondTabController extends AbstractController implements Initializ
 				loadGroups();
 				LOG.info("Группа " + delGroup.getName() + " была успешно удалена");
 			}catch (Exception e){
-				LOG.error("Ошибка при удалении группы: " + e.getStackTrace());
+				LOG.error("Ошибка при удалении группы: ", e);
 			}finally{
 				lblDelGroup.setText("");
 			}
@@ -181,7 +181,7 @@ public class SecondTabController extends AbstractController implements Initializ
 			cbDelGroups.getItems().addAll(associations);
 			LOG.info("Группы были успешно загружены");
 		} catch (Exception e) {
-			LOG.error("Ошибка при загрузке групп: " + e.getStackTrace());
+			LOG.error("Ошибка при загрузке групп: ", e);
 		}
 	}
 }
