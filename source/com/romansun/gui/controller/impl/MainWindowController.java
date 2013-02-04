@@ -51,8 +51,8 @@ public class MainWindowController extends AbstractController implements Initiali
 			secondTab.setContent(loadTab(PATH_TO_SECOND_TAB, null));
 			thirdTab.setContent(loadTab(PATH_TO_THIRD_TAB, null));
 			LOG.info("Все табы были успешно загружены");
-		} catch (Exception ex) {
-			LOG.error("Ошибка при загрузке Tabs: " + ex.getStackTrace());
+		} catch (Exception e) {
+			LOG.error("Ошибка при загрузке Tabs: ", e);
 		}
 	}
 	
@@ -81,7 +81,7 @@ public class MainWindowController extends AbstractController implements Initiali
 				observable.notifyObservers();
 				LOG.info("Все обеды и ужины были сброшены, отчет " + report.getName() + " сформирован");
 			} catch (Exception e) {
-				LOG.error("Ошибка при сбросе талонов и создании отчета: " + e.getStackTrace());
+				LOG.error("Ошибка при сбросе талонов и создании отчета: " , e);
 			}
 		}
 		
@@ -106,8 +106,7 @@ public class MainWindowController extends AbstractController implements Initiali
 		if(!file.exists()) 
 			LOG.error("Невозможно загрузить файл либо он не существует: " + path_to_tab);
 		
-    	URL fxmlURL = file.toURL();
-    	FXMLLoader fxmlLoader = new FXMLLoader(fxmlURL);
+    	FXMLLoader fxmlLoader = new FXMLLoader(file.toURL());
     	fxmlLoader.setController(controller);
     	fxmlLoader.load();
     	AnchorPane pane = fxmlLoader.getRoot();

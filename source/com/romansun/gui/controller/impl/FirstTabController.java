@@ -111,7 +111,7 @@ public class FirstTabController extends AbstractController implements
 					+ talon.getCount_lunch() + ", ужинов="
 					+ talon.getCount_dinner());
 		} catch (Exception e) {
-			LOG.error("Ошибка при добавлении талона: " + e.getStackTrace());
+			LOG.error("Ошибка при добавлении талона: ", e);
 		}
 		countLunches.getSelectionModel().selectFirst();
 		countDinners.getSelectionModel().selectFirst();
@@ -152,8 +152,7 @@ public class FirstTabController extends AbstractController implements
 				LOG.info("Изменены данные о посетителе "
 						+ chooseVisitor.getId());
 			} catch (Exception e) {
-				LOG.error("Ошибка при изменении данных о посетителе: "
-						+ e.getStackTrace());
+				LOG.error("Ошибка при изменении данных о посетителе: ", e);
 			}
 		} else {
 			Dialog.showError("Поля, помеченные * не могут быть пустыми!");
@@ -177,8 +176,7 @@ public class FirstTabController extends AbstractController implements
 						LOG.info("Удален посетитель " + visitor.getId());
 					}
 				} catch (Exception e) {
-					LOG.error("Ошибка при удалении посетителя: "
-							+ e.getStackTrace());
+					LOG.error("Ошибка при удалении посетителя: ", e);
 				}
 			}
 		} else if (event.getCode() == KeyCode.L /* Lunches */) {
@@ -200,8 +198,7 @@ public class FirstTabController extends AbstractController implements
 								+ visitor.getId());
 					}
 				} catch (Exception e) {
-					LOG.error("Ошибка при удалении обедов для посетителя: "
-							+ e.getStackTrace());
+					LOG.error("Ошибка при удалении обедов для посетителя: ", e);
 				}
 			}
 		} else if (event.getCode() == KeyCode.D /* Dinners */) {
@@ -223,8 +220,7 @@ public class FirstTabController extends AbstractController implements
 								+ visitor.getId());
 					}
 				} catch (Exception e) {
-					LOG.error("Ошибка при удалении ужинов для посетителя: "
-							+ e.getStackTrace());
+					LOG.error("Ошибка при удалении ужинов для посетителя: ", e);
 				}
 			}
 		}
@@ -280,7 +276,7 @@ public class FirstTabController extends AbstractController implements
 					+ chooseFilter.getName());
 		} catch (Exception e) {
 			LOG.error("Ошибка при загрузке посетителей с фильтром="
-					+ chooseFilter.getName() + ": " + e.getStackTrace());
+					+ chooseFilter.getName() + ": ", e);
 		}
 	}
 
@@ -297,8 +293,7 @@ public class FirstTabController extends AbstractController implements
 					+ chooseFilter.getName() + " и маской=" + mask);
 		} catch (Exception e) {
 			LOG.error("Ошибка при загрузке посетителей с фильтром="
-					+ chooseFilter.getName() + " и маской=" + mask + ": "
-					+ e.getStackTrace());
+					+ chooseFilter.getName() + " и маской=" + mask + ": ", e);
 		}
 	}
 
@@ -319,7 +314,7 @@ public class FirstTabController extends AbstractController implements
 			cbGroups.getItems().addAll(associations);
 			LOG.info("Загружены все фильтры и группы");
 		} catch (Exception e) {
-			LOG.error("Ошибка при загрузке фильтров и групп: " + e.getStackTrace());
+			LOG.error("Ошибка при загрузке фильтров и групп: ", e);
 		}
 	}
 

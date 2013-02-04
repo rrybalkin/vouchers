@@ -17,7 +17,7 @@ public class Factory {
 		try {
 			sessionFactory = new Configuration().configure(new File(PATH_TO_CONFIG_FILE)).buildSessionFactory();
 		} catch (Throwable ex) {
-			LOG.error("Initial SessionFactory creation failed. " + ex.getStackTrace());
+			LOG.error("Initial SessionFactory creation failed. ", ex);
 			throw new ExceptionInInitializerError(ex);
 		}
 	}

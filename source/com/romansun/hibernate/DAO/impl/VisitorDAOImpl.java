@@ -83,7 +83,7 @@ public class VisitorDAOImpl implements VisitorDAO {
 								+ " and association=:association_id")
 				.setString("mask", "%" + mask + "%")
 				.setLong("association_id", association.getId());
-		visitors = (Collection<Visitor>) query.list();
+		visitors = query.list();
 		session.getTransaction().commit();
 
 		if (session != null && session.isOpen()) {
@@ -118,7 +118,7 @@ public class VisitorDAOImpl implements VisitorDAO {
 				" select v "
 						+ " from Visitor v where association=:association_id")
 				.setLong("association_id", association.getId());
-		visitors = (Collection<Visitor>) query.list();
+		visitors = query.list();
 		session.getTransaction().commit();
 		if (session != null && session.isOpen()) {
 			session.close();
@@ -157,7 +157,7 @@ public class VisitorDAOImpl implements VisitorDAO {
 									+ " from Visitor v where (LOWER(lastname) || ' ' || LOWER(firstname) || ' ' || LOWER(middlename)) like :mask")
 					.setString("mask", "%" + mask.toLowerCase() + "%");
 		}
-		visitors = (Collection<Visitor>) query.list();
+		visitors = query.list();
 		session.getTransaction().commit();
 		if (session != null && session.isOpen()) {
 			session.close();
