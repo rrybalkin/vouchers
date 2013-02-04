@@ -87,6 +87,19 @@ public class MainWindowController extends AbstractController implements Initiali
 		
 	}
 	
+	@FXML
+	private void clickOnClose() {
+		System.exit(0);
+	}
+	
+	@FXML
+	private void clickOnAbout() {
+		Dialog.showInfo("Программа \"Учет талонов\" предназначена для заведующих столовой." +
+				"\nАвтор программы: Рыбалкин Роман Александрович" +
+				"\nПо всем вопросам обращаться по адресу roman.rybalkin24@gmail.com" +
+				"\nВсе права защищены ©");
+	}
+	
 	// method for loading Tab from fxml-file
 	private AnchorPane loadTab(String path_to_tab, Object controller) throws IOException {
 		File file = new File(path_to_tab);
