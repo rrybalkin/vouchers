@@ -1,5 +1,7 @@
 package com.romansun.gui.controller;
 
+import java.io.File;
+
 import com.romansun.hibernate.factory.DAOFactory;
 
 public abstract class AbstractController {
@@ -8,6 +10,10 @@ public abstract class AbstractController {
 	protected static DAOFactory dao; 
 	
 	static {
+		File reports = new File(PATH_TO_REPORTS);
+		if (!reports.exists()) {
+			reports.mkdir();
+		}
 		dao = DAOFactory.getInstance();
 	}
 	

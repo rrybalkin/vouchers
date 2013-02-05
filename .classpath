@@ -16,5 +16,6 @@
 	<classpathentry kind="lib" path="D:/Workspace for Eclipse/Vouchers/lib/ojdbc6.jar"/>
 	<classpathentry kind="lib" path="D:/Workspace for Eclipse/Vouchers/lib/orai18n.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Hibernate"/>
+	<classpathentry kind="lib" path="lib/ant-javafx.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

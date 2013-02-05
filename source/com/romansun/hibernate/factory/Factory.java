@@ -7,18 +7,26 @@ import org.apache.log4j.Logger;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.SessionFactory;
 
+import com.romansun.gui.utils.Resources;
+
 public class Factory {
 	private static final Logger LOG = Logger.getLogger(Factory.class);
 	private static final SessionFactory sessionFactory;
-	private static final String PATH_TO_CONFIG_FILE = "config\\hibernate.cfg.xml";
 	static {
 		// This line is needed for right working
 		Locale.setDefault(Locale.ENGLISH);
 		try {
-			sessionFactory = new Configuration().configure(new File(PATH_TO_CONFIG_FILE)).buildSessionFactory();
-		} catch (Throwable ex) {
-			LOG.error("Initial SessionFactory creation failed. ", ex);
-			throw new ExceptionInInitializerError(ex);
+			File config = new File("config\\hibernate.cfg.xml");
+			if (!config.exists()) {
+				config = new Resources().getHibernateConfig();
+				LOG.info("Внешний hibernate.cfg.xml не был найден - используется внутренний");
+			} else {
+				LOG.info("Внешний hibernate.cfg.xml был найден");
+			}
+			sessionFactory = new Configuration().configure(config).buildSessionFactory();
+		} catch (Throwable e) {
+			LOG.error("Initial SessionFactory creation failed. ", e);
+			throw new ExceptionInInitializerError(e);
 		}
 	}
 
