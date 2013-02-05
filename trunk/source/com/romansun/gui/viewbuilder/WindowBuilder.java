@@ -1,9 +1,10 @@
 package com.romansun.gui.viewbuilder;
 
-import java.io.File;
 import java.net.URL;
 
 import org.apache.log4j.Logger;
+
+import com.romansun.gui.utils.Resources;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -14,13 +15,11 @@ import javafx.stage.Stage;
 
 public class WindowBuilder extends Application {
 	private static final Logger LOG = Logger.getLogger(WindowBuilder.class);
-	private static final String PATH_TO_FILE = "fxml\\main_window.fxml";
 
 	@Override
 	public void start(Stage stage) throws Exception {
 		try {
-			File f = new File(PATH_TO_FILE);
-			URL fxmlURL = f.toURL();
+			URL fxmlURL = new Resources().getMainWindowFXML().toURL();
 			if (fxmlURL == null) {
 				throw new IllegalArgumentException("FXML file cannot be load");
 			}
@@ -30,9 +29,8 @@ public class WindowBuilder extends Application {
 			stage.setTitle("Учет талонов");
 			stage.getIcons().add(new Image("file:resource/icon.png"));
 			stage.show();
-		} catch (Exception ex) {
-			LOG.error("Ошибка при выполнении загрузки главного окна: "
-					+ ex.getStackTrace());
+		} catch (Exception e) {
+			LOG.error("Ошибка при выполнении загрузки главного окна: ", e);
 		}
 	}
 	

@@ -1,6 +1,5 @@
 package com.romansun.gui.controller.impl;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -19,6 +18,7 @@ import javafx.scene.layout.AnchorPane;
 
 import com.romansun.gui.controller.AbstractController;
 import com.romansun.gui.utils.Dialog;
+import com.romansun.gui.utils.Resources;
 import com.romansun.hibernate.logic.Visitor;
 import com.romansun.reports.ReportBuilder;
 import com.romansun.reports.ReportsSaver;
@@ -40,16 +40,11 @@ public class MainWindowController extends AbstractController implements Initiali
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		// paths to tabs
-		final String PATH_TO_FIRST_TAB = "fxml\\first_tab.fxml";
-		final String PATH_TO_SECOND_TAB = "fxml\\second_tab.fxml";
-		final String PATH_TO_THIRD_TAB = "fxml\\third_tab.fxml";
-		
-		// loading tabs and add to TabPane
 		try {
-			firstTab.setContent(loadTab(PATH_TO_FIRST_TAB, null));
-			secondTab.setContent(loadTab(PATH_TO_SECOND_TAB, null));
-			thirdTab.setContent(loadTab(PATH_TO_THIRD_TAB, null));
+			// loading tabs and add to TabPane
+			firstTab.setContent(loadTab(new Resources().getFirstTabFXML().toURL(), null));
+			secondTab.setContent(loadTab(new Resources().getSecondTabFXML().toURL(), null));
+			thirdTab.setContent(loadTab(new Resources().getThirdTabFXML().toURL(), null));
 			LOG.info("Все табы были успешно загружены");
 		} catch (Exception e) {
 			LOG.error("Ошибка при загрузке Tabs: ", e);
@@ -101,12 +96,8 @@ public class MainWindowController extends AbstractController implements Initiali
 	}
 	
 	// method for loading Tab from fxml-file
-	private AnchorPane loadTab(String path_to_tab, Object controller) throws IOException {
-		File file = new File(path_to_tab);
-		if(!file.exists()) 
-			LOG.error("Невозможно загрузить файл либо он не существует: " + path_to_tab);
-		
-    	FXMLLoader fxmlLoader = new FXMLLoader(file.toURL());
+	private AnchorPane loadTab(URL path_to_tab, Object controller) throws IOException {
+    	FXMLLoader fxmlLoader = new FXMLLoader(path_to_tab);
     	fxmlLoader.setController(controller);
     	fxmlLoader.load();
     	AnchorPane pane = fxmlLoader.getRoot();
