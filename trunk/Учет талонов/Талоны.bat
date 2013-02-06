@@ -1,0 +1,1 @@
+start javaw -jar "Vouchers v1.0.jar"

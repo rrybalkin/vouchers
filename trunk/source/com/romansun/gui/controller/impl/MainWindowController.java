@@ -1,5 +1,6 @@
 package com.romansun.gui.controller.impl;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -37,14 +38,30 @@ public class MainWindowController extends AbstractController implements Initiali
 	public static void addObserver(Observer o) {
 		observable.addObserver(o);
 	}
-	
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		try {
 			// loading tabs and add to TabPane
-			firstTab.setContent(loadTab(new Resources().getFirstTabFXML().toURL(), null));
-			secondTab.setContent(loadTab(new Resources().getSecondTabFXML().toURL(), null));
-			thirdTab.setContent(loadTab(new Resources().getThirdTabFXML().toURL(), null));
+			File firstTabFile = new File("resource/fxml/first_tab.fxml");
+			if (!firstTabFile.exists()) {
+				firstTabFile = new Resources().getFirstTabFXML();
+				LOG.info("Внешний файл first_tab.fxml не найден, используется внутренний");
+			}
+			File secondTabFile = new File("resource/fxml/second_tab.fxml");
+			if (!secondTabFile.exists()) {
+				secondTabFile = new Resources().getSecondTabFXML();
+				LOG.info("Внешний файл secondTab.fxml не найден, используется внутренний");
+			}
+			File thirdTabFile = new File("resource/fxml/third_tab.fxml");
+			if (!thirdTabFile.exists()) {
+				thirdTabFile = new Resources().getThirdTabFXML();
+				LOG.info("Внешний файл thirdTab.fxml не найден, используется внутренний");
+			}
+			
+			firstTab.setContent(loadTab(firstTabFile.toURL(), null));
+			secondTab.setContent(loadTab(secondTabFile.toURL(), null));
+			thirdTab.setContent(loadTab(thirdTabFile.toURL(), null));
 			LOG.info("Все табы были успешно загружены");
 		} catch (Exception e) {
 			LOG.error("Ошибка при загрузке Tabs: ", e);
