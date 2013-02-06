@@ -1,5 +1,7 @@
 package com.romansun.base;
 
+import java.io.File;
+
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
@@ -10,8 +12,12 @@ public class StartWindow {
 
 	private final static Logger LOG = Logger.getLogger(StartWindow.class);
 	static {
-		PropertyConfigurator.configure(new Resources().getLog4jProperties()
-				.getPath());
+		File config = new File("config/log4j.properties");
+		if (!config.exists()) {
+			config = new Resources().getLog4jProperties();
+			LOG.info("Внешний файл log4j.properties не найден - используется внутренний");
+		}
+		PropertyConfigurator.configure(config.getPath());
 	}
 
 	/**

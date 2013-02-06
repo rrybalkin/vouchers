@@ -17,6 +17,7 @@ public class Resources {
 	private File firstTabFXML;
 	private File secondTabFXML;
 	private File thirdTabFXML;
+	private File icon;
 	
 	{
 		log4jProperties = getFileByName("log4j.properties");
@@ -25,11 +26,15 @@ public class Resources {
 		firstTabFXML = getFileByName("first_tab.fxml");
 		secondTabFXML = getFileByName("second_tab.fxml");
 		thirdTabFXML = getFileByName("third_tab.fxml");
-		
+		icon = getFileByName("icon.png");
 	}
 	
 	public Resources() {
 		
+	}
+	
+	public File getIcon() {
+		return icon;
 	}
 
 	public File getHibernateConfig() {

@@ -1,5 +1,6 @@
 package com.romansun.gui.viewbuilder;
 
+import java.io.File;
 import java.net.URL;
 
 import org.apache.log4j.Logger;
@@ -19,7 +20,12 @@ public class WindowBuilder extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 		try {
-			URL fxmlURL = new Resources().getMainWindowFXML().toURL();
+			File mainWindow = new File("resource/fxml/main_window.fxml");
+			if (!mainWindow.exists()) {
+				mainWindow = new Resources().getMainWindowFXML();
+				LOG.info("Внешний файл main_window.fxml не был найден - используется внутренний");
+			}
+			URL fxmlURL = mainWindow.toURL();
 			if (fxmlURL == null) {
 				throw new IllegalArgumentException("FXML file cannot be load");
 			}
@@ -27,7 +33,12 @@ public class WindowBuilder extends Application {
 			Scene scene = new Scene(mainFrame);
 			stage.setScene(scene);
 			stage.setTitle("Учет талонов");
-			stage.getIcons().add(new Image("file:resource/icon.png"));
+			File icon = new File("resource/icon.png");
+			if (!icon.exists()) {
+				icon = new Resources().getIcon();
+				LOG.info("Внешний файл icon.png не найден - используется внутренний");
+			}
+			stage.getIcons().add(new Image(icon.toURL().toString()));
 			stage.show();
 		} catch (Exception e) {
 			LOG.error("Ошибка при выполнении загрузки главного окна: ", e);
