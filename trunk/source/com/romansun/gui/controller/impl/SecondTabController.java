@@ -15,6 +15,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 
 import com.romansun.gui.controller.AbstractController;
 import com.romansun.gui.utils.Dialog;
@@ -146,6 +147,7 @@ public class SecondTabController extends AbstractController implements Initializ
 	protected void chooseDelGroup() {
 		Association delGroup = cbDelGroups.getValue();
 		if (delGroup != null) {
+			lblDelGroup.setTextFill(Color.RED);
 			lblDelGroup.setText("Удаляемая группа: \"" + delGroup.getName() + "\"");
 		}
 	}
@@ -167,18 +169,13 @@ public class SecondTabController extends AbstractController implements Initializ
 	private void loadGroups() {
 		try {
 			Collection<Association> associations = dao.getAssociationDAO().getAllAssociations();
-			Association withoutGroup = null;
-			for (Association a : associations) {
-				if (a.getId().equals(0L))
-					withoutGroup = a;
-			}
 			cbGroup.getItems().clear();
 			cbGroup.getItems().setAll(associations);
-			cbGroup.getSelectionModel().select(withoutGroup);
+			cbGroup.getSelectionModel().selectFirst();
 			
 			cbDelGroups.getItems().clear();
-			associations.remove(withoutGroup);
 			cbDelGroups.getItems().addAll(associations);
+			cbDelGroups.getItems().remove(0);
 			LOG.info("Группы были успешно загружены");
 		} catch (Exception e) {
 			LOG.error("Ошибка при загрузке групп: ", e);
