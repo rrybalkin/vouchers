@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="Associations")
-public class Association {
+public class Association implements Comparable<Association>{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "visitors_seq_gen")
     @SequenceGenerator(name = "visitors_seq_gen", sequenceName = "sq_association_id")
@@ -48,4 +48,9 @@ public class Association {
     public String toString() {
         return name;
     }
+
+	@Override
+	public int compareTo(Association a) {
+		return this.id.compareTo(a.getId());
+	}
 }
