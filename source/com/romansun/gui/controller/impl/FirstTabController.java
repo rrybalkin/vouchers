@@ -96,6 +96,8 @@ public class FirstTabController extends AbstractController implements
 	private ComboBox<Association> cbGroups;
 	@FXML
 	private TitledPane titledPane;
+	@FXML
+	private Label lblInfo;
 
 	@FXML
 	private void addTalon() {
@@ -265,15 +267,21 @@ public class FirstTabController extends AbstractController implements
 		listVisitors.getItems().clear();
 		try {
 			Collection<Visitor> visitors = null;
-			if (chooseFilter.getId() == -1L) {
-				visitors = dao.getVisitorDAO().getAllVisitors();
+			String mask = txtMask.getText();
+			if (mask != null && mask.length() != 0) {
+				loadVisitorsForMask(mask);
 			} else {
-				visitors = dao.getVisitorDAO().getVisitorsByCriteria(
-						chooseFilter, null);
+				if (chooseFilter.getId() == -1L) {
+					visitors = dao.getVisitorDAO().getAllVisitors();
+				} else {
+					visitors = dao.getVisitorDAO().getVisitorsByCriteria(
+							chooseFilter, null);
+				}
+				listVisitors.getItems().addAll(sortCollection(visitors));
+				LOG.info("Загружены посетители с фильтром="
+						+ chooseFilter.getName());
 			}
-			listVisitors.getItems().addAll(sortCollection(visitors));
-			LOG.info("Загружены посетители с фильтром="
-					+ chooseFilter.getName());
+			lblInfo.setText("Загружено посетителей: " + visitors.size());
 		} catch (Exception e) {
 			LOG.error("Ошибка при загрузке посетителей с фильтром="
 					+ chooseFilter.getName() + ": ", e);
@@ -291,6 +299,7 @@ public class FirstTabController extends AbstractController implements
 			listVisitors.getItems().addAll(sortCollection(visitors));
 			LOG.info("Загружены посетители с фильтром="
 					+ chooseFilter.getName() + " и маской=" + mask);
+			lblInfo.setText("Загружено посетителей: " + visitors.size());
 		} catch (Exception e) {
 			LOG.error("Ошибка при загрузке посетителей с фильтром="
 					+ chooseFilter.getName() + " и маской=" + mask + ": ", e);
