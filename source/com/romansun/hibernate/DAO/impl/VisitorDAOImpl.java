@@ -136,7 +136,6 @@ public class VisitorDAOImpl implements VisitorDAO {
 		session.beginTransaction();
 		Query query = null;
 		if (association != null && (mask != null && !mask.isEmpty())) {
-			System.out.println("1 case" + mask + " " + association.getId());
 			query = session
 					.createQuery(
 							" select v "

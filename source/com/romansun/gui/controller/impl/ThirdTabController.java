@@ -12,13 +12,16 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
 
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -50,6 +53,17 @@ public class ThirdTabController extends AbstractController implements Initializa
 		month = new DateTime().getMonthOfYear()-1;
 		year = new DateTime().getYear();
 	}
+	
+	private static Observable observable = new Observable() {
+		public void notifyObservers(Object arg) {
+			setChanged();
+			super.notifyObservers(arg);
+		}
+	};
+	
+	public static void addObserver(Observer o) {
+		observable.addObserver(o);
+	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
@@ -64,7 +78,7 @@ public class ThirdTabController extends AbstractController implements Initializa
 		cbMonth.getSelectionModel().select(new Integer(month));
 		
 		cbYear.setConverter(new YearConverter());
-		Integer[] years = {2012, 2013};
+		Integer[] years = config.YEARS_FOR_REPORTS;
 		cbYear.getItems().addAll(years);
 		cbYear.getSelectionModel().select(year);
 		
@@ -103,6 +117,8 @@ public class ThirdTabController extends AbstractController implements Initializa
 					tbReport.getItems().addAll(report.getVisitors());
 				}
 			}});
+		
+		initContextMenuForReports();
 	}
 	
 	@FXML
@@ -171,6 +187,35 @@ public class ThirdTabController extends AbstractController implements Initializa
 				return v1.getFIO().compareTo(v2.getFIO());
 			}});
 		return visitors;
+	}
+	
+	/*
+	 * Method for initializing context menu of items for stored reports
+	 */
+	private void initContextMenuForReports() {
+		final ContextMenu menu = new ContextMenu();
+		MenuItem itemPrintReport = new MenuItem("Формирование отчета");
+		itemPrintReport.setOnAction(new EventHandler<ActionEvent>() {
+	        @Override
+	        public void handle(ActionEvent event) {
+	        	Report selectedReport = lvReports.getSelectionModel().getSelectedItem();
+	            LOG.debug("Action: printing stored report = " + selectedReport.getName());
+	            
+	            observable.notifyObservers(selectedReport);
+	            mainTabPane.getSelectionModel().select(3);
+	        }
+	    });
+		
+		menu.getItems().add(itemPrintReport);
+		
+		lvReports.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+	        @Override
+	        public void handle(MouseEvent event) {
+	            if (event.getButton().equals(MouseButton.SECONDARY)) {
+	            	menu.show(lvReports, event.getScreenX(), event.getScreenY());
+	            }
+	        }
+	    });
 	}
 	
 	/*

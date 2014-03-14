@@ -15,11 +15,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 
+import com.romansun.config.Resources;
 import com.romansun.gui.controller.AbstractController;
 import com.romansun.gui.utils.Dialog;
-import com.romansun.gui.utils.Resources;
 import com.romansun.hibernate.logic.Visitor;
 import com.romansun.reports.ReportBuilder;
 import com.romansun.reports.ReportsSaver;
@@ -42,38 +43,49 @@ public class MainWindowController extends AbstractController implements Initiali
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		try {
+			mainTabPane = tabPane;
+			
 			// loading tabs and add to TabPane
 			File firstTabFile = new File("resource/fxml/first_tab.fxml");
 			if (!firstTabFile.exists()) {
-				firstTabFile = new Resources().getFirstTabFXML();
+				firstTabFile = Resources.getInstance().getFirstTabFXML();
 				LOG.info("Внешний файл first_tab.fxml не найден, используется внутренний");
 			}
 			File secondTabFile = new File("resource/fxml/second_tab.fxml");
 			if (!secondTabFile.exists()) {
-				secondTabFile = new Resources().getSecondTabFXML();
-				LOG.info("Внешний файл secondTab.fxml не найден, используется внутренний");
+				secondTabFile = Resources.getInstance().getSecondTabFXML();
+				LOG.info("Внешний файл second_tab.fxml не найден, используется внутренний");
 			}
 			File thirdTabFile = new File("resource/fxml/third_tab.fxml");
 			if (!thirdTabFile.exists()) {
-				thirdTabFile = new Resources().getThirdTabFXML();
-				LOG.info("Внешний файл thirdTab.fxml не найден, используется внутренний");
+				thirdTabFile = Resources.getInstance().getThirdTabFXML();
+				LOG.info("Внешний файл third_tab.fxml не найден, используется внутренний");
+			}
+			File fourthTabFile = new File("resource/fxml/fourth_tab.fxml");
+			if (!fourthTabFile.exists()) {
+				fourthTabFile = Resources.getInstance().getFourthTabXML();
+				LOG.info("Внешний файл fourth_tab.fxml не найден, используется внутренний");
 			}
 			
 			firstTab.setContent(loadTab(firstTabFile.toURL(), null));
 			secondTab.setContent(loadTab(secondTabFile.toURL(), null));
 			thirdTab.setContent(loadTab(thirdTabFile.toURL(), null));
+			fourthTab.setContent(loadTab(fourthTabFile.toURL(), null));
 			LOG.info("Все табы были успешно загружены");
 		} catch (Exception e) {
 			LOG.error("Ошибка при загрузке Tabs: ", e);
 		}
 	}
-	
+	@FXML
+	private TabPane tabPane;
 	@FXML
 	private Tab firstTab;
 	@FXML
 	private Tab secondTab;
 	@FXML
 	private Tab thirdTab;
+	@FXML
+	private Tab fourthTab;
 	
 	@FXML
 	private void resetTalons() {

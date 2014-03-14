@@ -5,7 +5,7 @@ import java.net.URL;
 
 import org.apache.log4j.Logger;
 
-import com.romansun.gui.utils.Resources;
+import com.romansun.config.Resources;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -22,7 +22,7 @@ public class WindowBuilder extends Application {
 		try {
 			File mainWindow = new File("resource/fxml/main_window.fxml");
 			if (!mainWindow.exists()) {
-				mainWindow = new Resources().getMainWindowFXML();
+				mainWindow = Resources.getInstance().getMainWindowFXML();
 				LOG.info("Внешний файл main_window.fxml не был найден - используется внутренний");
 			}
 			URL fxmlURL = mainWindow.toURL();
@@ -35,7 +35,7 @@ public class WindowBuilder extends Application {
 			stage.setTitle("Учет талонов");
 			File icon = new File("resource/icon.png");
 			if (!icon.exists()) {
-				icon = new Resources().getIcon();
+				icon = Resources.getInstance().getIcon();
 				LOG.info("Внешний файл icon.png не найден - используется внутренний");
 			}
 			stage.getIcons().add(new Image(icon.toURL().toString()));

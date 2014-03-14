@@ -13,6 +13,7 @@ public class DAOFactory {
 	private static AssociationDAO associationDAO = null;
 	private static TalonDAO talonDAO = null;
 	private static DAOFactory instance = null;
+	private DAOFactory() {}
 	
 	public static DAOFactory getInstance() {
 		if (instance == null){
