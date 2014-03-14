@@ -9,6 +9,7 @@ public class Report {
 	private Integer year;
 	private String name;
 	private File file;
+	private List<InfoVisitor> visitors;
 	
 	public Report() { 
 		
@@ -21,8 +22,6 @@ public class Report {
 	public void setName(String nameReport) {
 		this.name = nameReport;
 	}
-
-	private List<InfoVisitor> visitors;
 
 	public Integer getMonth() {
 		return month;

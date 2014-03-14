@@ -14,6 +14,11 @@
         <Tab fx:id="firstTab" text="Работа с посетителями" />
         <Tab fx:id="secondTab" text="Добавление новых" />
         <Tab fx:id="thirdTab" text="Предыдущие отчеты" />
+        <Tab fx:id="fourthTab" text="Формирование отчета">
+          <content>
+            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+          </content>
+        </Tab>
       </tabs>
     </TabPane>
     <MenuBar prefWidth="653.0">

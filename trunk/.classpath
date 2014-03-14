@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="source"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Program Files/Oracle/JavaFX 2.2 Runtime/lib/jfxrt.jar"/>
-	<classpathentry kind="lib" path="D:/Workspace for Eclipse/Vouchers/lib/commons-io-2.0.1.jar"/>
-	<classpathentry kind="lib" path="D:/Workspace for Eclipse/Vouchers/lib/commons-io-2.0.1-sources.jar"/>
-	<classpathentry kind="lib" path="D:/Workspace for Eclipse/Vouchers/lib/jaxb-api-2.1.jar"/>
-	<classpathentry kind="lib" path="D:/Workspace for Eclipse/Vouchers/lib/jaxb-impl-2.1.jar"/>
-	<classpathentry kind="lib" path="D:/Workspace for Eclipse/Vouchers/lib/jaxb-xjc-2.0.jar"/>
-	<classpathentry kind="lib" path="D:/Workspace for Eclipse/Vouchers/lib/jfxmessagebox-1.1.0.jar"/>
-	<classpathentry kind="lib" path="D:/Workspace for Eclipse/Vouchers/lib/jline-1.0.jar"/>
-	<classpathentry kind="lib" path="D:/Workspace for Eclipse/Vouchers/lib/joda-time-2.1.jar"/>
-	<classpathentry kind="lib" path="D:/Workspace for Eclipse/Vouchers/lib/joda-time-2.1-sources.jar"/>
-	<classpathentry kind="lib" path="D:/Workspace for Eclipse/Vouchers/lib/log4j.jar"/>
-	<classpathentry kind="lib" path="D:/Workspace for Eclipse/Vouchers/lib/ojdbc6.jar"/>
-	<classpathentry kind="lib" path="D:/Workspace for Eclipse/Vouchers/lib/orai18n.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Hibernate"/>
 	<classpathentry kind="lib" path="lib/ant-javafx.jar"/>
+	<classpathentry kind="lib" path="lib/commons-io-2.0.1-sources.jar"/>
+	<classpathentry kind="lib" path="lib/commons-io-2.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/jaxb-api-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/jaxb-impl-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/jaxb-xjc-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jfxmessagebox-1.1.0.jar"/>
+	<classpathentry kind="lib" path="lib/jline-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/joda-time-2.1-sources.jar"/>
+	<classpathentry kind="lib" path="lib/joda-time-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/log4j.jar"/>
+	<classpathentry kind="lib" path="lib/ojdbc6.jar"/>
+	<classpathentry kind="lib" path="lib/orai18n.jar"/>
+	<classpathentry kind="lib" path="lib/JavaFX/lib/jfxrt.jar"/>
+	<classpathentry kind="lib" path="D:/Workspace/Vouchers/lib/nproperty-1.3.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre7"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Apache POI"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.SessionFactory;
 
-import com.romansun.gui.utils.Resources;
+import com.romansun.config.Resources;
 
 public class Factory {
 	private static final Logger LOG = Logger.getLogger(Factory.class);
@@ -18,7 +18,7 @@ public class Factory {
 		try {
 			File config = new File("config\\hibernate.cfg.xml");
 			if (!config.exists()) {
-				config = new Resources().getHibernateConfig();
+				config = Resources.getInstance().getHibernateConfig();
 				LOG.info("Внешний hibernate.cfg.xml не был найден - используется внутренний");
 			} else {
 				LOG.info("Внешний hibernate.cfg.xml был найден");
