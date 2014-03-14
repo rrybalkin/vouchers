@@ -17,7 +17,8 @@ public class Resources {
 	private File firstTabFXML;
 	private File secondTabFXML;
 	private File thirdTabFXML;
-	private File fourthTabXML;
+	private File fourthTabFXML;
+	private File settingsWindowFXML;
 	private File icon;
 	
 	{
@@ -27,7 +28,8 @@ public class Resources {
 		firstTabFXML = getFileByName("first_tab.fxml");
 		secondTabFXML = getFileByName("second_tab.fxml");
 		thirdTabFXML = getFileByName("third_tab.fxml");
-		fourthTabXML = getFileByName("fourth_tab.fxml");
+		fourthTabFXML = getFileByName("fourth_tab.fxml");
+		settingsWindowFXML = getFileByName("settings_window.fxml");
 		icon = getFileByName("icon.png");
 	}
 	
@@ -55,8 +57,12 @@ public class Resources {
 		return thirdTabFXML;
 	}
 	
-	public File getFourthTabXML() {
-		return fourthTabXML;
+	public File getFourthTabFXML() {
+		return fourthTabFXML;
+	}
+	
+	public File getSettingsWindowFXML() {
+		return settingsWindowFXML;
 	}
 
 	public File getLog4jProperties() {

@@ -32,6 +32,7 @@ import com.romansun.gui.utils.Dialog;
 import com.romansun.hibernate.logic.Association;
 import com.romansun.hibernate.logic.Talon;
 import com.romansun.hibernate.logic.Visitor;
+import com.romansun.utils.AdditionalUtils;
 
 public class FirstTabController extends AbstractController implements
 		Initializable, Observer {
@@ -138,9 +139,9 @@ public class FirstTabController extends AbstractController implements
 		String middlename = txtMiddlename.getText();
 		Association association = cbGroups.getValue();
 		if (!lastname.isEmpty() && !firstname.isEmpty()) {
-			newVisitor.setFirstname(upFirst(firstname));
-			newVisitor.setLastname(upFirst(lastname));
-			newVisitor.setMiddlename(upFirst(middlename));
+			newVisitor.setFirstname(AdditionalUtils.upFirst(firstname));
+			newVisitor.setLastname(AdditionalUtils.upFirst(lastname));
+			newVisitor.setMiddlename(AdditionalUtils.upFirst(middlename));
 			newVisitor.setAssociation(association);
 			newVisitor.setTalon(chooseVisitor.getTalon());
 			newVisitor.setId(chooseVisitor.getId());

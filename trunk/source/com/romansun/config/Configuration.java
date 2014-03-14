@@ -14,11 +14,11 @@ import org.apache.log4j.Logger;
  * Class of configuration properties which are stored in configuration file "config/config.txt".
  * For parsing system uses "nProperty" library.
  * @link https://code.google.com/p/jfork/
- * @author rybalkin
+ * @author Roman Rybalkin
  *
  */
 public class Configuration {
-	private static final String PATH_TO_CONFIG_FILE = "config/config.txt";
+	public static final String PATH_TO_CONFIG_FILE = "config/config.txt";
 	private final static Logger LOG = Logger.getLogger(Configuration.class);
 	
 	/* Configuration properties */
@@ -31,14 +31,20 @@ public class Configuration {
 	@Cfg
 	public String PATH_TO_REPORTS;
 	
-	@Cfg("EXCEL_TEMPLATE")
-	public String pathToExcelTemplate;
+	@Cfg("PATH_TO_XLS_TEMPLATE")
+	public String pathToXLSTemplate;
+	@Cfg("PATH_TO_XLSX_TEMPLATE")
+	public String pathToXLSXTemplate;
+	@Cfg("PATH_TO_DOC_TEMPLATE")
+	public String pathToDOCTemplate;
+	@Cfg("PATH_TO_DOCX_TEMPLATE")
+	public String pathToDOCSTemplate;
 	
 	@Cfg("DATE_MACROS")
 	public String macrosDate;
 	
 	@Cfg(splitter = ",")
-	public String[] FULL_SET_OF_FIELDS_IN_TEMPLATE;
+	public String[] FIELDS_OF_EXEL_TEMPLATE;
 	
 	
 	/* Realization of Singleton */

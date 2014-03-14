@@ -20,6 +20,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import com.romansun.config.Configuration;
 import com.romansun.printing.data.ReportUnit;
 import com.romansun.printing.writer.IReportWriter;
+import com.romansun.utils.AdditionalUtils;
 
 /**
  * Class for creating and generating report file in type EXCEL
@@ -31,12 +32,13 @@ public class XLSReportWriter implements IReportWriter {
 	
 	private final Configuration config = Configuration.getInstance();
 	private File reportFolder;
+	private String version;
 	/* Columns of template */
 	private List<String> columns;
 	/* Associations for columns in template and their indexes */
 	private Map<String, Integer> columnIndexes;
 	
-	public XLSReportWriter(String pathToReportFolder) 
+	public XLSReportWriter(String pathToReportFolder, String version) 
 	{
 		File folder = new File(pathToReportFolder);
 		if (folder == null || !folder.exists()) {
@@ -44,8 +46,8 @@ public class XLSReportWriter implements IReportWriter {
 		} else {
 			this.reportFolder = folder;
 		}
-		
-		columns = Arrays.asList(config.FULL_SET_OF_FIELDS_IN_TEMPLATE);
+		this.version = version;
+		columns = Arrays.asList(config.FIELDS_OF_EXEL_TEMPLATE);
 	}
 
 	@Override
@@ -54,7 +56,17 @@ public class XLSReportWriter implements IReportWriter {
 		
 		File report = null;
 		try {
-			InputStream inp = new FileInputStream(config.pathToExcelTemplate);
+			String pathToTemplate = null;
+			if ("XLS".equalsIgnoreCase(version)) {
+				pathToTemplate = config.pathToXLSTemplate;
+			} else if ("XLSX".equalsIgnoreCase(version)) {
+				pathToTemplate = config.pathToXLSXTemplate;
+			} else {
+				LOG.error("Version = " + version + " is unknown!");
+				return null;
+			}
+			
+			InputStream inp = new FileInputStream(pathToTemplate);
 			Workbook wb = WorkbookFactory.create(inp);
 			inp.close();
 			Sheet sheet = wb.getSheetAt(0);
@@ -89,7 +101,7 @@ public class XLSReportWriter implements IReportWriter {
 			
 			// Write the output to a file
 			String reportName = "Отчет за " + reportDate;
-			report = createReportFile(reportName, "xlsx");
+			report = AdditionalUtils.createUniqueFile(reportFolder, reportName, version);
 		    FileOutputStream fileOut = new FileOutputStream(report);
 		    wb.write(fileOut);
 		    fileOut.close();
@@ -102,23 +114,6 @@ public class XLSReportWriter implements IReportWriter {
 		}
 		
 		return report;
-	}
-	
-	/**
-	 * Method for creating file of report; 
-	 * If file with initial name already exists - name will be extended by suffix = " (i)"
-	 * @param name name of report
-	 * @param extension extension of file
-	 * @return file with unique name within report folder
-	 */
-	private File createReportFile(String name, String extension) {
-		File file = new File(reportFolder.getAbsolutePath() + "//" + name + "." + extension);
-		int index = 1;
-		while (file.exists()) {
-			file = new File(reportFolder.getAbsolutePath() + "//" + name + " (" + index++ + ")" + "." + extension);
-		}
-		
-		return file;
 	}
 	
 	/**
