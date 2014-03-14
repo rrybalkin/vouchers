@@ -23,7 +23,7 @@ public class StartWindow {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		LOG.info("Старт программы");
+		LOG.info("!!! Старт программы !!!");
 		
 		WindowBuilder window = new WindowBuilder();
 		window.show();

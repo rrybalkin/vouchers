@@ -22,6 +22,7 @@ import com.romansun.gui.utils.Dialog;
 import com.romansun.hibernate.logic.Association;
 import com.romansun.hibernate.logic.Talon;
 import com.romansun.hibernate.logic.Visitor;
+import com.romansun.utils.AdditionalUtils;
 
 public class SecondTabController extends AbstractController implements Initializable {
 	
@@ -72,9 +73,9 @@ public class SecondTabController extends AbstractController implements Initializ
 		String description = taVisitorDescription.getText();
 		
 		if (!lastname.isEmpty() && !firstname.isEmpty()) {
-			visitor.setLastname(upFirst(lastname));
-			visitor.setFirstname(upFirst(firstname));
-			visitor.setMiddlename(upFirst(middlename));
+			visitor.setLastname(AdditionalUtils.upFirst(lastname));
+			visitor.setFirstname(AdditionalUtils.upFirst(firstname));
+			visitor.setMiddlename(AdditionalUtils.upFirst(middlename));
 			visitor.setAssociation(group);
 			visitor.setDescription(description);
 			
@@ -104,7 +105,7 @@ public class SecondTabController extends AbstractController implements Initializ
 		String name = txtGroupName.getText();
 		String description = taGroupDescription.getText();
 		if(!name.isEmpty()) {
-			group.setName(upFirst(name));
+			group.setName(AdditionalUtils.upFirst(name));
 			group.setDescription(description);
 			try {
 				dao.getAssociationDAO().addAssociation(group);

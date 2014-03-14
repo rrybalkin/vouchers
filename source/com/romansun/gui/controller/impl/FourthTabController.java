@@ -86,6 +86,9 @@ public class FourthTabController extends AbstractController implements Initializ
 					+ " " + DateTime.now().getYear();
 			
 			IReportWriter writer = WriterFactory.getWriter(reportType, config.PATH_TO_REPORTS);
+			if (writer == null) {
+				throw new RuntimeException("Этот тип отчета в настоящий момент не поддерживается!");
+			}
 			File report = writer.generateReport(reportData, reportDate);
 			
 			if (report != null && report.exists()) {

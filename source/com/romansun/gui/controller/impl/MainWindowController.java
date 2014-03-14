@@ -9,14 +9,16 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
 
-import org.apache.log4j.Logger;
-
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
+
+import org.apache.log4j.Logger;
 
 import com.romansun.config.Resources;
 import com.romansun.gui.controller.AbstractController;
@@ -27,6 +29,7 @@ import com.romansun.reports.ReportsSaver;
 import com.romansun.reports.logic.Report;
 
 public class MainWindowController extends AbstractController implements Initializable {
+	private final static String SETTINGS_WINDOW_NAME = "Settings";
 	private final static Logger LOG = Logger.getLogger(MainWindowController.class);
 	
 	private static Observable observable = new Observable() {
@@ -63,7 +66,7 @@ public class MainWindowController extends AbstractController implements Initiali
 			}
 			File fourthTabFile = new File("resource/fxml/fourth_tab.fxml");
 			if (!fourthTabFile.exists()) {
-				fourthTabFile = Resources.getInstance().getFourthTabXML();
+				fourthTabFile = Resources.getInstance().getFourthTabFXML();
 				LOG.info("Внешний файл fourth_tab.fxml не найден, используется внутренний");
 			}
 			
@@ -112,6 +115,18 @@ public class MainWindowController extends AbstractController implements Initiali
 	}
 	
 	@FXML
+	private void clickOnSettings() {
+		File settingsWindow = new File("resource/fxml/settings_window.fxml");
+		if (!settingsWindow.exists()) {
+			settingsWindow = Resources.getInstance().getFourthTabFXML();
+			LOG.info("Внешний файл settings_window.fxml не найден, используется внутренний");
+		}
+		DialogBuilder settingWindowBuilder = 
+				new DialogBuilder(settingsWindow, SETTINGS_WINDOW_NAME);
+		settingWindowBuilder.show();
+	}
+	
+	@FXML
 	private void clickOnClose() {
 		System.exit(0);
 	}
@@ -132,5 +147,41 @@ public class MainWindowController extends AbstractController implements Initiali
     	AnchorPane pane = fxmlLoader.getRoot();
     	
     	return pane;
+	}
+	
+	public class DialogBuilder {
+
+		private Stage stage = null;
+		protected String dialogFXML;
+		protected String dialogName;
+
+		public DialogBuilder() {
+			dialogFXML = null;
+			dialogName = "";
+		}
+
+		public DialogBuilder(File f, String dialogName) {
+			stage = new Stage();
+			URL fxmlURL = null;
+			try {
+				fxmlURL = f.toURL();
+				if (fxmlURL == null) {
+					throw new IllegalArgumentException("FXML file cannot be load");
+				}
+				AnchorPane mainFrame = FXMLLoader.load(fxmlURL);
+				Scene scene = new Scene(mainFrame);
+				stage.setScene(scene);
+				stage.setTitle(dialogName);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		public void show() {
+			if (stage == null)
+				throw new RuntimeException("Dialog cannot be instantiated");
+			stage.show();
+		}
+
 	}
 }
