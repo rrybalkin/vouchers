@@ -82,8 +82,14 @@ public class FourthTabController extends AbstractController implements Initializ
 		{
 			if (!validate()) return;
 			ReportData reportData = buildReportData();
-			String reportDate = DateTime.now().monthOfYear().getAsText(new Locale("ru")) 
+			String reportDate = null;
+			if (printingReport != null) {
+				String storedReportName = printingReport.getName();
+				reportDate = storedReportName.substring(0, storedReportName.indexOf('.'));
+			} else {
+				reportDate = DateTime.now().monthOfYear().getAsText(new Locale("ru"))
 					+ " " + DateTime.now().getYear();
+			}
 			
 			IReportWriter writer = WriterFactory.getWriter(reportType, config.PATH_TO_REPORTS);
 			if (writer == null) {
@@ -179,6 +185,7 @@ public class FourthTabController extends AbstractController implements Initializ
 	
 	protected void resetReportInfo() {
 		lblReportInfo.setText(PRINTING_REPORT_BY_ACTUAL_DATA);
+		printingReport = null;
 	}
 
 	@Override
