@@ -92,7 +92,7 @@ public class FourthTabController extends AbstractController implements Initializ
 				String storedReportName = printingReport.getName();
 				reportDate = storedReportName.substring(0, storedReportName.indexOf('.'));
 			} else {
-				reportDate = DateTime.now().monthOfYear().getAsText(new Locale("ru"))
+				reportDate = DateTime.now().minusMonths(1).monthOfYear().getAsText(new Locale("ru"))
 					+ " " + DateTime.now().getYear();
 			}
 			
