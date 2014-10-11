@@ -14,7 +14,7 @@ public class StartWindow {
 		File config = new File("config/log4j.properties");
 		if (!config.exists()) {
 			config = Resources.getInstance().getLog4jProperties();
-			LOG.info("Внешний файл log4j.properties не найден - используется внутренний");
+			LOG.info("External config of log4j.properies doesn't found - using internal");
 		}
 		PropertyConfigurator.configure(config.getPath());
 	}
@@ -23,7 +23,7 @@ public class StartWindow {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		LOG.info("!!! Старт программы !!!");
+		LOG.info("Start program ...");
 		
 		WindowBuilder window = new WindowBuilder();
 		window.show();

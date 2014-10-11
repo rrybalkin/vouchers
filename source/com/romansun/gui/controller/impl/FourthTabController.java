@@ -5,6 +5,10 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
@@ -28,6 +32,7 @@ import com.romansun.gui.utils.Dialog;
 import com.romansun.hibernate.logic.Visitor;
 import com.romansun.printing.data.ActualReportData;
 import com.romansun.printing.data.ReportData;
+import com.romansun.printing.data.ReportUnit;
 import com.romansun.printing.data.StoredReportData;
 import com.romansun.printing.writer.IReportWriter;
 import com.romansun.printing.writer.WriterFactory;
@@ -179,6 +184,19 @@ public class FourthTabController extends AbstractController implements Initializ
 					ignoreEmptyVisitors
 					);
 		}
+		 
+		// sorting report data
+		reportData.sort(new Comparator<ReportUnit>() {
+
+			@Override
+			public int compare(ReportUnit o1, ReportUnit o2) {
+				String fio1 = o1.getVisitorLastname() + " " + o1.getVisitorFirstname();
+				String fio2 = o2.getVisitorLastname() + " " + o2.getVisitorFirstname();
+				
+				return fio1.compareToIgnoreCase(fio2);
+			}
+			
+		});
 		
 		return reportData;
 	}
@@ -196,5 +214,16 @@ public class FourthTabController extends AbstractController implements Initializ
 		} else {
 			LOG.debug("Argument 'object' in update method is null or isn't instance of clazz 'Report'");
 		}
+	}
+	
+	public static Iterator<? super ReportUnit> sortedIterator(Iterator<? extends ReportUnit> i, Comparator<? super ReportUnit> comparator) {
+		List<ReportUnit> list = new ArrayList<ReportUnit>();
+		while(i.hasNext()) {
+			list.add(i.next());
+		}
+		
+		Collections.sort(list, comparator);
+		
+		return list.iterator();
 	}
 }

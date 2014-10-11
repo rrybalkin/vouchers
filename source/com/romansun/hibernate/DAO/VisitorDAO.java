@@ -14,4 +14,5 @@ public interface VisitorDAO {
 	public void deleteVisitor(Visitor visitor) throws Exception;
 	public Collection<Visitor> getVisitorsByAssociation(Association association) throws Exception;
 	public Collection<Visitor> getVisitorsByCriteria(Association association, String mask) throws Exception;
+	public int getCountVisitors() throws Exception;
 }

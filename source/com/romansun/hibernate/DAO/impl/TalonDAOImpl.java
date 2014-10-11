@@ -116,4 +116,20 @@ public class TalonDAOImpl implements TalonDAO {
 		}
 
 	}
+
+	@Override
+	public int getCountLunches() throws Exception {
+		Session session = Factory.getSessionFactory().openSession();
+		int count = ((Long)session.createQuery("select sum(count_lunch) from Talon").uniqueResult()).intValue();
+		
+		return count;
+	}
+
+	@Override
+	public int getCountDinners() throws Exception {
+		Session session = Factory.getSessionFactory().openSession();
+		int count = ((Long)session.createQuery("select sum(count_dinner) from Talon").uniqueResult()).intValue();
+		
+		return count;
+	}
 }

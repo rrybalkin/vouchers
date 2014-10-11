@@ -13,4 +13,6 @@ public interface TalonDAO {
 	public void resetAllTalons() throws Exception;
 	public void resetLunchById(Long talon_id) throws Exception;
 	public void resetDinnerById(Long talon_id) throws Exception;
+	public int getCountLunches() throws Exception;
+	public int getCountDinners() throws Exception;
 }
