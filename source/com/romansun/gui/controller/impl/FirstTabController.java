@@ -281,8 +281,8 @@ public class FirstTabController extends AbstractController implements
 				listVisitors.getItems().addAll(sortCollection(visitors));
 				LOG.info("Загружены посетители с фильтром="
 						+ chooseFilter.getName());
+				lblInfo.setText("Загружено посетителей: " + visitors.size());
 			}
-			lblInfo.setText("Загружено посетителей: " + visitors.size());
 		} catch (Exception e) {
 			LOG.error("Ошибка при загрузке посетителей с фильтром="
 					+ chooseFilter.getName() + ": ", e);
