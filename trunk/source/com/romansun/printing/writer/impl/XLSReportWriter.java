@@ -38,6 +38,20 @@ public class XLSReportWriter implements IReportWriter {
 	/* Associations for columns in template and their indexes */
 	private Map<String, Integer> columnIndexes;
 	
+	/* Cell formulas */
+	private Map<String, CellFormula> cellFormulas;
+	{
+		cellFormulas = new HashMap<String, CellFormula>();
+		cellFormulas.put("№", new CellFormula() {
+
+			@Override
+			public String getFormula() {
+				return "ROW()-2";
+			}
+			
+		});
+	}
+	
 	public XLSReportWriter(String pathToReportFolder, String version) 
 	{
 		File folder = new File(pathToReportFolder);
@@ -86,18 +100,24 @@ public class XLSReportWriter implements IReportWriter {
 					int columnIndex = columnIndexes.get(columnName);
 					Object pValue = unit.getPropertyByName(columnName);
 					
+					Cell cell = currentRow.createCell(columnIndex);
+					if (cellFormulas.containsKey(columnName)) {
+						cell.setCellFormula(cellFormulas.get(columnName).getFormula());
+						continue;
+					}
+					
 					if (pValue instanceof Integer) {
-						currentRow.createCell(columnIndex).setCellValue((Integer) pValue);
+						cell.setCellValue((Integer) pValue);
 					} else if (pValue instanceof Double) {
-						currentRow.createCell(columnIndex).setCellValue((Double) pValue);
+						cell.setCellValue((Double) pValue);
 					} else {
-						currentRow.createCell(columnIndex).setCellValue((String) pValue);
+						cell.setCellValue((String) pValue);
 					}
 				}
 
 				rowNum++;
 			}
-			LOG.debug(rowNum-2 + " rows were filled!");
+			LOG.debug(rowNum-2 + " rows were filled");
 			
 			// Write the output to a file
 			String reportName = "Отчет за " + reportDate;
@@ -121,7 +141,7 @@ public class XLSReportWriter implements IReportWriter {
 	 * @param sheet template sheet which contains columns
 	 */
 	private void findColumnIndexes(Sheet sheet) {
-		LOG.debug("Find columns indexes by their names in current template ...");
+		LOG.debug("Searching the column indexes by their names in the current template ...");
 		columnIndexes = new HashMap<String, Integer>();
 		
 		Row titleRow = sheet.getRow(1);
@@ -138,5 +158,14 @@ public class XLSReportWriter implements IReportWriter {
 		
 		LOG.debug("End of finding columns!");
 	}
-
+	
+	/**
+	 * Interface for creating cell formula
+	 * 
+	 * @author Roman Rybalkin
+	 *
+	 */
+	interface CellFormula {
+		String getFormula();
+	}
 }

@@ -1,2 +1,2 @@
 // Добавляем стандаартную группу - "Без группы"
-INSERT INTO associations VALUE(0, 'Без группы', null);
+INSERT INTO associations VALUES(0, 'Без группы', null);

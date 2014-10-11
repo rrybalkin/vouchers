@@ -10,4 +10,5 @@ public interface AssociationDAO {
 	public Association getAssociationById(Long association_id) throws Exception;
 	public Collection<Association> getAllAssociations() throws Exception;
 	public void deleteAssociation(Association association) throws Exception;
+	public int getCountAssociations() throws Exception;
 }

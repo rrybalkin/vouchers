@@ -11,11 +11,7 @@ import com.romansun.reports.logic.InfoVisitor;
 import com.romansun.reports.logic.Report;
 
 public class ReportBuilder {
-
-	public ReportBuilder() {
-
-	}
-
+	
 	public Report buildReport(List<Visitor> visitors) {
 		Report report = new Report();
 		// Getting attributes for report

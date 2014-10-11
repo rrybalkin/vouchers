@@ -80,4 +80,12 @@ public class AssociationDAOImpl implements AssociationDAO {
 
 	}
 
+	@Override
+	public int getCountAssociations() throws Exception {
+		Session session = Factory.getSessionFactory().openSession();
+		int count = ((Long)session.createQuery("select count(*) from Association").uniqueResult()).intValue();
+		
+		return count;
+	}
+
 }

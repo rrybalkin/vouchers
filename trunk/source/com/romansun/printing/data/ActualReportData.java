@@ -28,7 +28,6 @@ public class ActualReportData extends ReportData {
 		LOG.debug("Ignore Empty Visitors = " + ignoreEmptyVisitors);
 		super.units = new ArrayList<ReportUnit>();
 		
-		int num = 1;
 		for (Visitor visitor : visitors) {
 			int countOfLunches = visitor.getTalon().getCount_lunch();
 			int countOfDinners = visitor.getTalon().getCount_dinner();
@@ -39,7 +38,6 @@ public class ActualReportData extends ReportData {
 			}
 			
 			ReportUnit unit = new ReportUnit();
-			unit.setNumber(num);
 			unit.setVisitorFirstname(visitor.getFirstname());
 			unit.setVisitorLastname(visitor.getLastname());
 			
@@ -64,7 +62,6 @@ public class ActualReportData extends ReportData {
 			unit.setGeneralCost(generalCost);
 			
 			units.add(unit);
-			num++;
 		}
 		
 		LOG.debug("Actual Data were successfully extracted.");

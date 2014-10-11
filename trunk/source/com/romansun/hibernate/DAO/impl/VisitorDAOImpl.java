@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Projections;
 
 import com.romansun.hibernate.DAO.VisitorDAO;
 import com.romansun.hibernate.factory.Factory;
@@ -163,5 +164,13 @@ public class VisitorDAOImpl implements VisitorDAO {
 		}
 
 		return visitors;
+	}
+
+	@Override
+	public int getCountVisitors() throws Exception {
+		Session session = Factory.getSessionFactory().openSession();
+		int count = ((Long)session.createQuery("select count(*) from Visitor").uniqueResult()).intValue();
+		
+		return count;
 	}
 }

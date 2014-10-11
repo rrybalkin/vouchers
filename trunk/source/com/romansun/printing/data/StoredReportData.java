@@ -30,7 +30,6 @@ public class StoredReportData extends ReportData {
 		super.units = new ArrayList<ReportUnit>();
 		
 		List<InfoVisitor> visitors = report.getVisitors();
-		int num = 1;
 		for (InfoVisitor visitor : visitors) {
 			ReportUnit unit = new ReportUnit();
 			String[] fio = visitor.getFIO().replace("Без группы", "Без_группы").split(" ");
@@ -52,7 +51,6 @@ public class StoredReportData extends ReportData {
 				double costOfDinners = countOfDinners * priceOfDinner;
 				double generalCost = costOfLunches + costOfDinners;
 				
-				unit.setNumber(num);
 				unit.setVisitorFirstname(firstname);
 				unit.setVisitorLastname(lastname);
 				if (middlename != null && !"?".equals(middlename)) {
@@ -69,7 +67,6 @@ public class StoredReportData extends ReportData {
 				unit.setGeneralCost(generalCost);
 				
 				units.add(unit);
-				num++;
 			} else {
 				LOG.debug("Information about visitor = " + visitor.getFIO() + " is null or incorrect!");
 			}

@@ -7,8 +7,6 @@ import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 
 public class ReportUnit {
-	@Alias(name="№")
-	protected int num;
 	@Alias(name="имя")
 	protected String visitorFirstname;
 	@Alias(name="фамилия")
@@ -28,12 +26,6 @@ public class ReportUnit {
 	@Alias(name="общая стоимость")
 	protected double generalCost;
 	
-	public int getNumber() {
-		return num;
-	}
-	public void setNumber(int num) {
-		this.num = num;
-	}
 	public String getVisitorFirstname() {
 		return visitorFirstname;
 	}
