@@ -19,9 +19,6 @@ public class StartWindow {
 		PropertyConfigurator.configure(config.getPath());
 	}
 
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
 		LOG.info("Start program ...");
 		

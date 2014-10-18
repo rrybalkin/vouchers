@@ -84,13 +84,13 @@ public class SecondTabController extends AbstractController implements Initializ
 			talon.setCount_lunch(0);
 			visitor.setTalon(talon);
 			try {
-				dao.getTalonDAO().addTalon(talon);
-				dao.getVisitorDAO().addVisitor(visitor);
+				dao.getTalonDAO().add(talon);
+				visitorsDAO.add(visitor);
 				Dialog.showInfo("Новый посетитель успешно добавлен!");
 				observable.notifyObservers();
-				LOG.info("Новый посетитель " + lastname + " " + firstname + " " + middlename + " был успешно добавлен");
+				LOG.info("New visitor = [" + visitor + "] was successfully added");
 			}catch (Exception e) {
-				LOG.error("Ошибка при добавлении нового посетителя: ", e);
+				LOG.error("Error while adding new visitor = [" + visitor + "]: ", e);
 			}finally{
 				reset("visitor");
 			}
@@ -108,7 +108,7 @@ public class SecondTabController extends AbstractController implements Initializ
 			group.setName(AdditionalUtils.upFirst(name));
 			group.setDescription(description);
 			try {
-				dao.getAssociationDAO().addAssociation(group);
+				dao.getAssociationDAO().add(group);
 				Dialog.showInfo("Новая группа успешно добавлена!");
 				observable.notifyObservers();
 				loadGroups();
@@ -129,7 +129,7 @@ public class SecondTabController extends AbstractController implements Initializ
 		Association delGroup = cbDelGroups.getValue();
 		if (delGroup != null) {
 			try {
-				dao.getAssociationDAO().deleteAssociation(delGroup);
+				dao.getAssociationDAO().delete(delGroup);
 				Dialog.showInfo("Группа " + delGroup.getName() + " была успешно удалена!");
 				observable.notifyObservers();
 				loadGroups();
@@ -169,7 +169,7 @@ public class SecondTabController extends AbstractController implements Initializ
 	
 	private void loadGroups() {
 		try {
-			Collection<Association> associations = dao.getAssociationDAO().getAllAssociations();
+			Collection<Association> associations = dao.getAssociationDAO().getAll();
 			cbGroup.getItems().clear();
 			cbGroup.getItems().setAll(associations);
 			cbGroup.getSelectionModel().selectFirst();

@@ -1,91 +1,95 @@
 package com.romansun.hibernate.DAO.impl;
 
-import java.util.ArrayList;
+import static com.romansun.hibernate.DAO.utils.QueryStorage.GET_COUNT_OF_ASSOCIATIONS;
+
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 import org.hibernate.Session;
 
 import com.romansun.hibernate.DAO.AssociationDAO;
-import com.romansun.hibernate.factory.Factory;
+import com.romansun.hibernate.factory.Invoker;
 import com.romansun.hibernate.logic.Association;
 
 public class AssociationDAOImpl implements AssociationDAO {
 
 	@Override
-	public void addAssociation(Association association) throws Exception {
-		Session session = null;
-		session = Factory.getSessionFactory().openSession();
-		session.beginTransaction();
-		session.save(association);
-		session.getTransaction().commit();
-		if (session != null && session.isOpen()) {
-			session.close();
-		}
+	public void add(final Association a) throws Exception {
+		if (a == null)
+			throw new IllegalArgumentException("Association must be not null");
+
+		new Invoker<Void>() {
+			@Override
+			public Void task(Session session) {
+				session.save(a);
+				return null;
+			}
+		}.invoke();
 	}
 
 	@Override
-	public void updateAssociation(Long association_id,
-			Association newAssociation) throws Exception {
-		Session session = null;
-		session = Factory.getSessionFactory().openSession();
-		session.beginTransaction();
-		session.update(newAssociation);
-		session.getTransaction().commit();
+	public void update(final Association a) throws Exception {
+		if (a == null)
+			throw new IllegalArgumentException("Association must be not null");
 
-		if (session != null && session.isOpen()) {
-			session.close();
-		}
+		new Invoker<Void>() {
+			@Override
+			public Void task(Session session) {
+				session.update(a);
+				return null;
+			}
+		}.invoke();
 	}
 
 	@Override
-	public Association getAssociationById(Long association_id) throws Exception {
-		Session session = null;
-		Association association = null;
-		session = Factory.getSessionFactory().openSession();
-		association = (Association) session.load(Association.class,
-				association_id);
+	public void delete(final Association a) throws Exception {
+		if (a == null)
+			throw new IllegalArgumentException("Association must be not null");
 
-		if (session != null && session.isOpen()) {
-			session.close();
-		}
-		return association;
+		new Invoker<Void>() {
+			@Override
+			public Void task(Session session) {
+				session.delete(a);
+				return null;
+			}
+		}.invoke();
 	}
 
 	@Override
-	public Collection<Association> getAllAssociations() throws Exception {
-		Session session = null;
-		session = Factory.getSessionFactory().openSession();
-		List<Association> associations = session.createCriteria(Association.class).list();
-		Collections.sort(associations);
+	public Association getById(final long id) throws Exception {
+		if (id <= 0)
+			throw new IllegalArgumentException("ID must be positive");
 
-		if (session != null && session.isOpen()) {
-			session.close();
-		}
-		return associations;
+		return new Invoker<Association>() {
+
+			@Override
+			public Association task(Session session) {
+				Association asc = (Association) session.load(Association.class,	id);
+				return asc;
+			}
+		}.invoke();
 	}
 
 	@Override
-	public void deleteAssociation(Association association) throws Exception {
-		Session session = null;
-		session = Factory.getSessionFactory().openSession();
-		session.beginTransaction();
-		session.delete(association);
-		session.getTransaction().commit();
+	public Collection<Association> getAll() throws Exception {
+		return new Invoker<Collection<Association>>() {
 
-		if (session != null && session.isOpen()) {
-			session.close();
-		}
-
+			@Override
+			public Collection<Association> task(Session session) {
+				Collection<Association> ascs = session.createCriteria(Association.class).list();
+				return ascs;
+			}
+		}.invoke();
 	}
 
 	@Override
-	public int getCountAssociations() throws Exception {
-		Session session = Factory.getSessionFactory().openSession();
-		int count = ((Long)session.createQuery("select count(*) from Association").uniqueResult()).intValue();
-		
-		return count;
+	public int getCount() throws Exception {
+		return new Invoker<Integer>() {
+
+			@Override
+			public Integer task(Session session) {
+				return (Integer) session.createQuery(GET_COUNT_OF_ASSOCIATIONS).uniqueResult();
+			}
+		}.invoke();
 	}
 
 }
