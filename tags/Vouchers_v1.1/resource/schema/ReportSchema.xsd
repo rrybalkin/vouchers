@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/SaveFormalSchema" xmlns:tns="http://www.example.org/SaveFormalSchema" elementFormDefault="qualified">
+
+    
+
+
+    
+
+
+    <complexType name="ReportType">
+    	<sequence>
+    		<element name="Visitors" type="tns:VisitorsType" minOccurs="1" maxOccurs="1"></element>
+    	</sequence>
+    	<attribute name="month" type="int"></attribute>
+    	<attribute name="year" type="int"></attribute>
+    </complexType>
+
+
+    <complexType name="VisitorType">
+    	<sequence>
+    		<element name="FIO" type="string"></element>
+    		<element name="Lunches" type="int"></element>
+    		<element name="Dinners" type="int"></element>
+    	</sequence>
+    </complexType>
+    
+
+
+    <complexType name="VisitorsType">
+    	<sequence>
+    		<element name="Visitor" type="tns:VisitorType" minOccurs="1" maxOccurs="unbounded"></element>
+    	</sequence>
+    </complexType>
+    
+
+
+
+    <complexType name="RootType">
+    	<sequence>
+    		<element name="Report" type="tns:ReportType" minOccurs="1" maxOccurs="1"></element>
+    	</sequence>
+    </complexType>
+    
+    <element name="Root" type="tns:RootType"></element>
+
+</schema>

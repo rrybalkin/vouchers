@@ -1,0 +1,66 @@
+<project name="Vouchers v1.1" default="jar" xmlns:fx="javafx:com.sun.javafx.tools.ant">
+	<property name="src.dir" value="source"/>
+	<property name="classes.dir" value="build/classes"/>
+	<property name="build.dir" value="build"/>
+	<property name="jar.dir" value="build/jar"/>
+	<property name="lib.dir" value="./lib"/>
+	<property name="resource.dir" value="resource"/>
+	<property name="config.dir" value="config"/>
+	<property name="javafx.ant.lib" value="lib"/>
+	<property name="javafx.lib.dir" value="lib/JavaFX"/> 
+	
+	<property name="main.class" value="com.romansun.base.StartWindow"/>
+	
+	<path id="classpath">
+        <fileset dir="./lib" includes="**/*.jar"/>
+    </path>
+	
+	<target name="init_javafx_ant">
+        <taskdef resource="com/sun/javafx/tools/ant/antlib.xml"      
+                uri="javafx:com.sun.javafx.tools.ant"
+                classpath="${javafx.ant.lib}/ant-javafx.jar"/>
+    </target>
+	
+	<target name="clean" depends="init_javafx_ant">
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <target name="compile" depends="clean">
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath"/>
+    </target>
+	
+	<target name="jar" depends="compile">
+		<mkdir dir="${jar.dir}"/>
+		<manifestclasspath property="jar.classpath" jarfile="${ant.project.name}.jar">
+			<classpath refid="classpath"/>
+		</manifestclasspath>
+		<fx:jar destfile="${jar.dir}/${ant.project.name}.jar">
+			<fx:application name="${ant.project.name}"
+					mainClass="${main.class}"/>
+		 
+			<fx:resources>
+				<fx:fileset dir="${lib.dir}" includes="**/*.jar"/>
+			</fx:resources>
+					
+			<!-- That include into result jar file -->
+			<fileset dir="${classes.dir}" includes="**/*.class"/>
+			<fileset dir="${resource.dir}/fxml" includes="**"/>
+			<fileset dir="${resource.dir}" includes="*.*"/>
+			<fileset dir="${config.dir}" includes="**"/>
+			<fileset dir="${lib.dir}" includes="**/*.jar"/>
+		 
+			<!-- Customize jar manifest -->
+			<manifest>
+				<attribute name="Main-Class" value="${main.class}"/>
+				<attribute name="Class-Path" value="${jar.classpath}"/>
+			</manifest>
+		</fx:jar>
+	</target>
+
+	<!--
+    <target name="run" depends="jar">
+        <java jar="${jar.dir}/${ant.project.name}.jar" fork="true"/>
+    </target>
+	-->
+</project>
