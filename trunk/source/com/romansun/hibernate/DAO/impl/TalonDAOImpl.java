@@ -6,130 +6,149 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 import com.romansun.hibernate.DAO.TalonDAO;
-import com.romansun.hibernate.factory.Factory;
+import com.romansun.hibernate.factory.Invoker;
 import com.romansun.hibernate.logic.Talon;
-import com.romansun.hibernate.logic.Visitor;
+
+import static com.romansun.hibernate.DAO.utils.QueryStorage.*;
 
 public class TalonDAOImpl implements TalonDAO {
 
 	@Override
-	public void addTalon(Talon talon) throws Exception {
-		Session session = null;
-		session = Factory.getSessionFactory().openSession();
-		session.beginTransaction();
-		session.save(talon);
-		session.getTransaction().commit();
+	public void add(final Talon t) throws Exception {
+		if (t == null)
+			throw new IllegalArgumentException("Talon must be not null");
 
-		if (session != null && session.isOpen()) {
-			session.close();
-		}
+		new Invoker<Void>() {
+			@Override
+			public Void task(Session session) {
+				session.save(t);
+				return null;
+			}
+		}.invoke();
 	}
 
 	@Override
-	public void updateTalonForVisitor(Visitor visitor, Talon newTalon)
-			throws Exception {
-		Session session = null;
-		session = Factory.getSessionFactory().openSession();
-		session.beginTransaction();
-		session.update(newTalon);
-		session.getTransaction().commit();
+	public void update(final Talon t) throws Exception {
+		if (t == null)
+			throw new IllegalArgumentException("Talon must be not null");
 
-		if (session != null && session.isOpen()) {
-			session.close();
-		}
+		new Invoker<Void>() {
+			@Override
+			public Void task(Session session) {
+				session.update(t);
+				return null;
+			}
+		}.invoke();
 	}
 
 	@Override
-	public void deleteTalon(Talon talon) throws Exception {
-		Session session = null;
+	public void delete(final Talon t) throws Exception {
+		if (t == null)
+			throw new IllegalArgumentException("Talon must be not null");
 
-		session = Factory.getSessionFactory().openSession();
-		session.beginTransaction();
-		session.delete(talon);
-		session.getTransaction().commit();
+		new Invoker<Void>() {
+			@Override
+			public Void task(Session session) {
+				session.delete(t);
+				return null;
+			}
+		}.invoke();
+	}
 
-		if (session != null && session.isOpen()) {
-			session.close();
-		}
+	@Override
+	public Talon getById(final long id) throws Exception {
+		if (id <= 0)
+			throw new IllegalArgumentException("ID must be positive");
+
+		return new Invoker<Talon>() {
+
+			@Override
+			public Talon task(Session session) {
+				Talon talon = (Talon) session.load(Talon.class, id);
+				return talon;
+			}
+		}.invoke();
+	}
+
+	@Override
+	public Collection<Talon> getAll() throws Exception {
+		return new Invoker<Collection<Talon>>() {
+			
+			@Override
+			public Collection<Talon> task(Session session) {
+				Collection<Talon> talons = session.createCriteria(Talon.class).list();
+				return talons;
+			}
+		}.invoke();
 	}
 
 	@Override
 	public void resetAllTalons() throws Exception {
-		Session session = null;
+		new Invoker<Void>() {
 
-		session = Factory.getSessionFactory().openSession();
-		session.beginTransaction();
-		Query query = session
-				.createQuery(" update Talon t set t.count_lunch=0, t.count_dinner=0 ");
-		query.executeUpdate();
-		session.getTransaction().commit();
-
-		if (session != null && session.isOpen()) {
-			session.close();
-		}
-
+			@Override
+			public Void task(Session session) {
+				Query query = session.createQuery(RESET_ALL_TALONS);
+				query.executeUpdate();
+				return null;
+			}
+		}.invoke();
 	}
 
 	@Override
-	public Collection<Talon> getAllTalons() throws Exception {
-		Session session = null;
-		Collection<Talon> talons = null;
-		session = Factory.getSessionFactory().openSession();
-		talons = session.createCriteria(Talon.class).list();
+	public void resetLunchById(final long id) throws Exception {
+		if (id <= 0)
+			throw new IllegalArgumentException("ID must be positive");
 
-		if (session != null && session.isOpen()) {
-			session.close();
-		}
+		new Invoker<Void>() {
 
-		return talons;
+			@Override
+			public Void task(Session session) {
+				Query query = session.createQuery(RESET_LUNCHES_BY_TALON).setLong(TALON_BIND, id);
+				query.executeUpdate();
+				return null;
+			}
+		}.invoke();
 	}
 
 	@Override
-	public void resetLunchById(Long talon_id) throws Exception {
-		Session session = null;
-		session = Factory.getSessionFactory().openSession();
-		session.beginTransaction();
-		Query query = session.createQuery(
-				" update Talon t set t.count_lunch=0 where talon_id = :id ")
-				.setLong("id", talon_id);
-		query.executeUpdate();
-		session.getTransaction().commit();
-
-		if (session != null && session.isOpen()) {
-			session.close();
-		}
-
-	}
-
-	@Override
-	public void resetDinnerById(Long talon_id) throws Exception {
-		Session session = null;
-		session = Factory.getSessionFactory().openSession();
-		session.beginTransaction();
-		Query query = session.createQuery(
-				" update Talon t set t.count_dinner=0 where talon_id = :id ")
-				.setLong("id", talon_id);
-		query.executeUpdate();
-		session.getTransaction().commit();
-		if (session != null && session.isOpen()) {
-			session.close();
-		}
-
-	}
-
-	@Override
-	public int getCountLunches() throws Exception {
-		Session session = Factory.getSessionFactory().openSession();
-		int count = ((Long)session.createQuery("select sum(count_lunch) from Talon").uniqueResult()).intValue();
+	public void resetDinnerById(final long id) throws Exception 
+	{
+		if (id <= 0)
+			throw new IllegalArgumentException("ID must be positive");
 		
-		return count;
+		new Invoker<Void>() {
+
+			@Override
+			public Void task(Session session) {
+				Query query = session.createQuery(RESET_DINNERS_BY_TALON).setLong(TALON_BIND, id);
+				query.executeUpdate();
+				return null;
+			}
+		}.invoke();
 	}
 
 	@Override
-	public int getCountDinners() throws Exception {
-		Session session = Factory.getSessionFactory().openSession();
-		int count = ((Long)session.createQuery("select sum(count_dinner) from Talon").uniqueResult()).intValue();
-		
-		return count;
+	public int getCountLunches() throws Exception 
+	{
+		return new Invoker<Integer>() {
+
+			@Override
+			public Integer task(Session session) {
+				return (Integer) session.createQuery(GET_COUNT_OF_LUNCHES).uniqueResult();
+			}
+		}.invoke();
+	}
+
+	@Override
+	public int getCountDinners() throws Exception 
+	{
+		return new Invoker<Integer>() {
+
+			@Override
+			public Integer task(Session session) {
+				return (Integer) session.createQuery(GET_COUNT_OF_DINNERS).uniqueResult();
+			}
+		}.invoke();
 	}
 }

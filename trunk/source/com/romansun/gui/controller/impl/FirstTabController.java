@@ -10,8 +10,6 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
 
-import org.apache.log4j.Logger;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -27,6 +25,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
+import org.apache.log4j.Logger;
+
 import com.romansun.gui.controller.AbstractController;
 import com.romansun.gui.utils.Dialog;
 import com.romansun.hibernate.logic.Association;
@@ -36,8 +36,7 @@ import com.romansun.utils.AdditionalUtils;
 
 public class FirstTabController extends AbstractController implements
 		Initializable, Observer {
-	private final static Logger LOG = Logger
-			.getLogger(FirstTabController.class);
+	private final static Logger LOG = Logger.getLogger(FirstTabController.class);
 	private static Visitor chooseVisitor;
 	private static Association chooseFilter;
 
@@ -45,6 +44,7 @@ public class FirstTabController extends AbstractController implements
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// Add observer in SecondTabController
 		SecondTabController.addObserver(this);
+		MainWindowController.addObserver(this);
 		// Initialize ComboBox "Filter", ComboBox "Groups"
 		loadFilters();
 		// Initialize ListView "Visitors"
@@ -101,19 +101,20 @@ public class FirstTabController extends AbstractController implements
 	private Label lblInfo;
 
 	@FXML
-	private void addTalon() {
+	protected void addTalon() {
 		Integer lunches = countLunches.getValue();
 		Integer dinners = countDinners.getValue();
 		Talon talon = chooseVisitor.getTalon();
 		talon.setCount_dinner(talon.getCount_dinner() + dinners);
 		talon.setCount_lunch(talon.getCount_lunch() + lunches);
 		try {
-			dao.getTalonDAO().updateTalonForVisitor(chooseVisitor, talon);
+			dao.getTalonDAO().update(talon);
 			LOG.info("Добавлен новый талон для посетителя "
 					+ chooseVisitor.getId() + ", обедов="
 					+ talon.getCount_lunch() + ", ужинов="
 					+ talon.getCount_dinner());
 		} catch (Exception e) {
+			Dialog.showError("При добавлении талона возникла ошибка: " + e.getLocalizedMessage());
 			LOG.error("Ошибка при добавлении талона: ", e);
 		}
 		countLunches.getSelectionModel().selectFirst();
@@ -122,17 +123,16 @@ public class FirstTabController extends AbstractController implements
 	}
 
 	@FXML
-	private void changeFilter() {
+	protected void changeFilter() {
 		Association newFilter = filter.getValue();
-		if (chooseFilter != null && newFilter != null
-				&& !newFilter.getName().equals(chooseFilter.getName())) {
+		if (chooseFilter != null && newFilter != null && !newFilter.getName().equals(chooseFilter.getName())) {
 			chooseFilter = newFilter;
 			loadVisitors();
 		}
 	}
 
 	@FXML
-	private void updateVisitor() {
+	protected void updateVisitor() {
 		Visitor newVisitor = new Visitor();
 		String firstname = txtFirstname.getText();
 		String lastname = txtLastname.getText();
@@ -146,8 +146,7 @@ public class FirstTabController extends AbstractController implements
 			newVisitor.setTalon(chooseVisitor.getTalon());
 			newVisitor.setId(chooseVisitor.getId());
 			try {
-				dao.getVisitorDAO().updateVisitor(chooseVisitor.getId(),
-						newVisitor);
+				visitorsDAO.update(newVisitor);
 				chooseVisitor = newVisitor;
 				loadVisitors();
 				loadInfoAboutVisitor();
@@ -173,10 +172,10 @@ public class FirstTabController extends AbstractController implements
 					Visitor visitor = listVisitors.getSelectionModel()
 							.getSelectedItem();
 					if (visitor != null) {
-						dao.getVisitorDAO().deleteVisitor(visitor);
-						dao.getTalonDAO().deleteTalon(visitor.getTalon());
+						visitorsDAO.delete(visitor);
+						dao.getTalonDAO().delete(visitor.getTalon());
 						loadVisitors();
-						LOG.info("Удален посетитель " + visitor.getId());
+						LOG.info("Visitor = " + visitor.getId() + " was deleted");
 					}
 				} catch (Exception e) {
 					LOG.error("Ошибка при удалении посетителя: ", e);
@@ -192,13 +191,12 @@ public class FirstTabController extends AbstractController implements
 					Visitor visitor = listVisitors.getSelectionModel()
 							.getSelectedItem();
 					if (visitor != null) {
-						dao.getTalonDAO().resetLunchById(
-								visitor.getTalon().getId());
+						dao.getTalonDAO().resetLunchById(visitor.getTalon().getId());
 						loadVisitors();
 						chooseVisitor.getTalon().setCount_lunch(0);
 						loadInfoAboutVisitor();
-						LOG.info("Сброшены обеды для посетителя "
-								+ visitor.getId());
+						LOG.info("Dinners for visitor = ["
+								+ visitor + "] was reseted");
 					}
 				} catch (Exception e) {
 					LOG.error("Ошибка при удалении обедов для посетителя: ", e);
@@ -273,37 +271,33 @@ public class FirstTabController extends AbstractController implements
 				loadVisitorsForMask(mask);
 			} else {
 				if (chooseFilter.getId() == -1L) {
-					visitors = dao.getVisitorDAO().getAllVisitors();
+					visitors = visitorsDAO.getAll();
 				} else {
-					visitors = dao.getVisitorDAO().getVisitorsByCriteria(
-							chooseFilter, null);
+					visitors = visitorsDAO.getVisitorsByCriteria(chooseFilter, null);
 				}
 				listVisitors.getItems().addAll(sortCollection(visitors));
-				LOG.info("Загружены посетители с фильтром="
-						+ chooseFilter.getName());
+				LOG.info("Visitors by association = [" + chooseFilter + "] were loaded");
 				lblInfo.setText("Загружено посетителей: " + visitors.size());
 			}
 		} catch (Exception e) {
-			LOG.error("Ошибка при загрузке посетителей с фильтром="
-					+ chooseFilter.getName() + ": ", e);
+			LOG.error("Error while loading visitors by association = ["
+					+ chooseFilter + "]: ", e);
 		}
 	}
 
 	private void loadVisitorsForMask(String mask) {
 		listVisitors.getItems().clear();
 		try {
-			Collection<Visitor> visitors = dao
-					.getVisitorDAO()
-					.getVisitorsByCriteria(
+			Collection<Visitor> visitors = visitorsDAO.getVisitorsByCriteria(
 							((chooseFilter.getId() != -1) ? chooseFilter : null),
 							mask);
 			listVisitors.getItems().addAll(sortCollection(visitors));
-			LOG.info("Загружены посетители с фильтром="
-					+ chooseFilter.getName() + " и маской=" + mask);
+			
+			LOG.info("Visitors by association = [" + chooseFilter + "] and mask = " + mask + " were loaded");
 			lblInfo.setText("Загружено посетителей: " + visitors.size());
 		} catch (Exception e) {
-			LOG.error("Ошибка при загрузке посетителей с фильтром="
-					+ chooseFilter.getName() + " и маской=" + mask + ": ", e);
+			LOG.error("Error while loading visitors by association = ["
+					+ chooseFilter + "] and mask = " + mask + ": ", e);
 		}
 	}
 
@@ -316,8 +310,7 @@ public class FirstTabController extends AbstractController implements
 		all.setName("Все посетители");
 		filter.getItems().add(all);
 		try {
-			Collection<Association> associations = dao.getAssociationDAO()
-					.getAllAssociations();
+			Collection<Association> associations = dao.getAssociationDAO().getAll();
 			filter.getItems().addAll(associations);
 			filter.getSelectionModel().selectFirst();
 			chooseFilter = filter.getValue();

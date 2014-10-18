@@ -16,14 +16,12 @@ public class Association implements Comparable<Association>{
     @SequenceGenerator(name = "visitors_seq_gen", sequenceName = "sq_association_id")
 	@Column(name="association_id")
 	private Long id;
+	
 	@Column(name="name")
 	private String name;
+	
 	@Column(name="description")
 	private String description;
-	
-	public Association() {
-		
-	}
 	
 	public Long getId() {
 		return id;

@@ -178,7 +178,7 @@ public class FourthTabController extends AbstractController implements Initializ
 			reportData = new StoredReportData(printingReport, costOfLunch, costOfDinner, ignoreEmptyVisitors);
 		} else {
 			reportData = new ActualReportData(
-					new ArrayList<Visitor>(dao.getVisitorDAO().getAllVisitors()), 
+					new ArrayList<Visitor>(dao.getVisitorDAO().getAll()), 
 					costOfLunch, 
 					costOfDinner, 
 					ignoreEmptyVisitors

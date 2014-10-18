@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 
 import org.apache.log4j.Logger;
 
+import com.romansun.cache.EntityCache;
 import com.romansun.config.Resources;
 import com.romansun.gui.controller.AbstractController;
 import com.romansun.gui.utils.Dialog;
@@ -97,13 +98,17 @@ public class MainWindowController extends AbstractController implements Initiali
 			// Create report
 			Report report = null;
 			try {
-				Collection<Visitor> visitors = dao.getVisitorDAO().getAllVisitors();
+				Collection<Visitor> visitors = visitorsDAO.getAll();
 				ReportBuilder builder = new ReportBuilder();
 				report = builder.buildReport(new ArrayList<Visitor>(visitors));
 				ReportsSaver saver = new ReportsSaver(PATH_TO_REPORTS, report);
 				saver.saveReport();
 				// Reset talons
 				dao.getTalonDAO().resetAllTalons();
+				if (config.useVisitorsCache) {
+					// reload cache
+					((EntityCache) visitorsDAO).reload();
+				}
 				// Call to observer
 				observable.notifyObservers();
 				LOG.info("Все обеды и ужины были сброшены, отчет " + report.getName() + " сформирован");
@@ -173,7 +178,7 @@ public class MainWindowController extends AbstractController implements Initiali
 				stage.setScene(scene);
 				stage.setTitle(dialogName);
 			} catch (Exception e) {
-				e.printStackTrace();
+				LOG.error("Error in DialogBuilder:", e);
 			}
 		}
 

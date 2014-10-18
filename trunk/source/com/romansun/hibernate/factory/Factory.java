@@ -5,6 +5,7 @@ import java.util.Locale;
 
 import org.apache.log4j.Logger;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.stat.Statistics;
 import org.hibernate.SessionFactory;
 
 import com.romansun.config.Resources;
@@ -19,13 +20,16 @@ public class Factory {
 			File config = new File("config\\hibernate.cfg.xml");
 			if (!config.exists()) {
 				config = Resources.getInstance().getHibernateConfig();
-				LOG.info("Внешний hibernate.cfg.xml не был найден - используется внутренний");
+				LOG.info("External hibernate.cfg.xml is not found - using inner...");
 			} else {
-				LOG.info("Внешний hibernate.cfg.xml был найден");
+				LOG.info("External hibernate.cfg.xml is found");
 			}
 			sessionFactory = new Configuration().configure(config).buildSessionFactory();
+			Statistics stats = sessionFactory.getStatistics();
+			stats.setStatisticsEnabled(true);
+			stats.logSummary();
 		} catch (Throwable e) {
-			LOG.error("Initial SessionFactory creation failed. ", e);
+			LOG.error("Initial SessionFactory creation failed: ", e);
 			throw new ExceptionInInitializerError(e);
 		}
 	}

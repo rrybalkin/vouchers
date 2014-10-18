@@ -46,6 +46,9 @@ public class Configuration {
 	@Cfg(splitter = ",")
 	public String[] FIELDS_OF_EXEL_TEMPLATE;
 	
+	@Cfg("USE_VISITORS_CACHE")
+	public boolean useVisitorsCache;
+	
 	
 	/* Realization of Singleton */
 	private Configuration() {
