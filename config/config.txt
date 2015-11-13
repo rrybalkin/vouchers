@@ -1,0 +1,9 @@
+﻿
+YEARS_FOR_REPORTS = 2012,2013,2014
+PRINT_REPORT_FORMATS = XLSX,XLS,DOC
+PATH_TO_REPORTS = Отчеты для печати
+PATH_TO_XLS_TEMPLATE = resource\\templates\\excel_template_short.xls
+PATH_TO_XLSX_TEMPLATE = resource\\templates\\excel_template_short.xlsx
+FIELDS_OF_EXEL_TEMPLATE = №,имя,фамилия,отчество,группа,колличество обедов,колличество ужинов,стоимость обедов,стоимость ужинов,общая стоимость
+DATE_MACROS = ${date}
+USE_VISITORS_CACHE = FALSE
