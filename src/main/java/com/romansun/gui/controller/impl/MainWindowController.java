@@ -21,9 +21,9 @@ import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 
 import com.romansun.cache.EntityCache;
-import com.romansun.config.Resources;
+import com.romansun.utils.Resources;
 import com.romansun.gui.controller.AbstractController;
-import com.romansun.gui.utils.Dialog;
+import com.romansun.gui.Dialog;
 import com.romansun.hibernate.entity.Visitor;
 import com.romansun.reports.ReportBuilder;
 import com.romansun.reports.ReportsSaver;
@@ -32,15 +32,15 @@ import com.romansun.reports.logic.Report;
 public class MainWindowController extends AbstractController implements Initializable {
 	private final static String SETTINGS_WINDOW_NAME = "Settings";
 	private final static Logger LOG = Logger.getLogger(MainWindowController.class);
-	
+
 	private static Observable observable = new Observable() {
 		public void notifyObservers(Object arg) {
 			setChanged();
 			super.notifyObservers(arg);
 		}
 	};
-	
-	public static void addObserver(Observer o) {
+
+	static void addObserver(Observer o) {
 		observable.addObserver(o);
 	}
 
@@ -48,31 +48,19 @@ public class MainWindowController extends AbstractController implements Initiali
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		try {
 			mainTabPane = tabPane;
-			
+
 			// loading tabs and add to TabPane
-			File firstTabFile = new File("resource/fxml/first_tab.fxml");
-			if (!firstTabFile.exists()) {
-				firstTabFile = Resources.getInstance().getFirstTabFXML();
-			}
-			File secondTabFile = new File("resource/fxml/second_tab.fxml");
-			if (!secondTabFile.exists()) {
-				secondTabFile = Resources.getInstance().getSecondTabFXML();
-			}
-			File thirdTabFile = new File("resource/fxml/third_tab.fxml");
-			if (!thirdTabFile.exists()) {
-				thirdTabFile = Resources.getInstance().getThirdTabFXML();
-			}
-			File fourthTabFile = new File("resource/fxml/fourth_tab.fxml");
-			if (!fourthTabFile.exists()) {
-				fourthTabFile = Resources.getInstance().getFourthTabFXML();
-			}
-			
-			firstTab.setContent(loadTab(firstTabFile.toURL(), null));
-			secondTab.setContent(loadTab(secondTabFile.toURL(), null));
-			thirdTab.setContent(loadTab(thirdTabFile.toURL(), null));
-			fourthTab.setContent(loadTab(fourthTabFile.toURL(), null));
+			File firstTabFile = Resources.getInstance().getResource(Resources.FIRST_TAB_FXML);
+			File secondTabFile = Resources.getInstance().getResource(Resources.SECOND_TAB_FXML);
+			File thirdTabFile = Resources.getInstance().getResource(Resources.THIRD_TAB_FXML);
+			File fourthTabFile = Resources.getInstance().getResource(Resources.FOURTH_TAB_FXML);
+
+			firstTab.setContent(loadTab(firstTabFile));
+			secondTab.setContent(loadTab(secondTabFile));
+			thirdTab.setContent(loadTab(thirdTabFile));
+			fourthTab.setContent(loadTab(fourthTabFile));
 		} catch (Exception e) {
-			LOG.error("Error in loading tabs: ", e);
+			throw new IllegalStateException("Error in loading tabs", e);
 		}
 	}
 	@FXML
@@ -85,21 +73,21 @@ public class MainWindowController extends AbstractController implements Initiali
 	private Tab thirdTab;
 	@FXML
 	private Tab fourthTab;
-	
+
 	@FXML
 	private void resetTalons() {
 		int answer = Dialog.showQuestion("Do you really want to reset all talons?", null);
 		if (answer == 1 /*YES*/) {
 			// Create report
-			Report report = null;
+			Report report;
 			try {
 				Collection<Visitor> visitors = visitorsDAO.getAll();
 				ReportBuilder builder = new ReportBuilder();
-				report = builder.buildReport(new ArrayList<Visitor>(visitors));
+				report = builder.buildReport(new ArrayList<>(visitors));
 				ReportsSaver saver = new ReportsSaver(PATH_TO_REPORTS, report);
 				saver.saveReport();
 				// Reset talons
-				dao.getTalonDAO().resetAllTalons();
+				daoFactory.getTalonDAO().resetAllTalons();
 				if (config.useVisitorsCache) {
 					// reload cache
 					((EntityCache) visitorsDAO).reload();
@@ -110,59 +98,44 @@ public class MainWindowController extends AbstractController implements Initiali
 				LOG.error("Error while reset talons: " , e);
 			}
 		}
-		
+
 	}
-	
+
 	@FXML
 	private void clickOnSettings() {
-		File settingsWindow = new File("resource/fxml/settings_window.fxml");
-		if (!settingsWindow.exists()) {
-			settingsWindow = Resources.getInstance().getFourthTabFXML();
-		}
-		DialogBuilder settingWindowBuilder = 
+		File settingsWindow = Resources.getInstance().getResource(Resources.SETTINGS_WINDOW_FXML);
+		DialogBuilder settingWindowBuilder =
 				new DialogBuilder(settingsWindow, SETTINGS_WINDOW_NAME);
 		settingWindowBuilder.show();
 	}
-	
+
 	@FXML
 	private void clickOnClose() {
 		System.exit(0);
 	}
-	
+
 	@FXML
 	private void clickOnAbout() {
 		Dialog.showInfo("Author: Roman Rybalkin");
 	}
-	
-	// method for loading Tab from fxml-file
-	private AnchorPane loadTab(URL path_to_tab, Object controller) throws IOException {
-    	FXMLLoader fxmlLoader = new FXMLLoader(path_to_tab);
-    	fxmlLoader.setController(controller);
+
+	private AnchorPane loadTab(File tabFile) throws IOException {
+    	FXMLLoader fxmlLoader = new FXMLLoader(tabFile.toURI().toURL());
+    	fxmlLoader.setController(null);
     	fxmlLoader.load();
-    	AnchorPane pane = fxmlLoader.getRoot();
-    	
-    	return pane;
+
+		return fxmlLoader.getRoot();
 	}
-	
+
 	public class DialogBuilder {
 
-		private Stage stage = null;
-		protected String dialogFXML;
-		protected String dialogName;
+		private Stage stage;
 
-		public DialogBuilder() {
-			dialogFXML = null;
-			dialogName = "";
-		}
-
-		public DialogBuilder(File f, String dialogName) {
+		DialogBuilder(File f, String dialogName) {
 			stage = new Stage();
-			URL fxmlURL = null;
+			URL fxmlURL;
 			try {
-				fxmlURL = f.toURL();
-				if (fxmlURL == null) {
-					throw new IllegalArgumentException("FXML file cannot be load");
-				}
+				fxmlURL = f.toURI().toURL();
 				AnchorPane mainFrame = FXMLLoader.load(fxmlURL);
 				Scene scene = new Scene(mainFrame);
 				stage.setScene(scene);
@@ -172,11 +145,10 @@ public class MainWindowController extends AbstractController implements Initiali
 			}
 		}
 
-		public void show() {
+		void show() {
 			if (stage == null)
 				throw new RuntimeException("Dialog cannot be instantiated");
 			stage.show();
 		}
-
 	}
 }

@@ -29,7 +29,7 @@ import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 
 import com.romansun.gui.controller.AbstractController;
-import com.romansun.gui.utils.Dialog;
+import com.romansun.gui.Dialog;
 import com.romansun.reports.ReportsManager;
 import com.romansun.reports.logic.InfoVisitor;
 import com.romansun.reports.logic.Report;
@@ -54,7 +54,7 @@ public class ThirdTabController extends AbstractController implements Initializa
 		}
 	};
 	
-	public static void addObserver(Observer o) {
+	static void addObserver(Observer o) {
 		observable.addObserver(o);
 	}
 
@@ -69,9 +69,9 @@ public class ThirdTabController extends AbstractController implements Initializa
 		Integer[] months = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
 		cbMonth.getItems().addAll(months);
 		cbMonth.getSelectionModel().select(new Integer(month));
-		
+
 		cbYear.setConverter(new YearConverter());
-		Integer[] years = config.YEARS_FOR_REPORTS;
+		Integer[] years = {year-1, year, year+1};
 		cbYear.getItems().addAll(years);
 		cbYear.getSelectionModel().select(year);
 		

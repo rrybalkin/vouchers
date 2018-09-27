@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.romansun.utils.Resources;
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -17,7 +18,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
-import com.romansun.config.Configuration;
+import com.romansun.utils.Configuration;
 import com.romansun.printing.data.ReportUnit;
 import com.romansun.printing.writer.IReportWriter;
 import com.romansun.utils.AdditionalUtils;
@@ -61,7 +62,7 @@ public class XLSReportWriter implements IReportWriter {
 			this.reportFolder = folder;
 		}
 		this.version = version;
-		columns = Arrays.asList(config.FIELDS_OF_EXEL_TEMPLATE);
+		columns = Arrays.asList(config.fieldsOfExelTemplate);
 	}
 
 	@Override
@@ -70,17 +71,16 @@ public class XLSReportWriter implements IReportWriter {
 		
 		File report = null;
 		try {
-			String pathToTemplate = null;
+			File templateFile;
 			if ("XLS".equalsIgnoreCase(version)) {
-				pathToTemplate = config.pathToXLSTemplate;
+				templateFile = Resources.getInstance().getResource(Resources.XLS_REPORT_TEMPLATE);
 			} else if ("XLSX".equalsIgnoreCase(version)) {
-				pathToTemplate = config.pathToXLSXTemplate;
+				templateFile = Resources.getInstance().getResource(Resources.XLSX_REPORT_TEMPLATE);
 			} else {
-				LOG.error("Version = " + version + " is unknown!");
-				return null;
+				throw new IllegalStateException("Version = " + version + " is unknown");
 			}
 			
-			InputStream inp = new FileInputStream(pathToTemplate);
+			InputStream inp = new FileInputStream(templateFile);
 			Workbook wb = WorkbookFactory.create(inp);
 			inp.close();
 			Sheet sheet = wb.getSheetAt(0);

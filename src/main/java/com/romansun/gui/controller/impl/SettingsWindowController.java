@@ -7,10 +7,10 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.util.Iterator;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
+import com.romansun.utils.Resources;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,9 +28,10 @@ import javafx.scene.control.cell.TextFieldTableCell;
 
 import org.apache.log4j.Logger;
 
-import com.romansun.config.Configuration;
 import com.romansun.gui.controller.AbstractController;
-import com.romansun.gui.utils.Dialog;
+import com.romansun.gui.Dialog;
+
+import static com.romansun.utils.Resources.APP_CONFIG;
 
 public class SettingsWindowController extends AbstractController implements Initializable {
 	private final static Logger LOG = Logger.getLogger(SettingsWindowController.class);
@@ -39,7 +40,7 @@ public class SettingsWindowController extends AbstractController implements Init
 	@Override
 	public void initialize(URL url, ResourceBundle resourcebundle) {
 		try {
-			filltbSettingsWithSettings();
+			fillTableWithSettings();
 			
 			// Setting property for editing data to Columns
 			tcKey.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -47,9 +48,8 @@ public class SettingsWindowController extends AbstractController implements Init
 			tcKey.setOnEditCommit(
 				    new EventHandler<CellEditEvent<SettingRow, String>>() {
 				        public void handle(CellEditEvent<SettingRow, String> t) {
-				            ((SettingRow) t.getTableView().getItems().get(
-				                t.getTablePosition().getRow())
-				                ).setKey(t.getNewValue());
+				            t.getTableView().getItems().get(
+				                t.getTablePosition().getRow()).setKey(t.getNewValue());
 				        }
 				    }
 				);
@@ -58,9 +58,8 @@ public class SettingsWindowController extends AbstractController implements Init
 			tcValue.setOnEditCommit(
 			    new EventHandler<CellEditEvent<SettingRow, String>>() {
 			        public void handle(CellEditEvent<SettingRow, String> t) {
-			            ((SettingRow) t.getTableView().getItems().get(
-			                t.getTablePosition().getRow())
-			                ).setValue(t.getNewValue());
+			            t.getTableView().getItems().get(
+			                t.getTablePosition().getRow()).setValue(t.getNewValue());
 			        }
 			    }
 			);
@@ -69,15 +68,14 @@ public class SettingsWindowController extends AbstractController implements Init
 		}
 	}
 	
-	protected void filltbSettingsWithSettings() throws FileNotFoundException, UnsupportedEncodingException {
-		File settings = new File(Configuration.PATH_TO_CONFIG_FILE);
+	private void fillTableWithSettings() throws FileNotFoundException, UnsupportedEncodingException {
+		File settings = Resources.getInstance().getResource(APP_CONFIG);
 		if (settings.exists()) {
 			ObservableList<SettingRow> dataTable = FXCollections.observableArrayList();
-			
-			Scanner scanner = new Scanner(new InputStreamReader(new FileInputStream(settings), "UTF-8"));
+			Scanner scanner = new Scanner(new InputStreamReader(Resources.getInstance().getResourceInputStream(APP_CONFIG), "UTF-8"));
 			while(scanner.hasNext()) {
 				String line = scanner.nextLine();
-				if (line != null && line.length() > 0) {
+				if (line != null && line.length() > 0 && line.contains("=")) {
 					String[] setting = line.split("=");
 					if (setting.length != 2) {
 						LOG.debug("Setting = '" + line + "' is incorrect.");
@@ -87,15 +85,13 @@ public class SettingsWindowController extends AbstractController implements Init
 					String settingName = setting[0].trim();
 					String settingValue = setting[1].trim();
 					dataTable.add(new SettingRow(settingName, settingValue));
-				} else {
-					LOG.debug("Line = '" + line + "' cannot be processed.");
 				}
 			}
 			scanner.close();
 			
 			tbSettings.setItems(dataTable);
 		} else {
-			String msg = "Error while reading file with settings by path = " + Configuration.PATH_TO_CONFIG_FILE + ": ";
+			String msg = "Error while reading file with settings by path = " + APP_CONFIG + ": ";
 			LOG.error(msg);
 			Dialog.showError(msg);
 		}
@@ -103,15 +99,13 @@ public class SettingsWindowController extends AbstractController implements Init
 	
 	@FXML
 	protected void saveChanges() throws FileNotFoundException, UnsupportedEncodingException {
-		PrintWriter writer = new PrintWriter(new File(Configuration.PATH_TO_CONFIG_FILE), "UTF-8");
+		PrintWriter writer = new PrintWriter(Resources.getInstance().getResource(APP_CONFIG), "UTF-8");
 		// getting data from tbSettings
 		writer.println(""); // need because in the first line when properties are reading a sign '?' appears
-		Iterator<SettingRow> iterator = tbSettings.getItems().iterator();
-		while (iterator.hasNext()) {
-			SettingRow row = iterator.next();
+		for (SettingRow row : tbSettings.getItems()) {
 			String settingName = row.getKey();
 			String settingValue = row.getValue();
-			
+
 			writer.println(settingName + " = " + settingValue);
 		}
 		
@@ -120,10 +114,10 @@ public class SettingsWindowController extends AbstractController implements Init
 	
 	@FXML
 	protected void cancelChanges() throws FileNotFoundException, UnsupportedEncodingException {
-		filltbSettingsWithSettings();
+		fillTableWithSettings();
 	}
 	
-	@FXML //Method for removing row from tbSettings
+	@FXML
 	private void removeRowAction(ActionEvent event) {
 		int index = tbSettings.getSelectionModel().getSelectedIndex();
 		if (index != -1) {
@@ -131,7 +125,7 @@ public class SettingsWindowController extends AbstractController implements Init
 		}
 	}
 	
-	@FXML//Method for adding new row in tbSettings
+	@FXML
 	private void addRowAction(ActionEvent event) {
 		String key = txtKey.getText();
 		String value = txtValue.getText();
@@ -142,13 +136,13 @@ public class SettingsWindowController extends AbstractController implements Init
 		txtValue.clear();
 	}
 	
-	@FXML//TableView View for Settings
+	@FXML
 	private TableView<SettingRow> tbSettings;
 	@SuppressWarnings("rawtypes")
-	@FXML//tbSettings Column of tbSettings "Key"
+	@FXML
 	private TableColumn tcKey;
 	@SuppressWarnings("rawtypes")
-	@FXML//tbSettings Column of tbSettings "Value"
+	@FXML
 	private TableColumn tcValue;
 	
 	@FXML
@@ -169,16 +163,16 @@ public class SettingsWindowController extends AbstractController implements Init
 		private final SimpleStringProperty key;
 		private final SimpleStringProperty value;
 		
-		public SettingRow(String key, String value) {
+		SettingRow(String key, String value) {
 			this.key = new SimpleStringProperty(key);
 			this.value = new SimpleStringProperty(value);
 		}
 		
-		public String getKey() {
+		String getKey() {
 			return key.get();
 		}
 
-		public void setKey(String key) {
+		void setKey(String key) {
 			this.key.set(key);
 		}
 
@@ -190,5 +184,4 @@ public class SettingsWindowController extends AbstractController implements Init
 			this.value.set(value);
 		}	
 	}
-
 }

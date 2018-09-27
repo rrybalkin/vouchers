@@ -137,7 +137,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.romansun.base.StartWindow</mainClass>
+                            <mainClass>com.romansun.App</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

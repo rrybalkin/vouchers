@@ -8,21 +8,22 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.stat.Statistics;
 import org.hibernate.SessionFactory;
 
-import com.romansun.config.Resources;
+import com.romansun.utils.Resources;
 
 public class Factory {
 	private static final Logger LOG = Logger.getLogger(Factory.class);
+
 	private static final SessionFactory sessionFactory;
+
 	static {
 		// This line is needed for correct work
 		Locale.setDefault(Locale.ENGLISH);
 		try {
-			File config = new File("config" + File.separator + "hibernate.cfg.xml");
-            if (!config.exists()) {
-				config = Resources.getInstance().getHibernateConfig();
-				LOG.info("External hibernate.cfg.xml is not found - using inner...");
+			File config =Resources.getInstance().getResource(Resources.HIBERNATE_CONFIG);
+			if (!config.exists()) {
+                LOG.error("File hibernate.cfg.xml is not found");
 			} else {
-                LOG.info("External hibernate.cfg.xml is found");
+				LOG.info("File hibernate.cfg.xml is found");
 			}
 			sessionFactory = new Configuration().configure(config).buildSessionFactory();
 			Statistics stats = sessionFactory.getStatistics();
@@ -34,7 +35,7 @@ public class Factory {
 		}
 	}
 
-	public static SessionFactory getSessionFactory() {
+	static SessionFactory getSessionFactory() {
 		return sessionFactory;
 	}
 }

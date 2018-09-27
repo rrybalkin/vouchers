@@ -28,7 +28,7 @@ import javafx.scene.input.MouseEvent;
 import org.apache.log4j.Logger;
 
 import com.romansun.gui.controller.AbstractController;
-import com.romansun.gui.utils.Dialog;
+import com.romansun.gui.Dialog;
 import com.romansun.hibernate.entity.Association;
 import com.romansun.hibernate.entity.Talon;
 import com.romansun.hibernate.entity.Visitor;
@@ -108,7 +108,7 @@ public class FirstTabController extends AbstractController implements
 		talon.setCount_dinner(talon.getCount_dinner() + dinners);
 		talon.setCntOfLunches(talon.getCntOfLunches() + lunches);
 		try {
-			dao.getTalonDAO().update(talon);
+			daoFactory.getTalonDAO().update(talon);
 		} catch (Exception e) {
 			Dialog.showError(e.getLocalizedMessage());
 			LOG.error("Error: ", e);
@@ -165,7 +165,7 @@ public class FirstTabController extends AbstractController implements
 							.getSelectedItem();
 					if (visitor != null) {
 						visitorsDAO.delete(visitor);
-						dao.getTalonDAO().delete(visitor.getTalon());
+						daoFactory.getTalonDAO().delete(visitor.getTalon());
 						loadVisitors();
 						LOG.info("Visitor = " + visitor.getId() + " was deleted");
 					}
@@ -183,7 +183,7 @@ public class FirstTabController extends AbstractController implements
 					Visitor visitor = listVisitors.getSelectionModel()
 							.getSelectedItem();
 					if (visitor != null) {
-						dao.getTalonDAO().resetLunchById(visitor.getTalon().getId());
+						daoFactory.getTalonDAO().resetLunchById(visitor.getTalon().getId());
 						loadVisitors();
 						chooseVisitor.getTalon().setCntOfLunches(0);
 						loadInfoAboutVisitor();
@@ -204,7 +204,7 @@ public class FirstTabController extends AbstractController implements
 					Visitor visitor = listVisitors.getSelectionModel()
 							.getSelectedItem();
 					if (visitor != null) {
-						dao.getTalonDAO().resetDinnerById(
+						daoFactory.getTalonDAO().resetDinnerById(
 								visitor.getTalon().getId());
 						loadVisitors();
 						chooseVisitor.getTalon().setCount_dinner(0);
@@ -300,7 +300,7 @@ public class FirstTabController extends AbstractController implements
 		all.setName("All visitors");
 		filter.getItems().add(all);
 		try {
-			Collection<Association> associations = dao.getAssociationDAO().getAll();
+			Collection<Association> associations = daoFactory.getAssociationDAO().getAll();
 			filter.getItems().addAll(associations);
 			filter.getSelectionModel().selectFirst();
 			chooseFilter = filter.getValue();

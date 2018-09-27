@@ -28,7 +28,7 @@ import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 
 import com.romansun.gui.controller.AbstractController;
-import com.romansun.gui.utils.Dialog;
+import com.romansun.gui.Dialog;
 import com.romansun.hibernate.entity.Visitor;
 import com.romansun.printing.data.ActualReportData;
 import com.romansun.printing.data.ReportData;
@@ -42,18 +42,18 @@ public class FourthTabController extends AbstractController implements Initializ
 	private final static Logger LOG = Logger.getLogger(FourthTabController.class);
 	private final static String PRINTING_REPORT_BY_ACTUAL_DATA = "Print report by actual data";
 	private final static String GREEN_COLOR = "#008009", RED_COLOR = "#d91548";
-	protected Report printingReport;
+	private Report printingReport;
 	
 	@Override
 	public void initialize(URL url, ResourceBundle resource) {
 		ThirdTabController.addObserver(this);
 		
 		cbEnableEmptyVisitors.getItems().clear();
-		cbEnableEmptyVisitors.getItems().addAll(new String[]{"No", "Yes"});
+		cbEnableEmptyVisitors.getItems().addAll("No", "Yes");
 		cbEnableEmptyVisitors.getSelectionModel().select(0);
 		
 		cbReportFormat.getItems().clear();
-		cbReportFormat.getItems().addAll(config.PRINT_REPORT_FORMATS);
+		cbReportFormat.getItems().addAll(config.printReportFormats);
 		cbReportFormat.getSelectionModel().select(0);
 		
 		seeReport.visibleProperty().set(false);
@@ -87,7 +87,7 @@ public class FourthTabController extends AbstractController implements Initializ
 		{
 			if (!validate()) return;
 			ReportData reportData = buildReportData();
-			String reportDate = null;
+			String reportDate;
 			if (printingReport != null) {
 				String storedReportName = printingReport.getName();
 				reportDate = storedReportName.substring(0, storedReportName.indexOf('.'));
@@ -96,7 +96,7 @@ public class FourthTabController extends AbstractController implements Initializ
 					+ " " + DateTime.now().getYear();
 			}
 			
-			IReportWriter writer = WriterFactory.getWriter(reportType, config.PATH_TO_REPORTS);
+			IReportWriter writer = WriterFactory.getWriter(reportType, config.pathToReports);
 			if (writer == null) {
 				throw new RuntimeException("Writer is null");
 			}
@@ -178,7 +178,7 @@ public class FourthTabController extends AbstractController implements Initializ
 			reportData = new StoredReportData(printingReport, costOfLunch, costOfDinner, ignoreEmptyVisitors);
 		} else {
 			reportData = new ActualReportData(
-					new ArrayList<Visitor>(dao.getVisitorDAO().getAll()), 
+					new ArrayList<Visitor>(daoFactory.getVisitorDAO().getAll()),
 					costOfLunch, 
 					costOfDinner, 
 					ignoreEmptyVisitors

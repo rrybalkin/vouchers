@@ -18,7 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 
 import com.romansun.gui.controller.AbstractController;
-import com.romansun.gui.utils.Dialog;
+import com.romansun.gui.Dialog;
 import com.romansun.hibernate.entity.Association;
 import com.romansun.hibernate.entity.Talon;
 import com.romansun.hibernate.entity.Visitor;
@@ -84,7 +84,7 @@ public class SecondTabController extends AbstractController implements Initializ
 			talon.setCntOfLunches(0);
 			visitor.setTalon(talon);
 			try {
-				dao.getTalonDAO().add(talon);
+				daoFactory.getTalonDAO().add(talon);
 				visitorsDAO.add(visitor);
 				Dialog.showInfo("New visitor created");
 				observable.notifyObservers();
@@ -108,7 +108,7 @@ public class SecondTabController extends AbstractController implements Initializ
 			group.setName(AdditionalUtils.upFirst(name));
 			group.setDescription(description);
 			try {
-				dao.getAssociationDAO().add(group);
+				daoFactory.getAssociationDAO().add(group);
 				Dialog.showInfo("New group created");
 				observable.notifyObservers();
 				loadGroups();
@@ -125,7 +125,7 @@ public class SecondTabController extends AbstractController implements Initializ
 		Association delGroup = cbDelGroups.getValue();
 		if (delGroup != null) {
 			try {
-				dao.getAssociationDAO().delete(delGroup);
+				daoFactory.getAssociationDAO().delete(delGroup);
 				Dialog.showInfo("Group deleted");
 				observable.notifyObservers();
 				loadGroups();
@@ -162,7 +162,7 @@ public class SecondTabController extends AbstractController implements Initializ
 	
 	private void loadGroups() {
 		try {
-			Collection<Association> associations = dao.getAssociationDAO().getAll();
+			Collection<Association> associations = daoFactory.getAssociationDAO().getAll();
 			cbGroup.getItems().clear();
 			cbGroup.getItems().setAll(associations);
 			cbGroup.getSelectionModel().selectFirst();
