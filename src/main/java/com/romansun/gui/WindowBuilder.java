@@ -33,7 +33,14 @@ public class WindowBuilder extends Application {
 			LOG.error("Error while loading main window tab: ", e);
 		}
 	}
-	
+
+	@Override
+	public void stop() throws Exception {
+		LOG.info("Shutting down the application.");
+		super.stop();
+		System.exit(0);
+	}
+
 	public void show() {
 		Application.launch(WindowBuilder.class);
 	}

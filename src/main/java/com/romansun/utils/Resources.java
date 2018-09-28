@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentMap;
 public class Resources {
     private static final Logger LOG = Logger.getLogger(Resources.class);
 
-    public static final String APP_CONFIG = "config/application.conf";
+    public static final String APP_CONFIG = "application.conf";
     public static final String LOG4J_CONFIG = "config/log4j.properties";
     public static final String HIBERNATE_CONFIG = "config/hibernate.cfg.xml";
 

@@ -62,7 +62,7 @@ public class XLSReportWriter implements IReportWriter {
 			this.reportFolder = folder;
 		}
 		this.version = version;
-		columns = Arrays.asList(config.fieldsOfExelTemplate);
+		columns = config.fieldsOfExcelTemplate;
 	}
 
 	@Override

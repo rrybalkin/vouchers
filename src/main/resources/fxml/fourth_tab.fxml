@@ -46,6 +46,10 @@
                       </items>
                     </ComboBox>
                     <Hyperlink fx:id="seeReport" layoutX="278.0" layoutY="364.0" onAction="#hlAction" text="Посмотреть отчет" />
+                    <ComboBox fx:id="cbMonth" layoutX="91.0" layoutY="224.0" prefHeight="21.0" prefWidth="115.0" />
+                    <ComboBox fx:id="cbYear" layoutX="265.0" layoutY="224.0" prefHeight="21.0" prefWidth="96.0" />
+                    <Label layoutX="230.0" layoutY="226.0" text="Год:" />
+                    <Label layoutX="42.0" layoutY="226.0" text="Месяц:" />
                   </children>
                 </AnchorPane>
               </content>
