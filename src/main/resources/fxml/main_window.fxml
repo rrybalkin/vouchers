@@ -1,24 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.collections.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.paint.*?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="566.0" prefWidth="653.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.romansun.gui.controller.impl.MainWindowController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="566.0" prefWidth="653.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="com.romansun.gui.controller.impl.MainWindowController">
   <children>
     <TabPane fx:id="tabPane" layoutY="24.0" prefHeight="541.0" prefWidth="653.0" tabClosingPolicy="UNAVAILABLE">
       <tabs>
         <Tab fx:id="firstTab" text="Работа с посетителями" />
         <Tab fx:id="secondTab" text="Добавление новых" />
         <Tab fx:id="thirdTab" text="Предыдущие отчеты" />
-        <Tab fx:id="fourthTab" text="Формирование отчета">
-          <content>
-            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-          </content>
-        </Tab>
+        <Tab fx:id="fourthTab" content="$null" text="Формирование отчета" />
       </tabs>
     </TabPane>
     <MenuBar prefWidth="653.0">
