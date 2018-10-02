@@ -4,7 +4,7 @@ import static com.romansun.hibernate.dao.utils.QueryStorage.ASSOCIATION_BIND;
 import static com.romansun.hibernate.dao.utils.QueryStorage.GET_VISITORS_BY_ASSOCIATION;
 import static com.romansun.hibernate.dao.utils.QueryStorage.GET_VISITORS_BY_MASK;
 import static com.romansun.hibernate.dao.utils.QueryStorage.GET_VISITORS_BY_MASK_AND_ASSOCIATION;
-import static com.romansun.hibernate.dao.utils.QueryStorage.GET_VISITORS_CNT;
+import static com.romansun.hibernate.dao.utils.QueryStorage.GET_VISITORS_CNT_BY_ASSOCIATION;
 import static com.romansun.hibernate.dao.utils.QueryStorage.MASK_BIND;
 
 import java.util.Collection;
@@ -114,21 +114,23 @@ public class VisitorDAOImpl implements VisitorDAO {
 							.createQuery(GET_VISITORS_BY_MASK)
 							.setString(MASK_BIND, "%" + mask.toLowerCase() + "%");
 				}
-				
-				Collection<Visitor> visitors = query.list();
-				return visitors;
+
+				return (Collection<Visitor>) query.list();
 			}
 		}.invoke();
 	}
 
 	@Override
-	public int getCountVisitors() throws Exception 
+	public long getCountVisitors(Association association) throws Exception
 	{
-		return new Invoker<Integer>() {
+		return new Invoker<Long>() {
 
 			@Override
-			public Integer task(Session session) {
-				return (Integer) session.createQuery(GET_VISITORS_CNT).uniqueResult();
+			public Long task(Session session) {
+				return (Long) session
+						.createQuery(GET_VISITORS_CNT_BY_ASSOCIATION)
+						.setLong(ASSOCIATION_BIND, association.getId())
+						.uniqueResult();
 			}
 		}.invoke();
 	}

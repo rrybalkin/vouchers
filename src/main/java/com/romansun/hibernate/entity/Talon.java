@@ -11,39 +11,40 @@ import javax.persistence.Table;
 @Entity
 @Table(name="Talons")
 public class Talon {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "talons_seq_gen")
     @SequenceGenerator(name = "talons_seq_gen", sequenceName = "sq_talons_id")
 	@Column(name="talon_id")
-	private Long talon_id;
+	private Long talonId;
 	
 	@Column(name="count_lunch")
-	private int cntOfLunches;
+	private int lunches;
 	
 	@Column(name="count_dinner")
-	private int count_dinner;
+	private int dinners;
 	
 	public Long getId() {
-		return talon_id;
+		return talonId;
 	}
 
 	public void setId(Long talon_id) {
-		this.talon_id = talon_id;
+		this.talonId = talon_id;
 	}
 	
-	public int getCntOfLunches() {
-		return cntOfLunches;
+	public int getLunches() {
+		return lunches;
 	}
 
-	public void setCntOfLunches(int count_launch) {
-		this.cntOfLunches = count_launch;
+	public void setLunches(int count_launch) {
+		this.lunches = count_launch;
 	}
 
-	public int getCount_dinner() {
-		return count_dinner;
+	public int getDinners() {
+		return dinners;
 	}
 
-	public void setCount_dinner(int count_dinner) {
-		this.count_dinner = count_dinner;
+	public void setDinners(int count_dinner) {
+		this.dinners = count_dinner;
 	}
 }

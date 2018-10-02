@@ -71,7 +71,7 @@ public class VisitorsCacheImpl implements VisitorDAO, EntityCache<Visitor> {
 	}
 	
 	private static Collection<Visitor> filterByFio(Collection<Visitor> visitors, String mask) {
-		Collection<Visitor> suitableVisitors = new ArrayList<Visitor>();
+		Collection<Visitor> suitableVisitors = new ArrayList<>();
 		for (Visitor v : visitors) {
 			String fullFio = extractFIO(v);
 			if (fullFio.toLowerCase().contains(mask.toLowerCase())) {
@@ -83,7 +83,7 @@ public class VisitorsCacheImpl implements VisitorDAO, EntityCache<Visitor> {
 	}
 
 	private static Collection<Visitor> filterByAssociation(Collection<Visitor> visitors, Association asc) {
-		Collection<Visitor> suitableVisitors = new ArrayList<Visitor>();
+		Collection<Visitor> suitableVisitors = new ArrayList<>();
 		for (Visitor v : visitors) {
 			long ascId = v.getAssociation().getId();
 			if (ascId == asc.getId()) {
@@ -95,8 +95,8 @@ public class VisitorsCacheImpl implements VisitorDAO, EntityCache<Visitor> {
 	}
 
 	private static String extractFIO(Visitor v) {
-		return v.getLastname() + " " + v.getFirstname() + " "
-				+ v.getMiddlename();
+		return v.getLastName() + " " + v.getFirstName() + " "
+				+ v.getMiddleName();
 	}
 
 	private void persistChange(Visitor v, String type) {
@@ -140,7 +140,7 @@ public class VisitorsCacheImpl implements VisitorDAO, EntityCache<Visitor> {
 
 	@Override
 	public Collection<Visitor> getVisitorsByCriteria(Association asc, String mask) throws Exception {
-		Collection<Visitor> suitableVisitors = null;
+		Collection<Visitor> suitableVisitors;
 
 		if (asc != null && mask != null && mask.length() != 0) 
 		{
@@ -160,7 +160,7 @@ public class VisitorsCacheImpl implements VisitorDAO, EntityCache<Visitor> {
 	}
 
 	@Override
-	public int getCountVisitors() throws Exception {
-		return visitors.size();
+	public long getCountVisitors(Association association) throws Exception {
+		return filterByAssociation(this.visitors, association).size();
 	}
 }

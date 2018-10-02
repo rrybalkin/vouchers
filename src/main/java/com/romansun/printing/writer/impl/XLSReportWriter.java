@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -21,7 +20,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import com.romansun.utils.Configuration;
 import com.romansun.printing.data.ReportUnit;
 import com.romansun.printing.writer.IReportWriter;
-import com.romansun.utils.AdditionalUtils;
+import com.romansun.utils.Utils;
 
 /**
  * Class for creating and generating report file in type EXCEL
@@ -56,7 +55,7 @@ public class XLSReportWriter implements IReportWriter {
 	public XLSReportWriter(String pathToReportFolder, String version) 
 	{
 		File folder = new File(pathToReportFolder);
-		if (!folder.exists()) {
+		if (!folder.exists() && !folder.mkdirs()) {
 			throw new IllegalArgumentException("Folder by path=" + pathToReportFolder + " does not exist");
 		} else {
 			this.reportFolder = folder;
@@ -121,7 +120,7 @@ public class XLSReportWriter implements IReportWriter {
 			
 			// Write the output to a file
 			String reportName = "����� �� " + reportDate;
-			report = AdditionalUtils.createUniqueFile(reportFolder, reportName, version);
+			report = Utils.createUniqueFile(reportFolder, reportName, version);
 		    FileOutputStream fileOut = new FileOutputStream(report);
 		    wb.write(fileOut);
 		    fileOut.close();

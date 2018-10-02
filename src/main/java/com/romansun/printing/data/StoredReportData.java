@@ -27,19 +27,18 @@ public class StoredReportData extends ReportData {
 	protected void extractData() {
 		LOG.debug("Extract data for stored report = " + report.getName() + " ...");
 		LOG.debug("Ignore Empty Visitors = " + ignoreEmptyVisitors);
-		super.units = new ArrayList<ReportUnit>();
+		super.units = new ArrayList<>();
 		
 		List<InfoVisitor> visitors = report.getVisitors();
 		for (InfoVisitor visitor : visitors) {
 			ReportUnit unit = new ReportUnit();
-			String[] fio = visitor.getFIO().split(" ");
 
-			if (fio != null && fio.length == 4) {
-				String lastname = fio[0];
-				String firstname = fio[1];
-				String middlename = fio[2];
-				String groupName = fio[3];
-				
+			if (visitor.validate()) {
+				unit.setVisitorFirstname(visitor.getFirstName());
+				unit.setVisitorLastname(visitor.getLastName());
+				unit.setVisitorMiddlename(visitor.getMiddleName());
+				unit.setVisitorGroupName(visitor.getGroup());
+
 				int countOfLunches = visitor.getLunches();
 				int countOfDinners = visitor.getDinners();
 				if (ignoreEmptyVisitors && (countOfLunches == 0 && countOfDinners == 0)) {
@@ -50,16 +49,6 @@ public class StoredReportData extends ReportData {
 				double costOfLunches = countOfLunches * priceOfLunch;
 				double costOfDinners = countOfDinners * priceOfDinner;
 				double generalCost = costOfLunches + costOfDinners;
-				
-				unit.setVisitorFirstname(firstname);
-				unit.setVisitorLastname(lastname);
-				if (middlename != null && !"?".equals(middlename)) {
-					unit.setVisitorMiddlename(middlename);
-				}
-				if (groupName != null && !"(���_������)".equals(groupName)) {
-					unit.setVisitorGroupName(groupName.substring(1, groupName.length()-1));
-				}
-				
 				unit.setCountOfLunches(countOfLunches);
 				unit.setCountOfDinners(countOfDinners);
 				unit.setCostOfLunches(costOfLunches);
@@ -68,7 +57,7 @@ public class StoredReportData extends ReportData {
 				
 				units.add(unit);
 			} else {
-				LOG.debug("Information about visitor = " + visitor.getFIO() + " is null or incorrect!");
+				LOG.warn("Information about visitor = " + visitor.getFIO() + " is incorrect!");
 			}
 		}
 		

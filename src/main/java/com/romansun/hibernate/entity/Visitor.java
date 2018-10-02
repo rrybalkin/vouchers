@@ -15,6 +15,9 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import java.util.Objects;
+import java.util.Optional;
+
 @Entity
 @Table(name="Visitors")
 public class Visitor {
@@ -25,13 +28,13 @@ public class Visitor {
 	private Long id;
 	
 	@Column(name="firstname")
-	private String firstname;
+	private String firstName;
 	
 	@Column(name="lastname")
-	private String lastname;
+	private String lastName;
 	
 	@Column(name="middlename")
-	private String middlename;
+	private String middleName;
 	
 	@Column(name="description")
 	private String description;
@@ -60,23 +63,23 @@ public class Visitor {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getFirstname() {
-		return firstname;
+	public String getFirstName() {
+		return firstName;
 	}
-	public void setFirstname(String firstname) {
-		this.firstname = firstname;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
-	public String getLastname() {
-		return lastname;
+	public String getLastName() {
+		return lastName;
 	}
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
-	public String getMiddlename() {
-		return middlename;
+	public String getMiddleName() {
+		return middleName != null ? middleName : "";
 	}
-	public void setMiddlename(String middlename) {
-		this.middlename = middlename;
+	public void setMiddleName(String middleName) {
+		this.middleName = middleName;
 	}
 	public Association getAssociation() {
 		return association;
@@ -90,21 +93,24 @@ public class Visitor {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	public String getFIO() {
+		return getLastName() + " " + getFirstName() + " " + getMiddleName();
+	}
 	
 	@Override
 	public boolean equals(Object o) {
 		if (o instanceof Visitor) {
 			Visitor that = (Visitor) o;
-			if (this.id == that.id) {
+			if (Objects.equals(this.id, that.id)) {
 				return true;
 			}
 		}
-		
 		return false;
 	}
 	
 	@Override
     public String toString() {
-       return lastname + " " + firstname + " " + middlename;
+       return getFIO();
     }
 }

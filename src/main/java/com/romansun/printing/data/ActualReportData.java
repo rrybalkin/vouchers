@@ -26,22 +26,22 @@ public class ActualReportData extends ReportData {
 	protected void extractData() {
 		LOG.debug("Extract data for actual info about visitors ...");
 		LOG.debug("Ignore Empty Visitors = " + ignoreEmptyVisitors);
-		super.units = new ArrayList<ReportUnit>();
+		super.units = new ArrayList<>();
 		
 		for (Visitor visitor : visitors) {
-			int countOfLunches = visitor.getTalon().getCntOfLunches();
-			int countOfDinners = visitor.getTalon().getCount_dinner();
+			int countOfLunches = visitor.getTalon().getLunches();
+			int countOfDinners = visitor.getTalon().getDinners();
 			
 			if (ignoreEmptyVisitors && (countOfLunches == 0 && countOfDinners == 0)) {
-				LOG.debug("Visitor = " + visitor.getLastname() + " " + visitor.getFirstname() + " doesn't have any lunches or dinners.");
+				LOG.debug("Visitor = " + visitor.getLastName() + " " + visitor.getFirstName() + " doesn't have any lunches or dinners.");
 				continue;
 			}
 			
 			ReportUnit unit = new ReportUnit();
-			unit.setVisitorFirstname(visitor.getFirstname());
-			unit.setVisitorLastname(visitor.getLastname());
+			unit.setVisitorFirstname(visitor.getFirstName());
+			unit.setVisitorLastname(visitor.getLastName());
 			
-			String middlename = visitor.getMiddlename();
+			String middlename = visitor.getMiddleName();
 			if (!"?".equals(middlename)) {
 				unit.setVisitorMiddlename(middlename);
 			}

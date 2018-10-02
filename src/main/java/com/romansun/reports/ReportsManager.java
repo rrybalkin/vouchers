@@ -73,7 +73,7 @@ public class ReportsManager {
 		VisitorsType visitorsElement = reportElement.getVisitors();
 		List<VisitorType> visitors = visitorsElement.getVisitor();
 		
-		List<InfoVisitor> infoVisitors = new ArrayList<InfoVisitor>();
+		List<InfoVisitor> infoVisitors = new ArrayList<>();
 		for (VisitorType v : visitors) {
 			InfoVisitor infoVisitor = new InfoVisitor(v.getFIO(), v.getLunches(), v.getDinners());
 			

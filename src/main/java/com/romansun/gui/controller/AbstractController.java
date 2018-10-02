@@ -1,7 +1,10 @@
 package com.romansun.gui.controller;
 
 import java.io.File;
+import java.time.Month;
+import java.time.format.TextStyle;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javafx.scene.control.TabPane;
@@ -34,31 +37,29 @@ public abstract class AbstractController {
 	}
 
 	/*
- * Class Converter for ComboBox "Month"
- */
-	protected static class MonthConverter extends StringConverter<Integer> {
+	 * A month converter, name -> digit.
+	 */
+	public static class MonthConverter extends StringConverter<Integer> {
 
-		private static final Map<String, Integer> months = new HashMap<String, Integer>();
+		private static final Map<String, Integer> MONTHS = new HashMap<>();
 		static {
-			months.put("Январь", 1);
-			months.put("Февраль", 2);
-			months.put("Март", 3);
-			months.put("Апрель", 4);
-			months.put("Май", 5);
-			months.put("Июнь", 6);
-			months.put("Июль", 7);
-			months.put("Август", 8);
-			months.put("Сентябрь", 9);
-			months.put("Октябрь", 10);
-			months.put("Ноябрь", 11);
-			months.put("Декабрь", 12);
+			MONTHS.put(Month.JANUARY.getDisplayName(TextStyle.FULL, Locale.getDefault()), 1);
+			MONTHS.put(Month.FEBRUARY.getDisplayName(TextStyle.FULL, Locale.getDefault()), 2);
+			MONTHS.put(Month.MARCH.getDisplayName(TextStyle.FULL, Locale.getDefault()), 3);
+			MONTHS.put(Month.APRIL.getDisplayName(TextStyle.FULL, Locale.getDefault()), 4);
+			MONTHS.put(Month.MAY.getDisplayName(TextStyle.FULL, Locale.getDefault()), 5);
+			MONTHS.put(Month.JUNE.getDisplayName(TextStyle.FULL, Locale.getDefault()), 6);
+			MONTHS.put(Month.JULY.getDisplayName(TextStyle.FULL, Locale.getDefault()), 7);
+			MONTHS.put(Month.AUGUST.getDisplayName(TextStyle.FULL, Locale.getDefault()), 8);
+			MONTHS.put(Month.SEPTEMBER.getDisplayName(TextStyle.FULL, Locale.getDefault()), 9);
+			MONTHS.put(Month.OCTOBER.getDisplayName(TextStyle.FULL, Locale.getDefault()), 10);
+			MONTHS.put(Month.NOVEMBER.getDisplayName(TextStyle.FULL, Locale.getDefault()), 11);
+			MONTHS.put(Month.DECEMBER.getDisplayName(TextStyle.FULL, Locale.getDefault()), 12);
 		}
-
-		public MonthConverter() {}
 
 		@Override
 		public Integer fromString(String month) {
-			return months.get(month);
+			return MONTHS.get(month);
 		}
 
 		@Override
@@ -67,20 +68,18 @@ public abstract class AbstractController {
 		}
 
 		public static String getMonthNameByIndex(Integer monthIndex) {
-			for (String key : months.keySet()) {
-				if (monthIndex.equals(months.get(key)))
+			for (String key : MONTHS.keySet()) {
+				if (monthIndex.equals(MONTHS.get(key)))
 					return key;
 			}
-			return null;
+			throw new IllegalArgumentException("Month by index=" + monthIndex + " not found");
 		}
 	}
 
 	/*
-	 * Class Converter for ComboBox "Year"
+	 * A year converter, string -> int.
 	 */
-	protected static class YearConverter extends StringConverter<Integer> {
-
-		public YearConverter() {}
+	public static class YearConverter extends StringConverter<Integer> {
 
 		@Override
 		public Integer fromString(String month) {

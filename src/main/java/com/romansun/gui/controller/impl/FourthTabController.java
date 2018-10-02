@@ -9,6 +9,7 @@ import com.romansun.printing.data.StoredReportData;
 import com.romansun.printing.writer.IReportWriter;
 import com.romansun.printing.writer.WriterFactory;
 import com.romansun.reports.logic.Report;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -18,6 +19,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
+import javafx.util.StringConverter;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 
@@ -42,7 +44,18 @@ public class FourthTabController extends AbstractController implements Initializ
 		ThirdTabController.addObserver(this);
 
 		cbEnableEmptyVisitors.getItems().clear();
-		cbEnableEmptyVisitors.getItems().addAll("Нет", "Да");
+		cbEnableEmptyVisitors.getItems().addAll(Boolean.FALSE, Boolean.TRUE);
+		cbEnableEmptyVisitors.setConverter(new StringConverter<Boolean>() {
+			@Override
+			public String toString(Boolean o) {
+				return o ? "Да" : "Нет";
+			}
+
+			@Override
+			public Boolean fromString(String string) {
+				return "ДА".equalsIgnoreCase(string) ? Boolean.TRUE : Boolean.FALSE;
+			}
+		});
 		cbEnableEmptyVisitors.getSelectionModel().select(0);
 
 		cbReportFormat.getItems().clear();
@@ -58,30 +71,19 @@ public class FourthTabController extends AbstractController implements Initializ
 		year = new DateTime().getYear();
 
 		cbMonth.setConverter(new MonthConverter());
-		Integer[] months = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
-		cbMonth.getItems().addAll(months);
+		cbMonth.getItems().addAll(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
 		cbMonth.getSelectionModel().select(month);
 
 		cbYear.setConverter(new YearConverter());
-		Integer[] years = {year-1, year, year+1};
-		cbYear.getItems().addAll(years);
+		cbYear.getItems().addAll(year-1, year, year+1);
 		cbYear.getSelectionModel().select(year);
 
-		cbMonth.valueProperty().addListener(new ChangeListener<Integer>() {
-			public void changed(ObservableValue<? extends Integer> o,
-								Integer oldValue, Integer newValue) {
-				month = newValue;
-			}});
-
-		cbYear.valueProperty().addListener(new ChangeListener<Integer>() {
-			public void changed(ObservableValue<? extends Integer> o,
-								Integer oldValue, Integer newValue) {
-				year = newValue;
-			}});
+		cbMonth.valueProperty().addListener((o, oldValue, newValue) -> month = newValue);
+		cbYear.valueProperty().addListener((o, oldValue, newValue) -> year = newValue);
 	}
 
 	@FXML
-	private ComboBox<String> cbEnableEmptyVisitors;
+	private ComboBox<Boolean> cbEnableEmptyVisitors;
 	@FXML
 	private ComboBox<String> cbReportFormat;
 	@FXML
@@ -93,8 +95,6 @@ public class FourthTabController extends AbstractController implements Initializ
 	@FXML
 	private TextField txtCostOfDinner;
 	@FXML
-	private Button btnCreateReport;
-	@FXML
 	private Hyperlink seeReport;
 	@FXML
 	private ComboBox<Integer> cbMonth;
@@ -103,13 +103,13 @@ public class FourthTabController extends AbstractController implements Initializ
 
 	@FXML
 	protected void createReport() {
-		LOG.debug("Start forming report ...");
+		LOG.debug("Start generating report ...");
 		String reportType = cbReportFormat.getSelectionModel().getSelectedItem();
 		try
 		{
 			if (!validate()) return;
 			ReportData reportData = buildReportData();
-			String reportDate = null;
+			String reportDate;
 			if (printingReport != null) {
 				String storedReportName = printingReport.getName();
 				reportDate = storedReportName.substring(0, storedReportName.indexOf('.'));
@@ -144,7 +144,7 @@ public class FourthTabController extends AbstractController implements Initializ
 		}
 	}
 
-	@FXML //Method for process click on hyperlink
+	@FXML // process click on hyperlink
 	protected void hlAction() {
 		File file = (File) seeReport.getUserData();
 		try {
@@ -191,7 +191,7 @@ public class FourthTabController extends AbstractController implements Initializ
 	private ReportData buildReportData() throws Exception {
 		ReportData reportData;
 
-		boolean ignoreEmptyVisitors = "НЕТ".equalsIgnoreCase(cbEnableEmptyVisitors.getSelectionModel().getSelectedItem());
+		boolean ignoreEmptyVisitors = cbEnableEmptyVisitors.getSelectionModel().getSelectedItem();
 		double costOfLunch = Double.parseDouble(txtCostOfLunch.getText());
 		double costOfDinner = Double.parseDouble(txtCostOfDinner.getText());
 
@@ -207,17 +207,12 @@ public class FourthTabController extends AbstractController implements Initializ
 		}
 
 		// sorting report data
-		reportData.sort(new Comparator<ReportUnit>() {
+		reportData.sort((o1, o2) -> {
+            String fio1 = o1.getVisitorLastname() + " " + o1.getVisitorFirstname();
+            String fio2 = o2.getVisitorLastname() + " " + o2.getVisitorFirstname();
 
-			@Override
-			public int compare(ReportUnit o1, ReportUnit o2) {
-				String fio1 = o1.getVisitorLastname() + " " + o1.getVisitorFirstname();
-				String fio2 = o2.getVisitorLastname() + " " + o2.getVisitorFirstname();
-
-				return fio1.compareToIgnoreCase(fio2);
-			}
-
-		});
+            return fio1.compareToIgnoreCase(fio2);
+        });
 
 		return reportData;
 	}

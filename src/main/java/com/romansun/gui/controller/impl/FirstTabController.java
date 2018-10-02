@@ -3,8 +3,6 @@ package com.romansun.gui.controller.impl;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -32,12 +30,14 @@ import com.romansun.gui.Dialog;
 import com.romansun.hibernate.entity.Association;
 import com.romansun.hibernate.entity.Talon;
 import com.romansun.hibernate.entity.Visitor;
-import com.romansun.utils.AdditionalUtils;
+import com.romansun.utils.Utils;
 
-public class FirstTabController extends AbstractController implements
-		Initializable, Observer {
+public class FirstTabController extends AbstractController implements Initializable, Observer {
 	private final static Logger LOG = Logger.getLogger(FirstTabController.class);
-	private static Visitor chooseVisitor;
+
+	private static final int MAX_COUNT = 3;
+
+	private static Visitor choosenVisitor;
 	private static Association chooseFilter;
 
 	@Override
@@ -45,12 +45,19 @@ public class FirstTabController extends AbstractController implements
 		// Add observer in SecondTabController
 		SecondTabController.addObserver(this);
 		MainWindowController.addObserver(this);
+
+		// remember the initial labels text
+		this.lblFIOText = lblFIO.getText();
+		this.lblGroupText = lblGroup.getText();
+		this.lblLunchesText = lblLunches.getText();
+		this.lblDinnersText = lblDinners.getText();
+
 		// Initialize ComboBox "Filter", ComboBox "Groups"
 		loadFilters();
 		// Initialize ListView "Visitors"
 		loadVisitors();
 		// Initialize ComboBoxes for count dinners and lunches
-		initCounters(3);
+		initCounters();
 
 		// Initialize listener for input mask
 		txtMask.caretPositionProperty().addListener(
@@ -75,12 +82,16 @@ public class FirstTabController extends AbstractController implements
 	private ListView<Visitor> listVisitors;
 	@FXML
 	private Label lblFIO;
+	private String lblFIOText;
 	@FXML
 	private Label lblGroup;
+	private String lblGroupText;
 	@FXML
-	private Label lblLaunches;
+	private Label lblLunches;
+	private String lblLunchesText;
 	@FXML
 	private Label lblDinners;
+	private String lblDinnersText;
 	@FXML
 	private ComboBox<Integer> countLunches;
 	@FXML
@@ -88,11 +99,11 @@ public class FirstTabController extends AbstractController implements
 	@FXML
 	private Button btnAdd;
 	@FXML
-	private TextField txtLastname;
+	private TextField txtFirstName;
 	@FXML
-	private TextField txtFirstname;
+	private TextField txtLastName;
 	@FXML
-	private TextField txtMiddlename;
+	private TextField txtMiddleName;
 	@FXML
 	private ComboBox<Association> cbGroups;
 	@FXML
@@ -104,9 +115,9 @@ public class FirstTabController extends AbstractController implements
 	protected void addTalon() {
 		Integer lunches = countLunches.getValue();
 		Integer dinners = countDinners.getValue();
-		Talon talon = chooseVisitor.getTalon();
-		talon.setCount_dinner(talon.getCount_dinner() + dinners);
-		talon.setCntOfLunches(talon.getCntOfLunches() + lunches);
+		Talon talon = choosenVisitor.getTalon();
+		talon.setDinners(talon.getDinners() + dinners);
+		talon.setLunches(talon.getLunches() + lunches);
 		try {
 			daoFactory.getTalonDAO().update(talon);
 		} catch (Exception e) {
@@ -130,36 +141,44 @@ public class FirstTabController extends AbstractController implements
 	@FXML
 	protected void updateVisitor() {
 		Visitor newVisitor = new Visitor();
-		String firstname = txtFirstname.getText();
-		String lastname = txtLastname.getText();
-		String middlename = txtMiddlename.getText();
-		Association association = cbGroups.getValue();
-		if (!lastname.isEmpty() && !firstname.isEmpty()) {
-			newVisitor.setFirstname(AdditionalUtils.upFirst(firstname));
-			newVisitor.setLastname(AdditionalUtils.upFirst(lastname));
-			newVisitor.setMiddlename(AdditionalUtils.upFirst(middlename));
+		final String firstName = txtFirstName.getText();
+		final String lastName = txtLastName.getText();
+		final String middleName = txtMiddleName.getText();
+		final Association association = cbGroups.getValue();
+		if (!lastName.isEmpty() && !firstName.isEmpty()) {
+			newVisitor.setFirstName(Utils.upFirst(firstName));
+			newVisitor.setLastName(Utils.upFirst(lastName));
+			newVisitor.setMiddleName(Utils.upFirst(middleName));
 			newVisitor.setAssociation(association);
-			newVisitor.setTalon(chooseVisitor.getTalon());
-			newVisitor.setId(chooseVisitor.getId());
+			newVisitor.setTalon(choosenVisitor.getTalon());
+			newVisitor.setId(choosenVisitor.getId());
 			try {
 				visitorsDAO.update(newVisitor);
-				chooseVisitor = newVisitor;
+				choosenVisitor = newVisitor;
 				loadVisitors();
 				loadInfoAboutVisitor();
 				clickOnTitledPane();
+				Dialog.showInfo("Visitor updated.");
 			} catch (Exception e) {
-				LOG.error("Error: ", e);
+				Dialog.showError("Error while updating visitor: " + e.getLocalizedMessage());
+				LOG.error("Error while updating visitor: ", e);
 			}
+		} else {
+			Dialog.showError("Required visitor fields must be filled!");
 		}
 	}
 
 	@FXML
 	private void keyPressed(KeyEvent event) {
+		final Visitor selectedVisitor = listVisitors.getSelectionModel().getSelectedItem();
+		if (selectedVisitor == null) {
+			LOG.error("keyPressed event when no selected visitor in the list");
+			return;
+		}
+
 		if (event.getCode() == KeyCode.DELETE) {
-			int answer = Dialog.showQuestion(
-					"Are you sure to delete visitor?",
-					event);
-			if (answer == 1 /* YES */) {
+			int answer = Dialog.showQuestion("Are you sure to delete visitor " + selectedVisitor.getFIO() + " ?", event);
+			if (answer == Dialog.YES) {
 				try {
 					Visitor visitor = listVisitors.getSelectionModel()
 							.getSelectedItem();
@@ -170,48 +189,48 @@ public class FirstTabController extends AbstractController implements
 						LOG.info("Visitor = " + visitor.getId() + " was deleted");
 					}
 				} catch (Exception e) {
-					LOG.error("Error: ", e);
+					Dialog.showError("Error while deleting visitor: " + e.getMessage());
+					LOG.error("Error while deleting visitor: ", e);
 				}
 			}
 		} else if (event.getCode() == KeyCode.L /* Lunches */) {
-			int answer = Dialog
-					.showQuestion(
-							"Are you sure?",
-							event);
-			if (answer == 1 /* YES */) {
+			int answer = Dialog.showQuestion("Are you sure to reset lunches for selected visitor " + selectedVisitor.getFIO() + " ?", event);
+			if (answer == Dialog.YES) {
 				try {
 					Visitor visitor = listVisitors.getSelectionModel()
 							.getSelectedItem();
 					if (visitor != null) {
 						daoFactory.getTalonDAO().resetLunchById(visitor.getTalon().getId());
 						loadVisitors();
-						chooseVisitor.getTalon().setCntOfLunches(0);
-						loadInfoAboutVisitor();
-						LOG.info("Dinners for visitor = ["
-								+ visitor + "] were reset");
+						if (choosenVisitor != null && choosenVisitor.equals(visitor)) {
+							choosenVisitor.getTalon().setLunches(0);
+							loadInfoAboutVisitor();
+						}
+						LOG.info("Lunches for visitor = [" + visitor + "] were reset");
 					}
 				} catch (Exception e) {
-					LOG.error("Error: ", e);
+					Dialog.showError("Error while reset lunches: " + e.getMessage());
+					LOG.error("Error while doing reset lunches: ", e);
 				}
 			}
 		} else if (event.getCode() == KeyCode.D /* Dinners */) {
-			int answer = Dialog
-					.showQuestion(
-							"Are you sure to reset dinners?",
-							event);
-			if (answer == 1 /* YES */) {
+			int answer = Dialog.showQuestion("Are you sure to reset dinners for selected visitor " + selectedVisitor.getFIO() + " ?", event);
+			if (answer == Dialog.YES) {
 				try {
-					Visitor visitor = listVisitors.getSelectionModel()
-							.getSelectedItem();
+					Visitor visitor = listVisitors.getSelectionModel().getSelectedItem();
 					if (visitor != null) {
 						daoFactory.getTalonDAO().resetDinnerById(
 								visitor.getTalon().getId());
 						loadVisitors();
-						chooseVisitor.getTalon().setCount_dinner(0);
-						loadInfoAboutVisitor();
+						if (choosenVisitor != null && choosenVisitor.equals(visitor)) {
+							choosenVisitor.getTalon().setDinners(0);
+							loadInfoAboutVisitor();
+						}
+						LOG.info("Dinners for visitor = [" + visitor + "] were reset");
 					}
 				} catch (Exception e) {
-					LOG.error("Error: ", e);
+					Dialog.showError("Error while reset dinners: " + e.getMessage());
+					LOG.error("Error while doing reset dinners: ", e);
 				}
 			}
 		}
@@ -224,7 +243,7 @@ public class FirstTabController extends AbstractController implements
 				Visitor visitor = listVisitors.getSelectionModel()
 						.getSelectedItem();
 				if (visitor != null) {
-					FirstTabController.chooseVisitor = visitor;
+					FirstTabController.choosenVisitor = visitor;
 					loadInfoAboutVisitor();
 					clickOnTitledPane();
 				}
@@ -237,14 +256,13 @@ public class FirstTabController extends AbstractController implements
 		Boolean expanded = titledPane.expandedProperty().get();
 		if (expanded) {
 			// Set data in Fields
-			if (chooseVisitor != null) {
-				txtLastname.setText(chooseVisitor.getLastname());
-				txtFirstname.setText(chooseVisitor.getFirstname());
-				txtMiddlename.setText(chooseVisitor.getMiddlename());
+			if (choosenVisitor != null) {
+				txtLastName.setText(choosenVisitor.getLastName());
+				txtFirstName.setText(choosenVisitor.getFirstName());
+				txtMiddleName.setText(choosenVisitor.getMiddleName());
 				Integer selIndex = null;
 				for (int i = 0; i < cbGroups.getItems().size(); i++) {
-					if (cbGroups.getItems().get(i).getName()
-							.equals(chooseVisitor.getAssociation().getName()))
+					if (cbGroups.getItems().get(i).getName().equals(choosenVisitor.getAssociation().getName()))
 						selIndex = i;
 				}
 				cbGroups.getSelectionModel().select(selIndex);
@@ -255,7 +273,7 @@ public class FirstTabController extends AbstractController implements
 	private void loadVisitors() {
 		listVisitors.getItems().clear();
 		try {
-			Collection<Visitor> visitors = null;
+			Collection<Visitor> visitors;
 			String mask = txtMask.getText();
 			if (mask != null && mask.length() != 0) {
 				loadVisitorsForMask(mask);
@@ -311,18 +329,14 @@ public class FirstTabController extends AbstractController implements
 	}
 
 	private void loadInfoAboutVisitor() {
-		if (chooseVisitor != null) {
-			// Set data in Labels
-			lblFIO.setText("FIO: " + chooseVisitor.getLastname() + " "
-					+ chooseVisitor.getFirstname() + " "
-					+ chooseVisitor.getMiddlename());
-			lblGroup.setText("Group: "
-					+ chooseVisitor.getAssociation().getName());
-			Talon talon = chooseVisitor.getTalon();
-			lblLaunches
-					.setText("Count of launches: " + talon.getCntOfLunches());
-			lblDinners
-					.setText("Count of dinners: " + talon.getCount_dinner());
+		if (choosenVisitor != null) {
+			lblFIO.setText(lblFIOText + " " + choosenVisitor.getLastName() + " "
+					+ choosenVisitor.getFirstName() + " "
+					+ choosenVisitor.getMiddleName());
+			lblGroup.setText(lblGroupText + " " + choosenVisitor.getAssociation().getName());
+			Talon talon = choosenVisitor.getTalon();
+			lblLunches.setText(lblLunchesText + " " + talon.getLunches());
+			lblDinners.setText(lblDinnersText + " " + talon.getDinners());
 
 			titledPane.setDisable(false);
 			btnAdd.setDisable(false);
@@ -331,10 +345,10 @@ public class FirstTabController extends AbstractController implements
 		}
 	}
 
-	private void initCounters(int max) {
-		List<Integer> counts = new ArrayList<Integer>();
-		for (int i = 0; i <= max; i++) {
-			counts.add(new Integer(i));
+	private void initCounters() {
+		List<Integer> counts = new ArrayList<>();
+		for (int i = 0; i <= MAX_COUNT; i++) {
+			counts.add(i);
 		}
 		countLunches.getItems().clear();
 		countDinners.getItems().clear();
@@ -345,16 +359,14 @@ public class FirstTabController extends AbstractController implements
 	}
 
 	private List<Visitor> sortCollection(Collection<Visitor> collection) {
-		List<Visitor> visitors = new ArrayList<Visitor>(collection);
-		Collections.sort(visitors, new Comparator<Visitor>() {
-			public int compare(Visitor v1, Visitor v2) {
-				String fio_1 = v1.getLastname() + " " + v1.getFirstname() + " "
-						+ v1.getMiddlename();
-				String fio_2 = v2.getLastname() + " " + v2.getFirstname() + " "
-						+ v2.getMiddlename();
-				return fio_1.compareTo(fio_2);
-			}
-		});
+		List<Visitor> visitors = new ArrayList<>(collection);
+		visitors.sort((v1, v2) -> {
+            String fio_1 = v1.getLastName() + " " + v1.getFirstName() + " "
+                    + v1.getMiddleName();
+            String fio_2 = v2.getLastName() + " " + v2.getFirstName() + " "
+                    + v2.getMiddleName();
+            return fio_1.compareTo(fio_2);
+        });
 		return visitors;
 	}
 

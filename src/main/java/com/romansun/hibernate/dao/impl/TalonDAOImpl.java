@@ -97,9 +97,6 @@ public class TalonDAOImpl implements TalonDAO {
 
 	@Override
 	public void resetLunchById(final long id) throws Exception {
-		if (id <= 0)
-			throw new IllegalArgumentException("ID must be positive");
-
 		new Invoker<Void>() {
 
 			@Override
@@ -112,11 +109,7 @@ public class TalonDAOImpl implements TalonDAO {
 	}
 
 	@Override
-	public void resetDinnerById(final long id) throws Exception 
-	{
-		if (id <= 0)
-			throw new IllegalArgumentException("ID must be positive");
-		
+	public void resetDinnerById(final long id) throws Exception {
 		new Invoker<Void>() {
 
 			@Override

@@ -39,7 +39,7 @@
                       </font>
                     </Label>
                     <Label fx:id="lblGroup" font="$x1" layoutX="13.0" layoutY="33.0" text="Группа:" />
-                    <Label fx:id="lblLaunches" font="$x1" layoutX="14.0" layoutY="61.0" text="Колличество обедов:" />
+                    <Label fx:id="lblLunches" font="$x1" layoutX="14.0" layoutY="61.0" text="Колличество обедов:" />
                     <Label fx:id="lblDinners" font="$x1" layoutX="14.0" layoutY="87.0" text="Колличество ужинов:" />
                   </children>
                 </AnchorPane>
@@ -52,7 +52,7 @@
                     <Label font="$x1" layoutX="13.0" layoutY="13.0" text="Колличество обедов:" />
                     <Label font="$x1" layoutX="14.0" layoutY="51.0" text="Колличество ужинов:" />
                     <Button fx:id="btnAdd" disable="true" layoutX="136.0" layoutY="88.0" mnemonicParsing="false" onAction="#addTalon" text="Добавить" />
-                    <ComboBox id="countLaunches" fx:id="countLunches" disable="true" layoutX="161.0" layoutY="13.0">
+                    <ComboBox fx:id="countLunches" disable="true" layoutX="161.0" layoutY="13.0">
                       <items>
                         <FXCollections fx:factory="observableArrayList">
                           <String fx:value="Item 1" />
@@ -79,11 +79,11 @@
                 <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                   <children>
                     <Label layoutX="14.0" layoutY="134.0" text="Группа:" />
-                    <TextField fx:id="txtLastname" layoutX="14.0" layoutY="26.0" prefWidth="200.0" />
+                    <TextField fx:id="txtLastName" layoutX="14.0" layoutY="26.0" prefWidth="200.0" />
                     <Label layoutX="14.0" layoutY="6.0" text="*Фамимлия:" />
-                    <TextField fx:id="txtFirstname" layoutX="14.0" layoutY="68.0" prefWidth="200.0" />
+                    <TextField fx:id="txtFirstName" layoutX="14.0" layoutY="68.0" prefWidth="200.0" />
                     <Label layoutX="14.0" layoutY="48.0" text="*Имя:" />
-                    <TextField fx:id="txtMiddlename" layoutX="14.0" layoutY="110.0" prefWidth="200.0" />
+                    <TextField fx:id="txtMiddleName" layoutX="14.0" layoutY="110.0" prefWidth="200.0" />
                     <Label layoutX="14.0" layoutY="90.0" text="Отчество:" />
                     <ComboBox id="cbGroup" fx:id="cbGroups" layoutX="14.0" layoutY="152.0" prefHeight="21.0" prefWidth="198.0">
                       <items>
