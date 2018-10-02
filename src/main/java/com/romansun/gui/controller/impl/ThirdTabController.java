@@ -2,9 +2,9 @@ package com.romansun.gui.controller.impl;
 
 import com.romansun.gui.Dialog;
 import com.romansun.gui.controller.AbstractController;
-import com.romansun.reports.ReportsManager;
-import com.romansun.reports.logic.InfoVisitor;
-import com.romansun.reports.logic.Report;
+import com.romansun.reporting.ReportsManager;
+import com.romansun.reporting.logic.InfoVisitor;
+import com.romansun.reporting.logic.Report;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;

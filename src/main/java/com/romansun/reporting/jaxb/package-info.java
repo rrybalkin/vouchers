@@ -6,4 +6,4 @@
 //
 
 @javax.xml.bind.annotation.XmlSchema(namespace = "http://www.example.org/SaveFormalSchema")
-package com.romansun.reports.jaxb;
+package com.romansun.reporting.jaxb;

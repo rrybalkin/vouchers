@@ -6,7 +6,7 @@
 //
 
 
-package com.romansun.reports.jaxb;
+package com.romansun.reporting.jaxb;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlElementDecl;

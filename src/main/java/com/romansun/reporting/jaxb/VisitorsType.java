@@ -6,7 +6,7 @@
 //
 
 
-package com.romansun.reports.jaxb;
+package com.romansun.reporting.jaxb;
 
 import java.util.ArrayList;
 import java.util.List;

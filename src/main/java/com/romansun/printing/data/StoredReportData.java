@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.romansun.reports.logic.InfoVisitor;
-import com.romansun.reports.logic.Report;
+import com.romansun.reporting.logic.InfoVisitor;
+import com.romansun.reporting.logic.Report;
 
 public class StoredReportData extends ReportData {
 	private final static Logger LOG = Logger.getLogger(StoredReportData.class);

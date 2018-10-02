@@ -1,4 +1,4 @@
-package com.romansun.reports;
+package com.romansun.reporting;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -10,13 +10,13 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
 
-import com.romansun.reports.jaxb.ObjectFactory;
-import com.romansun.reports.jaxb.ReportType;
-import com.romansun.reports.jaxb.RootType;
-import com.romansun.reports.jaxb.VisitorType;
-import com.romansun.reports.jaxb.VisitorsType;
-import com.romansun.reports.logic.InfoVisitor;
-import com.romansun.reports.logic.Report;
+import com.romansun.reporting.jaxb.ObjectFactory;
+import com.romansun.reporting.jaxb.ReportType;
+import com.romansun.reporting.jaxb.RootType;
+import com.romansun.reporting.jaxb.VisitorType;
+import com.romansun.reporting.jaxb.VisitorsType;
+import com.romansun.reporting.logic.InfoVisitor;
+import com.romansun.reporting.logic.Report;
 
 
 public class ReportsSaver {

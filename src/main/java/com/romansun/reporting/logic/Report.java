@@ -1,4 +1,4 @@
-package com.romansun.reports.logic;
+package com.romansun.reporting.logic;
 
 import java.io.File;
 import java.util.List;

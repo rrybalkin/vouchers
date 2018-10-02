@@ -25,9 +25,9 @@ import com.romansun.utils.Resources;
 import com.romansun.gui.controller.AbstractController;
 import com.romansun.gui.Dialog;
 import com.romansun.hibernate.entity.Visitor;
-import com.romansun.reports.ReportBuilder;
-import com.romansun.reports.ReportsSaver;
-import com.romansun.reports.logic.Report;
+import com.romansun.reporting.ReportBuilder;
+import com.romansun.reporting.ReportsSaver;
+import com.romansun.reporting.logic.Report;
 
 public class MainWindowController extends AbstractController implements Initializable {
 	private final static String SETTINGS_WINDOW_NAME = "Settings";

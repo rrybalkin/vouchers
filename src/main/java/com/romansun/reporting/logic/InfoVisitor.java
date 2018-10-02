@@ -1,4 +1,4 @@
-package com.romansun.reports.logic;
+package com.romansun.reporting.logic;
 
 import org.apache.commons.lang3.StringUtils;
 

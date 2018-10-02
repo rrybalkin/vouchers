@@ -1,15 +1,14 @@
-package com.romansun.reports;
+package com.romansun.reporting;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import org.joda.time.DateTime;
 
 import com.romansun.hibernate.entity.Visitor;
-import com.romansun.reports.logic.InfoVisitor;
-import com.romansun.reports.logic.Report;
+import com.romansun.reporting.logic.InfoVisitor;
+import com.romansun.reporting.logic.Report;
 
 public class ReportBuilder {
 	
