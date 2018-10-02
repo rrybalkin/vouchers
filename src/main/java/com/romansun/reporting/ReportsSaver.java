@@ -1,22 +1,16 @@
 package com.romansun.reporting;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import com.romansun.reporting.jaxb.*;
+import com.romansun.reporting.logic.InfoVisitor;
+import com.romansun.reporting.logic.Report;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
-
-import com.romansun.reporting.jaxb.ObjectFactory;
-import com.romansun.reporting.jaxb.ReportType;
-import com.romansun.reporting.jaxb.RootType;
-import com.romansun.reporting.jaxb.VisitorType;
-import com.romansun.reporting.jaxb.VisitorsType;
-import com.romansun.reporting.logic.InfoVisitor;
-import com.romansun.reporting.logic.Report;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ReportsSaver {
@@ -34,7 +28,7 @@ public class ReportsSaver {
 		ReportType reportElement = new ReportType();
 		VisitorsType visitorsElement = new VisitorsType();
 		// Getting info about all visitors from report
-		List<VisitorType> visitors = new ArrayList<VisitorType>();
+		List<VisitorType> visitors = new ArrayList<>();
 		List<InfoVisitor> infoVisitors = report.getVisitors();
 		for (InfoVisitor info : infoVisitors) {
 			VisitorType visitor = new VisitorType();
@@ -54,7 +48,7 @@ public class ReportsSaver {
 		
 		// Start JAXB
 		JAXBElement<RootType> root = of.createRoot(rootElement);
-		JAXBContext jc = JAXBContext.newInstance("com.romansun.reports.jaxb");
+		JAXBContext jc = JAXBContext.newInstance(getClass().getPackage().getName() + ".jaxb");
 		Marshaller marshaller = jc.createMarshaller();
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 		File dstFile = getSaveFile();
@@ -62,14 +56,12 @@ public class ReportsSaver {
 		marshaller.marshal(root, out);
 	}
 	
-	private File getSaveFile() throws IOException {
+	private File getSaveFile() {
 		StringBuilder fullPath = new StringBuilder(1000);
 		fullPath.append(pathToReports);
 		if (pathToReports.lastIndexOf("\\") != pathToReports.length()) 
 			fullPath.append("\\");
 		fullPath.append(report.getName().replace(" ", "_"));
-		File file = new File(fullPath.toString());
-		
-		return file;
+		return new File(fullPath.toString());
 	}
 }

@@ -186,25 +186,25 @@ public class FourthTabController extends AbstractController implements Initializ
 	private ReportData buildReportData() throws Exception {
 		ReportData reportData;
 
-		boolean ignoreEmptyVisitors = cbEnableEmptyVisitors.getSelectionModel().getSelectedItem();
+		boolean includeEmptyVisitors = cbEnableEmptyVisitors.getSelectionModel().getSelectedItem();
 		double costOfLunch = Double.parseDouble(txtCostOfLunch.getText());
 		double costOfDinner = Double.parseDouble(txtCostOfDinner.getText());
 
 		if (printingReport != null) {
-			reportData = new StoredReportData(printingReport, costOfLunch, costOfDinner, ignoreEmptyVisitors);
+			reportData = new StoredReportData(printingReport, costOfLunch, costOfDinner, includeEmptyVisitors);
 		} else {
 			reportData = new ActualReportData(
 					new ArrayList<>(daoFactory.getVisitorDAO().getAll()),
 					costOfLunch,
 					costOfDinner,
-					ignoreEmptyVisitors
+					includeEmptyVisitors
 			);
 		}
 
 		// sorting report data
 		reportData.sort((o1, o2) -> {
-            String fio1 = o1.getVisitorLastname() + " " + o1.getVisitorFirstname();
-            String fio2 = o2.getVisitorLastname() + " " + o2.getVisitorFirstname();
+            String fio1 = o1.getLastName() + " " + o1.getFirstName();
+            String fio2 = o2.getLastName() + " " + o2.getFirstName();
 
             return fio1.compareToIgnoreCase(fio2);
         });
@@ -219,7 +219,7 @@ public class FourthTabController extends AbstractController implements Initializ
 
 	@Override
 	public void update(Observable o, Object obj) {
-		if (obj != null && obj instanceof Report) {
+		if (obj instanceof Report) {
 			printingReport = (Report) obj;
 			lblReportInfo.setText("Формирование сохраненного отчета " + printingReport.getName());
 		} else {

@@ -11,10 +11,10 @@ public class InfoVisitor {
 	private final Integer dinners;
 
 	public InfoVisitor(String fio, Integer lunches, Integer dinners) {
-		String[] splittedFio = fio.split(" ");
-		this.firstName = splittedFio[0];
-		this.lastName = splittedFio[1];
-		this.middleName = splittedFio.length > 2 ? splittedFio[3] : "";
+		String[] splitFio = fio.split(" ");
+		this.lastName = splitFio[0];
+		this.firstName = splitFio[1];
+		this.middleName = splitFio.length > 2 ? splitFio[3] : "";
 		this.group = "";
 		this.lunches = lunches;
 		this.dinners = dinners;
@@ -60,7 +60,6 @@ public class InfoVisitor {
 	public boolean validate() {
 		return StringUtils.isNotEmpty(firstName)
 				&& StringUtils.isNotEmpty(lastName)
-				&& StringUtils.isNotEmpty(group)
 				&& lunches != null
 				&& dinners != null;
 	}

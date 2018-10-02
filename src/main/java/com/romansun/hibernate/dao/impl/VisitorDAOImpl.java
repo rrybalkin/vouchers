@@ -1,27 +1,20 @@
 package com.romansun.hibernate.dao.impl;
 
-import static com.romansun.hibernate.dao.utils.QueryStorage.ASSOCIATION_BIND;
-import static com.romansun.hibernate.dao.utils.QueryStorage.GET_VISITORS_BY_ASSOCIATION;
-import static com.romansun.hibernate.dao.utils.QueryStorage.GET_VISITORS_BY_MASK;
-import static com.romansun.hibernate.dao.utils.QueryStorage.GET_VISITORS_BY_MASK_AND_ASSOCIATION;
-import static com.romansun.hibernate.dao.utils.QueryStorage.GET_VISITORS_CNT_BY_ASSOCIATION;
-import static com.romansun.hibernate.dao.utils.QueryStorage.MASK_BIND;
-
-import java.util.Collection;
-
+import com.romansun.hibernate.dao.VisitorDAO;
+import com.romansun.hibernate.entity.Association;
+import com.romansun.hibernate.entity.Visitor;
+import com.romansun.hibernate.factory.Invoker;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import com.romansun.hibernate.dao.VisitorDAO;
-import com.romansun.hibernate.factory.Invoker;
-import com.romansun.hibernate.entity.Association;
-import com.romansun.hibernate.entity.Visitor;
+import java.util.Collection;
+
+import static com.romansun.hibernate.dao.utils.QueryStorage.*;
 
 public class VisitorDAOImpl implements VisitorDAO {
 
 	@Override
-	public void add(final Visitor v) throws Exception 
-	{
+	public void add(final Visitor v) {
 		if (v == null) throw new IllegalArgumentException("Visitor must be not null");
 		
 		new Invoker<Void>() {
@@ -34,8 +27,7 @@ public class VisitorDAOImpl implements VisitorDAO {
 	}
 
 	@Override
-	public void update(final Visitor v) throws Exception 
-	{
+	public void update(final Visitor v) {
 		if (v == null) throw new IllegalArgumentException("Visitor must be not null");
 		
 		new Invoker<Void>() {
@@ -48,8 +40,7 @@ public class VisitorDAOImpl implements VisitorDAO {
 	}
 	
 	@Override
-	public void delete(final Visitor v) throws Exception
-	{	
+	public void delete(final Visitor v) {
 		if (v == null) throw new IllegalArgumentException("Visitor must be not null");
 		
 		new Invoker<Void>() {
@@ -62,23 +53,21 @@ public class VisitorDAOImpl implements VisitorDAO {
 	}
 
 	@Override
-	public Visitor getById(final long id) throws Exception 
-	{
+	public Visitor getById(final long id) {
 		if (id <= 0) throw new IllegalArgumentException("ID must be positive");
 		
 		return new Invoker<Visitor>() {
 
 			@Override
 			public Visitor task(Session session) {
-				Visitor visitor = (Visitor) session.load(Visitor.class, id);
+				Visitor visitor = session.load(Visitor.class, id);
 				return visitor;
 			}
 		}.invoke();
 	}
 
 	@Override
-	public Collection<Visitor> getAll() throws Exception 
-	{
+	public Collection<Visitor> getAll() {
 		return new Invoker<Collection<Visitor>>() {
 			
 			@Override
@@ -90,7 +79,7 @@ public class VisitorDAOImpl implements VisitorDAO {
 	}
 
 	@Override
-	public Collection<Visitor> getVisitorsByCriteria(final Association a, final String mask) throws Exception {
+	public Collection<Visitor> getVisitorsByCriteria(final Association a, final String mask) {
 		return new Invoker<Collection<Visitor>>() {
 			@Override
 			public Collection<Visitor> task(Session session) {
@@ -121,8 +110,7 @@ public class VisitorDAOImpl implements VisitorDAO {
 	}
 
 	@Override
-	public long getCountVisitors(Association association) throws Exception
-	{
+	public long getCountVisitors(Association association) {
 		return new Invoker<Long>() {
 
 			@Override

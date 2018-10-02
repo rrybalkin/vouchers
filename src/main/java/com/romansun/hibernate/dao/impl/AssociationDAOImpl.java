@@ -1,19 +1,18 @@
 package com.romansun.hibernate.dao.impl;
 
-import static com.romansun.hibernate.dao.utils.QueryStorage.GET_COUNT_OF_ASSOCIATIONS;
+import com.romansun.hibernate.dao.AssociationDAO;
+import com.romansun.hibernate.entity.Association;
+import com.romansun.hibernate.factory.Invoker;
+import org.hibernate.Session;
 
 import java.util.Collection;
 
-import org.hibernate.Session;
-
-import com.romansun.hibernate.dao.AssociationDAO;
-import com.romansun.hibernate.factory.Invoker;
-import com.romansun.hibernate.entity.Association;
+import static com.romansun.hibernate.dao.utils.QueryStorage.GET_COUNT_OF_ASSOCIATIONS;
 
 public class AssociationDAOImpl implements AssociationDAO {
 
 	@Override
-	public void add(final Association a) throws Exception {
+	public void add(final Association a) {
 		if (a == null)
 			throw new IllegalArgumentException("Association must be not null");
 
@@ -27,7 +26,7 @@ public class AssociationDAOImpl implements AssociationDAO {
 	}
 
 	@Override
-	public void update(final Association a) throws Exception {
+	public void update(final Association a) {
 		if (a == null)
 			throw new IllegalArgumentException("Association must be not null");
 
@@ -41,7 +40,7 @@ public class AssociationDAOImpl implements AssociationDAO {
 	}
 
 	@Override
-	public void delete(final Association a) throws Exception {
+	public void delete(final Association a) {
 		if (a == null)
 			throw new IllegalArgumentException("Association must be not null");
 
@@ -55,7 +54,7 @@ public class AssociationDAOImpl implements AssociationDAO {
 	}
 
 	@Override
-	public Association getById(final long id) throws Exception {
+	public Association getById(final long id) {
 		if (id <= 0)
 			throw new IllegalArgumentException("ID must be positive");
 
@@ -63,14 +62,14 @@ public class AssociationDAOImpl implements AssociationDAO {
 
 			@Override
 			public Association task(Session session) {
-				Association asc = (Association) session.load(Association.class,	id);
+				Association asc = session.load(Association.class,	id);
 				return asc;
 			}
 		}.invoke();
 	}
 
 	@Override
-	public Collection<Association> getAll() throws Exception {
+	public Collection<Association> getAll() {
 		return new Invoker<Collection<Association>>() {
 
 			@Override
@@ -82,7 +81,7 @@ public class AssociationDAOImpl implements AssociationDAO {
 	}
 
 	@Override
-	public int getCount() throws Exception {
+	public int getCount() {
 		return new Invoker<Integer>() {
 
 			@Override

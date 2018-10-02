@@ -5,6 +5,7 @@ import com.typesafe.config.ConfigFactory;
 import org.apache.log4j.Logger;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Class of configuration properties which are stored in configuration file "application.conf".
@@ -16,22 +17,26 @@ public class Configuration {
 
     public List<String> printReportFormats;
     public String pathToReports;
+    public String reportNameTemplate;
     public String macrosDate;
-    public List<String> fieldsOfExcelTemplate;
+    public Map<String, String> xlsTemplateColumns;
     public boolean useVisitorsCache;
 
+    @SuppressWarnings("unchecked")
     private Configuration() {
-        LOG.debug("Reading config file...");
+        LOG.info("Reading config file...");
         try {
             final Config config = ConfigFactory.load();
             this.printReportFormats = config.getStringList("report.formats");
             this.pathToReports = config.getString("report.folder");
-            this.macrosDate = config.getString("report.macros.data");
-            this.fieldsOfExcelTemplate = config.getStringList("report.template.xls.fields");
+            this.reportNameTemplate = config.getString("report.name.template");
+            this.macrosDate = config.getString("report.macros.date");
             this.useVisitorsCache = config.getBoolean("cache.enable");
-            LOG.debug("Reading config file... Done");
+            this.xlsTemplateColumns = (Map<String, String>) config.getList("report.template.xls.columns").unwrapped().get(0);
+            LOG.info("Reading config file... Done");
         } catch (Exception e) {
             LOG.error("Reading config file... Failed", e);
+            throw new IllegalStateException("Application config failed to load");
         }
     }
 

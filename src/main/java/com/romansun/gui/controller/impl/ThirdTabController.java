@@ -28,7 +28,7 @@ public class ThirdTabController extends AbstractController implements Initializa
 	{
 		reportsManager = new ReportsManager(PATH_TO_REPORTS);
 		reportsManager.loadReports();
-		month = new DateTime().getMonthOfYear()-1;
+		month = new DateTime().getMonthOfYear();
 		year = new DateTime().getYear();
 	}
 	

@@ -1,6 +1,5 @@
 package com.romansun.printing.data;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -44,7 +43,7 @@ public abstract class ReportData implements Iterator<ReportUnit> {
 		if (!extracted) {
 			extractData();
 		}
-		Collections.sort(units, comparator);
+		units.sort(comparator);
 	}
 	
 	protected abstract void extractData();

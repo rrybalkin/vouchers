@@ -5,7 +5,7 @@ import org.hibernate.Transaction;
 
 public abstract class Invoker<T> {
 	
-	public T invoke() throws Exception {
+	public T invoke() {
 		Session session = null;
 		Transaction tx = null;
 		try {

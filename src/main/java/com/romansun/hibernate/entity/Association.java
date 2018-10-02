@@ -11,6 +11,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "Associations")
 public class Association implements Comparable<Association> {
+    public static final String NO_GROUP = "No group";
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "visitors_seq_gen")
     @SequenceGenerator(name = "visitors_seq_gen", sequenceName = "sq_association_id")

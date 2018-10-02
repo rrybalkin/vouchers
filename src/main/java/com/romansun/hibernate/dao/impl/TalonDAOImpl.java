@@ -1,20 +1,19 @@
 package com.romansun.hibernate.dao.impl;
 
-import java.util.Collection;
-
+import com.romansun.hibernate.dao.TalonDAO;
+import com.romansun.hibernate.entity.Talon;
+import com.romansun.hibernate.factory.Invoker;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import com.romansun.hibernate.dao.TalonDAO;
-import com.romansun.hibernate.factory.Invoker;
-import com.romansun.hibernate.entity.Talon;
+import java.util.Collection;
 
 import static com.romansun.hibernate.dao.utils.QueryStorage.*;
 
 public class TalonDAOImpl implements TalonDAO {
 
 	@Override
-	public void add(final Talon t) throws Exception {
+	public void add(final Talon t) {
 		if (t == null)
 			throw new IllegalArgumentException("Talon must be not null");
 
@@ -28,7 +27,7 @@ public class TalonDAOImpl implements TalonDAO {
 	}
 
 	@Override
-	public void update(final Talon t) throws Exception {
+	public void update(final Talon t) {
 		if (t == null)
 			throw new IllegalArgumentException("Talon must be not null");
 
@@ -42,7 +41,7 @@ public class TalonDAOImpl implements TalonDAO {
 	}
 
 	@Override
-	public void delete(final Talon t) throws Exception {
+	public void delete(final Talon t) {
 		if (t == null)
 			throw new IllegalArgumentException("Talon must be not null");
 
@@ -56,7 +55,7 @@ public class TalonDAOImpl implements TalonDAO {
 	}
 
 	@Override
-	public Talon getById(final long id) throws Exception {
+	public Talon getById(final long id) {
 		if (id <= 0)
 			throw new IllegalArgumentException("ID must be positive");
 
@@ -71,7 +70,7 @@ public class TalonDAOImpl implements TalonDAO {
 	}
 
 	@Override
-	public Collection<Talon> getAll() throws Exception {
+	public Collection<Talon> getAll() {
 		return new Invoker<Collection<Talon>>() {
 			
 			@Override
@@ -83,7 +82,7 @@ public class TalonDAOImpl implements TalonDAO {
 	}
 
 	@Override
-	public void resetAllTalons() throws Exception {
+	public void resetAllTalons() {
 		new Invoker<Void>() {
 
 			@Override
@@ -96,7 +95,7 @@ public class TalonDAOImpl implements TalonDAO {
 	}
 
 	@Override
-	public void resetLunchById(final long id) throws Exception {
+	public void resetLunchById(final long id) {
 		new Invoker<Void>() {
 
 			@Override
@@ -109,7 +108,7 @@ public class TalonDAOImpl implements TalonDAO {
 	}
 
 	@Override
-	public void resetDinnerById(final long id) throws Exception {
+	public void resetDinnerById(final long id) {
 		new Invoker<Void>() {
 
 			@Override
@@ -122,8 +121,7 @@ public class TalonDAOImpl implements TalonDAO {
 	}
 
 	@Override
-	public int getCountLunches() throws Exception 
-	{
+	public int getCountLunches() {
 		return new Invoker<Integer>() {
 
 			@Override
@@ -134,8 +132,7 @@ public class TalonDAOImpl implements TalonDAO {
 	}
 
 	@Override
-	public int getCountDinners() throws Exception 
-	{
+	public int getCountDinners() {
 		return new Invoker<Integer>() {
 
 			@Override

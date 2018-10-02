@@ -1,19 +1,18 @@
 package com.romansun.reporting;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.Unmarshaller;
-
 import com.romansun.reporting.jaxb.ReportType;
 import com.romansun.reporting.jaxb.RootType;
 import com.romansun.reporting.jaxb.VisitorType;
 import com.romansun.reporting.jaxb.VisitorsType;
 import com.romansun.reporting.logic.InfoVisitor;
 import com.romansun.reporting.logic.Report;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.Unmarshaller;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReportsManager {
 	
@@ -25,11 +24,10 @@ public class ReportsManager {
 	}
 	
 	public void loadReports() {
-		reports = new ArrayList<Report>();
+		reports = new ArrayList<>();
 		try {
 			File dirReports = new File(pathToReports);
-			if (dirReports != null && dirReports.exists()
-					&& dirReports.isDirectory()) {
+			if (dirReports.exists() && dirReports.isDirectory()) {
 				File[] xmlFiles = dirReports.listFiles();
 				for (File xmlReport : xmlFiles) {
 					Report report = parseReport(xmlReport);
@@ -41,14 +39,9 @@ public class ReportsManager {
 		}
 	}
 	
-	public List<Report> getReports() {
-		loadReports();
-		return reports;
-	}
-	
 	public List<Report> getReportsByDate(Integer month, Integer year) {
 		loadReports();
-		List<Report> needReports = new ArrayList<Report>();
+		List<Report> needReports = new ArrayList<>();
 		for (Report report : reports) {
 			Integer curMonth = report.getMonth();
 			Integer curYear = report.getYear();
@@ -59,13 +52,12 @@ public class ReportsManager {
 		
 		return needReports;
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	private Report parseReport(File xmlReport) throws Exception {
 		// Initialize JAXB
-		JAXBContext jaxb = JAXBContext.newInstance("com.romansun.reports.jaxb");
-		Unmarshaller unmarshaler = jaxb.createUnmarshaller();
-		JAXBElement<RootType> rootElement = (JAXBElement<RootType>) unmarshaler.unmarshal(xmlReport);
+		JAXBContext jaxb = JAXBContext.newInstance(getClass().getPackage().getName() + ".jaxb");
+		final Unmarshaller unmarshaller = jaxb.createUnmarshaller();
+		JAXBElement<RootType> rootElement = (JAXBElement<RootType>) unmarshaller.unmarshal(xmlReport);
 
 		// Get report
 		RootType root = rootElement.getValue();
