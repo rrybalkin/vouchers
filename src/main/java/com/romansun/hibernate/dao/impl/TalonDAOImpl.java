@@ -63,8 +63,7 @@ public class TalonDAOImpl implements TalonDAO {
 
 			@Override
 			public Talon task(Session session) {
-				Talon talon = session.load(Talon.class, id);
-				return talon;
+				return session.load(Talon.class, id);
 			}
 		}.invoke();
 	}

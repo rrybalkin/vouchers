@@ -15,24 +15,32 @@ import java.util.Map;
 public class Configuration {
     private final static Logger LOG = Logger.getLogger(Configuration.class);
 
+    public boolean useVisitorsCache;
     public List<String> printReportFormats;
     public String pathToReports;
     public String reportNameTemplate;
     public String macrosDate;
+    public int xlsTemplateHeaders;
     public Map<String, String> xlsTemplateColumns;
-    public boolean useVisitorsCache;
+    public List<String> xlsTemplateStatsColumns;
 
     @SuppressWarnings("unchecked")
     private Configuration() {
         LOG.info("Reading config file...");
         try {
             final Config config = ConfigFactory.load();
+
+            this.useVisitorsCache = config.getBoolean("cache.enable");
+
             this.printReportFormats = config.getStringList("report.formats");
             this.pathToReports = config.getString("report.folder");
             this.reportNameTemplate = config.getString("report.name.template");
             this.macrosDate = config.getString("report.macros.date");
-            this.useVisitorsCache = config.getBoolean("cache.enable");
+
+            this.xlsTemplateHeaders = config.getInt("report.template.xls.headers");
             this.xlsTemplateColumns = (Map<String, String>) config.getList("report.template.xls.columns").unwrapped().get(0);
+            this.xlsTemplateStatsColumns = config.getStringList("report.template.xls.stats");
+
             LOG.info("Reading config file... Done");
         } catch (Exception e) {
             LOG.error("Reading config file... Failed", e);

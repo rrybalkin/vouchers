@@ -8,6 +8,7 @@ import com.romansun.utils.Utils;
 import org.apache.log4j.Logger;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellReference;
 
 import java.io.*;
 import java.util.HashMap;
@@ -32,11 +33,11 @@ public class XLSReportWriter implements IReportWriter {
 	// columns in template and their indexes
 	private Map<String, Integer> columnIndexes;
 	
-	/* Cell formulas */
-	private Map<String, CellFormula> cellFormulas;
+	// cell formulas
+	private Map<String, String> cellFormulas;
 	{
 		cellFormulas = new HashMap<>();
-		cellFormulas.put("#", () -> "ROW()-2");
+		cellFormulas.put("#", "ROW()-2");
 	}
 	
 	public XLSReportWriter(String pathToReportFolder, String format)
@@ -65,22 +66,22 @@ public class XLSReportWriter implements IReportWriter {
 			findColumnIndexes( sheet );
 
 			LOG.debug("Start filling report from data ...");
-			int rowNum = 2; // skip 2 first lines with headers
+			int rowNum = config.xlsTemplateHeaders; // skip headers lines
 			while(reportData.hasNext()) {
 				Row currentRow = sheet.createRow(rowNum);
 				ReportUnit unit = reportData.next();
 
-				for (String columnName : columnIndexes.keySet()) {
-                    final Cell cell = currentRow.createCell(columnIndexes.get(columnName));
+				for (String columnAlias : columnIndexes.keySet()) {
+                    final Cell cell = currentRow.createCell(columnIndexes.get(columnAlias));
 
                     // check if cell should contain formula value
-                    if (cellFormulas.containsKey(columnName)) {
-                        cell.setCellFormula(cellFormulas.get(columnName).getFormula());
+                    if (cellFormulas.containsKey(columnAlias)) {
+                        cell.setCellFormula(cellFormulas.get(columnAlias));
                         continue;
                     }
 
                     // put a cell value from unit data
-				    Object pValue = unit.getPropertyByName(columnName);
+				    Object pValue = unit.getPropertyByName(columnAlias);
 					if (pValue != null) {
                         if (pValue instanceof Integer) {
                             cell.setCellValue((Integer) pValue);
@@ -90,13 +91,17 @@ public class XLSReportWriter implements IReportWriter {
                             cell.setCellValue((String) pValue);
                         }
                     } else {
-                        LOG.warn("Unit data by columnName='" + columnName + "' not found!");
+                        LOG.warn("Unit data by columnAlias='" + columnAlias + "' not found!");
                     }
 				}
 
 				rowNum++;
 			}
-			LOG.debug(rowNum-2 + " rows were filled");
+
+			// create stats row
+			createStatsRow(sheet, config.xlsTemplateHeaders, rowNum);
+
+			LOG.debug(rowNum - config.xlsTemplateHeaders + " rows were filled");
 			
 			// Write the output to a file
 			report = Utils.createUniqueFile(reportFolder, reportName, version);
@@ -126,7 +131,6 @@ public class XLSReportWriter implements IReportWriter {
             return WorkbookFactory.create(inp);
         }
     }
-
 
 	private String generateReportName(String reportDate) {
 		return config.reportNameTemplate.replace(config.macrosDate, reportDate);
@@ -163,14 +167,25 @@ public class XLSReportWriter implements IReportWriter {
 		
 		LOG.debug("End of finding columns!");
 	}
-	
+
 	/**
-	 * Interface for creating cell formula
-	 * 
-	 * @author Roman Rybalkin
-	 *
+	 * Creates a row with SUM stats according to configured columns.
+	 * @param sheet a spreadsheet page
+	 * @param firstRowNum row number which is the first in report report
+	 * @param lastRowNum row number which is the last in the report
 	 */
-	interface CellFormula {
-		String getFormula();
+	private void createStatsRow(Sheet sheet, int firstRowNum, int lastRowNum) {
+		LOG.debug("Creating a stats row in the spreadsheet ...");
+		final Row statsRow = sheet.createRow(++lastRowNum);
+
+		for (String statsColumnAlias : config.xlsTemplateStatsColumns) {
+			int columnIndex = columnIndexes.get(statsColumnAlias);
+			String columnLetter = CellReference.convertNumToColString(columnIndex);
+
+			final Cell cell = statsRow.createCell(columnIndex);
+			String sumFormula = "SUM(" + columnLetter + firstRowNum + ":" + columnLetter + lastRowNum + ")";
+			LOG.debug("SUM formula for column='" + statsColumnAlias + "' is " + sumFormula);
+			cell.setCellFormula(sumFormula);
+		}
 	}
 }
