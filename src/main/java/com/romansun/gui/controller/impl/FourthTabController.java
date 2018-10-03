@@ -5,8 +5,9 @@ import com.romansun.gui.controller.AbstractController;
 import com.romansun.printing.data.ActualReportData;
 import com.romansun.printing.data.ReportData;
 import com.romansun.printing.data.StoredReportData;
-import com.romansun.printing.writer.IReportWriter;
-import com.romansun.printing.writer.WriterFactory;
+import com.romansun.printing.writer.ReportType;
+import com.romansun.printing.writer.ReportWriter;
+import com.romansun.printing.writer.ReportWriterFactory;
 import com.romansun.reporting.logic.Report;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -54,7 +55,18 @@ public class FourthTabController extends AbstractController implements Initializ
 		cbEnableEmptyVisitors.getSelectionModel().select(0);
 
 		cbReportFormat.getItems().clear();
-		cbReportFormat.getItems().addAll(config.printReportFormats);
+		cbReportFormat.getItems().addAll(ReportType.values());
+		cbReportFormat.setConverter(new StringConverter<ReportType>() {
+			@Override
+			public String toString(ReportType object) {
+				return object.name();
+			}
+
+			@Override
+			public ReportType fromString(String string) {
+				return ReportType.valueOf(string);
+			}
+		});
 		cbReportFormat.getSelectionModel().select(0);
 
 		seeReport.visibleProperty().set(false);
@@ -80,7 +92,7 @@ public class FourthTabController extends AbstractController implements Initializ
 	@FXML
 	private ComboBox<Boolean> cbEnableEmptyVisitors;
 	@FXML
-	private ComboBox<String> cbReportFormat;
+	private ComboBox<ReportType> cbReportFormat;
 	@FXML
 	private Label lblReportInfo;
 	@FXML
@@ -99,7 +111,7 @@ public class FourthTabController extends AbstractController implements Initializ
 	@FXML
 	protected void createReport() {
 		LOG.debug("Start generating report ...");
-		String reportType = cbReportFormat.getSelectionModel().getSelectedItem();
+		ReportType reportType = cbReportFormat.getSelectionModel().getSelectedItem();
 		try
 		{
 			if (!validate()) return;
@@ -113,11 +125,11 @@ public class FourthTabController extends AbstractController implements Initializ
 						+ " " + cbYear.getSelectionModel().getSelectedItem();
 			}
 
-			IReportWriter writer = WriterFactory.getWriter(reportType, config.pathToReports);
+			ReportWriter writer = ReportWriterFactory.getWriter(reportType);
 			if (writer == null) {
 				throw new RuntimeException("Этот тип отчета в настоящий момент не поддерживается!");
 			}
-			File report = writer.generateReport(reportData, reportDate);
+			File report = writer.generateReport(reportType, reportData, reportDate);
 
 			if (report != null && report.exists()) {
 				lblStatus.setTextFill(Color.web(GREEN_COLOR));
@@ -130,8 +142,7 @@ public class FourthTabController extends AbstractController implements Initializ
 
 			resetReportInfo();
 		}
-		catch (Exception e)
-		{
+		catch (Exception e) {
 			LOG.error("Error while forming report with reportType = '" + reportType + "': ", e);
 
 			lblStatus.setTextFill(Color.web(RED_COLOR));
