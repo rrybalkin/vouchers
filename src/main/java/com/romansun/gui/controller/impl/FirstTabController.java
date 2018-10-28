@@ -37,8 +37,8 @@ public class FirstTabController extends AbstractController implements Initializa
 
 	private static final int MAX_COUNT = 3;
 
-	private static Visitor choosenVisitor;
-	private static Association chooseFilter;
+	private Visitor chosenVisitor;
+	private Association chosenFilter;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -112,10 +112,10 @@ public class FirstTabController extends AbstractController implements Initializa
 	private Label lblInfo;
 
 	@FXML
-	protected void addTalon() {
+	void addTalon() {
 		Integer lunches = countLunches.getValue();
 		Integer dinners = countDinners.getValue();
-		Talon talon = choosenVisitor.getTalon();
+		Talon talon = chosenVisitor.getTalon();
 		talon.setDinners(talon.getDinners() + dinners);
 		talon.setLunches(talon.getLunches() + lunches);
 		try {
@@ -130,16 +130,16 @@ public class FirstTabController extends AbstractController implements Initializa
 	}
 
 	@FXML
-	protected void changeFilter() {
+	void changeFilter() {
 		Association newFilter = filter.getValue();
-		if (chooseFilter != null && newFilter != null && !newFilter.getName().equals(chooseFilter.getName())) {
-			chooseFilter = newFilter;
+		if (chosenFilter != null && newFilter != null && !newFilter.getName().equals(chosenFilter.getName())) {
+			chosenFilter = newFilter;
 			loadVisitors();
 		}
 	}
 
 	@FXML
-	protected void updateVisitor() {
+	void updateVisitor() {
 		Visitor newVisitor = new Visitor();
 		final String firstName = txtFirstName.getText();
 		final String lastName = txtLastName.getText();
@@ -150,11 +150,11 @@ public class FirstTabController extends AbstractController implements Initializa
 			newVisitor.setLastName(Utils.upFirst(lastName));
 			newVisitor.setMiddleName(Utils.upFirst(middleName));
 			newVisitor.setAssociation(association);
-			newVisitor.setTalon(choosenVisitor.getTalon());
-			newVisitor.setId(choosenVisitor.getId());
+			newVisitor.setTalon(chosenVisitor.getTalon());
+			newVisitor.setId(chosenVisitor.getId());
 			try {
 				visitorsDAO.update(newVisitor);
-				choosenVisitor = newVisitor;
+				chosenVisitor = newVisitor;
 				loadVisitors();
 				loadInfoAboutVisitor();
 				clickOnTitledPane();
@@ -169,7 +169,7 @@ public class FirstTabController extends AbstractController implements Initializa
 	}
 
 	@FXML
-	private void keyPressed(KeyEvent event) {
+	void keyPressed(KeyEvent event) {
 		final Visitor selectedVisitor = listVisitors.getSelectionModel().getSelectedItem();
 		if (selectedVisitor == null) {
 			LOG.error("keyPressed event when no selected visitor in the list");
@@ -202,8 +202,8 @@ public class FirstTabController extends AbstractController implements Initializa
 					if (visitor != null) {
 						daoFactory.getTalonDAO().resetLunchById(visitor.getTalon().getId());
 						loadVisitors();
-						if (choosenVisitor != null && choosenVisitor.equals(visitor)) {
-							choosenVisitor.getTalon().setLunches(0);
+						if (chosenVisitor != null && chosenVisitor.equals(visitor)) {
+							chosenVisitor.getTalon().setLunches(0);
 							loadInfoAboutVisitor();
 						}
 						LOG.info("Lunches for visitor = [" + visitor + "] were reset");
@@ -222,8 +222,8 @@ public class FirstTabController extends AbstractController implements Initializa
 						daoFactory.getTalonDAO().resetDinnerById(
 								visitor.getTalon().getId());
 						loadVisitors();
-						if (choosenVisitor != null && choosenVisitor.equals(visitor)) {
-							choosenVisitor.getTalon().setDinners(0);
+						if (chosenVisitor != null && chosenVisitor.equals(visitor)) {
+							chosenVisitor.getTalon().setDinners(0);
 							loadInfoAboutVisitor();
 						}
 						LOG.info("Dinners for visitor = [" + visitor + "] were reset");
@@ -237,13 +237,13 @@ public class FirstTabController extends AbstractController implements Initializa
 	}
 
 	@FXML
-	private void chooseVisitor(MouseEvent mouseEvent) {
+	void chooseVisitor(MouseEvent mouseEvent) {
 		if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
 			if (mouseEvent.getClickCount() == 2) {
 				Visitor visitor = listVisitors.getSelectionModel()
 						.getSelectedItem();
 				if (visitor != null) {
-					FirstTabController.choosenVisitor = visitor;
+					this.chosenVisitor = visitor;
 					loadInfoAboutVisitor();
 					clickOnTitledPane();
 				}
@@ -252,17 +252,17 @@ public class FirstTabController extends AbstractController implements Initializa
 	}
 
 	@FXML
-	private void clickOnTitledPane() {
+	void clickOnTitledPane() {
 		Boolean expanded = titledPane.expandedProperty().get();
 		if (expanded) {
 			// Set data in Fields
-			if (choosenVisitor != null) {
-				txtLastName.setText(choosenVisitor.getLastName());
-				txtFirstName.setText(choosenVisitor.getFirstName());
-				txtMiddleName.setText(choosenVisitor.getMiddleName());
-				Integer selIndex = null;
+			if (chosenVisitor != null) {
+				txtLastName.setText(chosenVisitor.getLastName());
+				txtFirstName.setText(chosenVisitor.getFirstName());
+				txtMiddleName.setText(chosenVisitor.getMiddleName());
+				int selIndex = 0;
 				for (int i = 0; i < cbGroups.getItems().size(); i++) {
-					if (cbGroups.getItems().get(i).getName().equals(choosenVisitor.getAssociation().getName()))
+					if (cbGroups.getItems().get(i).getName().equals(chosenVisitor.getAssociation().getName()))
 						selIndex = i;
 				}
 				cbGroups.getSelectionModel().select(selIndex);
@@ -278,18 +278,18 @@ public class FirstTabController extends AbstractController implements Initializa
 			if (mask != null && mask.length() != 0) {
 				loadVisitorsForMask(mask);
 			} else {
-				if (chooseFilter.getId() == -1L) {
+				if (chosenFilter.getId() == -1L) {
 					visitors = visitorsDAO.getAll();
 				} else {
-					visitors = visitorsDAO.getVisitorsByCriteria(chooseFilter, null);
+					visitors = visitorsDAO.getVisitorsByCriteria(chosenFilter, null);
 				}
 				listVisitors.getItems().addAll(sortCollection(visitors));
-				LOG.info("Visitors by association = [" + chooseFilter + "] were loaded");
+				LOG.info("Visitors by association = [" + chosenFilter + "] were loaded");
 				lblInfo.setText("All visitors: " + visitors.size());
 			}
 		} catch (Exception e) {
 			LOG.error("Error while loading visitors by association = ["
-					+ chooseFilter + "]: ", e);
+					+ chosenFilter + "]: ", e);
 		}
 	}
 
@@ -297,15 +297,15 @@ public class FirstTabController extends AbstractController implements Initializa
 		listVisitors.getItems().clear();
 		try {
 			Collection<Visitor> visitors = visitorsDAO.getVisitorsByCriteria(
-							((chooseFilter.getId() != -1) ? chooseFilter : null),
+							((chosenFilter.getId() != -1) ? chosenFilter : null),
 							mask);
 			listVisitors.getItems().addAll(sortCollection(visitors));
 			
-			LOG.info("Visitors by association = [" + chooseFilter + "] and mask = " + mask + " were loaded");
+			LOG.info("Visitors by association = [" + chosenFilter + "] and mask = " + mask + " were loaded");
 			lblInfo.setText("All visitors: " + visitors.size());
 		} catch (Exception e) {
 			LOG.error("Error while loading visitors by association = ["
-					+ chooseFilter + "] and mask = " + mask + ": ", e);
+					+ chosenFilter + "] and mask = " + mask + ": ", e);
 		}
 	}
 
@@ -321,7 +321,7 @@ public class FirstTabController extends AbstractController implements Initializa
 			Collection<Association> associations = daoFactory.getAssociationDAO().getAll();
 			filter.getItems().addAll(associations);
 			filter.getSelectionModel().selectFirst();
-			chooseFilter = filter.getValue();
+			chosenFilter = filter.getValue();
 			cbGroups.getItems().addAll(associations);
 		} catch (Exception e) {
 			LOG.error("Error: ", e);
@@ -329,12 +329,12 @@ public class FirstTabController extends AbstractController implements Initializa
 	}
 
 	private void loadInfoAboutVisitor() {
-		if (choosenVisitor != null) {
-			lblFIO.setText(lblFIOText + " " + choosenVisitor.getLastName() + " "
-					+ choosenVisitor.getFirstName() + " "
-					+ choosenVisitor.getMiddleName());
-			lblGroup.setText(lblGroupText + " " + choosenVisitor.getAssociation().getName());
-			Talon talon = choosenVisitor.getTalon();
+		if (chosenVisitor != null) {
+			lblFIO.setText(lblFIOText + " " + chosenVisitor.getLastName() + " "
+					+ chosenVisitor.getFirstName() + " "
+					+ chosenVisitor.getMiddleName());
+			lblGroup.setText(lblGroupText + " " + chosenVisitor.getAssociation().getName());
+			Talon talon = chosenVisitor.getTalon();
 			lblLunches.setText(lblLunchesText + " " + talon.getLunches());
 			lblDinners.setText(lblDinnersText + " " + talon.getDinners());
 

@@ -63,7 +63,7 @@ public class SecondTabController extends AbstractController implements Initializ
     private Label lblDelGroup;
 
     @FXML
-    protected void addVisitor() {
+    void addVisitor() {
         Visitor visitor = new Visitor();
         final String firstName = txtFirstName.getText();
         final String lastName = txtLastName.getText();
@@ -98,7 +98,7 @@ public class SecondTabController extends AbstractController implements Initializ
     }
 
     @FXML
-    protected void addGroup() {
+    void addGroup() {
         Association group = new Association();
         final String name = txtGroupName.getText();
         final String description = taGroupDescription.getText();
@@ -120,7 +120,7 @@ public class SecondTabController extends AbstractController implements Initializ
     }
 
     @FXML
-    protected void deleteGroup(ActionEvent event) {
+    void deleteGroup(ActionEvent event) {
         Association delGroup = cbDelGroups.getValue();
         if (delGroup != null) {
             final int answer = Dialog.showQuestion("Are you sure to delete the selected group?", event);
@@ -147,7 +147,7 @@ public class SecondTabController extends AbstractController implements Initializ
     }
 
     @FXML
-    protected void chooseDelGroup() {
+    void chooseDelGroup() {
         Association delGroup = cbDelGroups.getValue();
         if (delGroup != null) {
             lblDelGroup.setTextFill(Color.RED);

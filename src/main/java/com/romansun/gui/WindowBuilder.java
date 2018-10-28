@@ -3,6 +3,7 @@ package com.romansun.gui;
 import java.io.File;
 import java.net.URL;
 
+import com.romansun.utils.SuppressFBWarnings;
 import org.apache.log4j.Logger;
 
 import com.romansun.utils.Resources;
@@ -14,6 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+@SuppressFBWarnings({"DM_EXIT", "REC_CATCH_EXCEPTION"})
 public class WindowBuilder extends Application {
 	private static final Logger LOG = Logger.getLogger(WindowBuilder.class);
 
@@ -31,6 +33,7 @@ public class WindowBuilder extends Application {
 			stage.show();
 		} catch (Exception e) {
 			LOG.error("Error while loading main window tab: ", e);
+			throw e;
 		}
 	}
 

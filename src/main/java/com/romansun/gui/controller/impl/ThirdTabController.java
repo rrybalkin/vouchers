@@ -2,6 +2,7 @@ package com.romansun.gui.controller.impl;
 
 import com.romansun.gui.Dialog;
 import com.romansun.gui.controller.AbstractController;
+import com.romansun.gui.controller.Converters;
 import com.romansun.reporting.ReportsManager;
 import com.romansun.reporting.logic.InfoVisitor;
 import com.romansun.reporting.logic.Report;
@@ -50,11 +51,11 @@ public class ThirdTabController extends AbstractController implements Initializa
 		MainWindowController.addObserver(this);
 		loadReports();
 		
-		cbMonth.setConverter(new MonthConverter());
+		cbMonth.setConverter(Converters.MONTHS_CONVERTER);
 		cbMonth.getItems().addAll(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
 		cbMonth.getSelectionModel().select(month);
 
-		cbYear.setConverter(new YearConverter());
+		cbYear.setConverter(Converters.YEARS_CONVERTER);
 		cbYear.getItems().addAll(year-1, year, year+1);
 		cbYear.getSelectionModel().select(year);
 		
@@ -103,7 +104,7 @@ public class ThirdTabController extends AbstractController implements Initializa
 	private TableView<InfoVisitor> tbReport;
 	
 	@FXML
-	private void chooseReport(MouseEvent mouseEvent) {
+	void chooseReport(MouseEvent mouseEvent) {
 		if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
 			if (mouseEvent.getClickCount() == 2) {
 				tbReport.getItems().clear();
@@ -114,7 +115,7 @@ public class ThirdTabController extends AbstractController implements Initializa
 	}
 	
 	@FXML
-	private void keyPressed(KeyEvent event) {
+	void keyPressed(KeyEvent event) {
 		if (event.getCode() == KeyCode.DELETE) {
 			int answer = Dialog.showQuestion("Are you sure to delete this report?", event);
 			if (answer == 1 /*YES*/) {
@@ -137,7 +138,7 @@ public class ThirdTabController extends AbstractController implements Initializa
 		List<InfoVisitor> filterList = new ArrayList<>();
 		for (InfoVisitor v : visitors) {
 			String fio = v.getFIO();
-			if (fio.toLowerCase().contains(mask.toLowerCase())) {
+			if (fio.toLowerCase(Locale.getDefault()).contains(mask.toLowerCase(Locale.getDefault()))) {
 				filterList.add(v);
 			}
 		}

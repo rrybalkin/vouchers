@@ -14,6 +14,7 @@ import org.apache.poi.ss.util.CellReference;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 
 public abstract class AbstractExcelWriter implements ReportWriter {
@@ -56,7 +57,7 @@ public abstract class AbstractExcelWriter implements ReportWriter {
 
             // Write the output to a file
             final String reportName = generateReportName(reportDate);
-            File report = Utils.createUniqueFile(reportsFolder, reportName, reportType.name().toLowerCase());
+            File report = Utils.createUniqueFile(reportsFolder, reportName, reportType.name().toLowerCase(Locale.getDefault()));
             try (FileOutputStream fileOut = new FileOutputStream(report)) {
                 wb.write(fileOut);
             }

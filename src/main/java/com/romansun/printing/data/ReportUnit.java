@@ -8,23 +8,23 @@ import java.lang.reflect.Field;
 
 public class ReportUnit {
     @Alias(name = "firstname")
-    private String firstName;
+    String firstName;
     @Alias(name = "lastname")
-    private String lastName;
+    String lastName;
     @Alias(name = "middlename")
-    private String middleName;
+    String middleName;
     @Alias(name = "group")
-    private String group;
+    String group;
     @Alias(name = "lunches")
-    private int lunches;
+    int lunches;
     @Alias(name = "dinners")
-    private int dinners;
+    int dinners;
     @Alias(name = "lunch price")
-    private double lunchPrice;
+    double lunchPrice;
     @Alias(name = "dinner price")
-    private double dinnerPrice;
+    double dinnerPrice;
     @Alias(name = "total cost")
-    private double totalCost;
+    double totalCost;
 
     public String getFirstName() {
         return firstName;
@@ -106,7 +106,6 @@ public class ReportUnit {
      */
     public Object getPropertyByName(String pName) throws IllegalArgumentException, IllegalAccessException {
         for (Field field : this.getClass().getDeclaredFields()) {
-            field.setAccessible(true);
             String alias = field.getAnnotation(Alias.class).name();
 
             if (alias.equalsIgnoreCase(pName)) {

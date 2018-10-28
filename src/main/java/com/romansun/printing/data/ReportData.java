@@ -3,13 +3,12 @@ package com.romansun.printing.data;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public abstract class ReportData implements Iterator<ReportUnit> {
-	protected List<ReportUnit> units;
-	protected boolean extracted = false;
+	List<ReportUnit> units;
+	boolean extracted = false;
 	private int currentIndex = 0;
-	
-	public ReportData() {}
 	
 	@Override
 	public boolean hasNext() {
@@ -24,7 +23,12 @@ public abstract class ReportData implements Iterator<ReportUnit> {
 		if (!extracted) {
 			extractData();
 		}
-		return units.get(currentIndex++);
+
+		if (hasNext()) {
+			return units.get(currentIndex++);
+		} else {
+			throw new NoSuchElementException("No more elements");
+		}
 	}
 
 	@Override

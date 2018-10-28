@@ -9,6 +9,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
 
+import com.romansun.utils.SuppressFBWarnings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -29,8 +30,8 @@ import com.romansun.reporting.ReportBuilder;
 import com.romansun.reporting.ReportsSaver;
 import com.romansun.reporting.logic.Report;
 
+@SuppressFBWarnings("DM_EXIT")
 public class MainWindowController extends AbstractController implements Initializable {
-	private final static String SETTINGS_WINDOW_NAME = "Settings";
 	private final static Logger LOG = Logger.getLogger(MainWindowController.class);
 
 	private static Observable observable = new Observable() {
@@ -47,7 +48,7 @@ public class MainWindowController extends AbstractController implements Initiali
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		try {
-			mainTabPane = tabPane;
+			super.mainTabPane = tabPane;
 
 			// loading tabs and add to TabPane
 			File firstTabFile = Resources.getInstance().getResource(Resources.FIRST_TAB_FXML);
@@ -75,7 +76,7 @@ public class MainWindowController extends AbstractController implements Initiali
 	private Tab fourthTab;
 
 	@FXML
-	private void resetTalons() {
+	void resetTalons() {
 		int answer = Dialog.showQuestion("Do you really want to reset all talons?", null);
 		if (answer == 1 /*YES*/) {
 			// Create report
@@ -102,20 +103,12 @@ public class MainWindowController extends AbstractController implements Initiali
 	}
 
 	@FXML
-	private void clickOnSettings() {
-		File settingsWindow = Resources.getInstance().getResource(Resources.SETTINGS_WINDOW_FXML);
-		DialogBuilder settingWindowBuilder =
-				new DialogBuilder(settingsWindow, SETTINGS_WINDOW_NAME);
-		settingWindowBuilder.show();
-	}
-
-	@FXML
-	private void clickOnClose() {
+	void clickOnClose() {
 		System.exit(0);
 	}
 
 	@FXML
-	private void clickOnAbout() {
+	void clickOnAbout() {
 		Dialog.showInfo("Author: Roman Rybalkin");
 	}
 
@@ -125,30 +118,5 @@ public class MainWindowController extends AbstractController implements Initiali
     	fxmlLoader.load();
 
 		return fxmlLoader.getRoot();
-	}
-
-	public class DialogBuilder {
-
-		private Stage stage;
-
-		DialogBuilder(File f, String dialogName) {
-			stage = new Stage();
-			URL fxmlURL;
-			try {
-				fxmlURL = f.toURI().toURL();
-				AnchorPane mainFrame = FXMLLoader.load(fxmlURL);
-				Scene scene = new Scene(mainFrame);
-				stage.setScene(scene);
-				stage.setTitle(dialogName);
-			} catch (Exception e) {
-				LOG.error("Error in DialogBuilder:", e);
-			}
-		}
-
-		void show() {
-			if (stage == null)
-				throw new RuntimeException("Dialog cannot be instantiated");
-			stage.show();
-		}
 	}
 }

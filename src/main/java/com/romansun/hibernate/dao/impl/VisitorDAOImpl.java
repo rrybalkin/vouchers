@@ -4,13 +4,16 @@ import com.romansun.hibernate.dao.VisitorDAO;
 import com.romansun.hibernate.entity.Association;
 import com.romansun.hibernate.entity.Visitor;
 import com.romansun.hibernate.factory.Invoker;
+import com.romansun.utils.SuppressFBWarnings;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
 import java.util.Collection;
+import java.util.Locale;
 
 import static com.romansun.hibernate.dao.utils.QueryStorage.*;
 
+@SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
 public class VisitorDAOImpl implements VisitorDAO {
 
 	@Override
@@ -60,8 +63,7 @@ public class VisitorDAOImpl implements VisitorDAO {
 
 			@Override
 			public Visitor task(Session session) {
-				Visitor visitor = session.load(Visitor.class, id);
-				return visitor;
+				return session.load(Visitor.class, id);
 			}
 		}.invoke();
 	}
@@ -72,8 +74,7 @@ public class VisitorDAOImpl implements VisitorDAO {
 			
 			@Override
 			public Collection<Visitor> task(Session session) {
-				Collection<Visitor> visitors = session.createCriteria(Visitor.class).list();
-				return visitors;
+				return (Collection<Visitor>) session.createCriteria(Visitor.class).list();
 			}
 		}.invoke();
 	}
@@ -83,25 +84,25 @@ public class VisitorDAOImpl implements VisitorDAO {
 		return new Invoker<Collection<Visitor>>() {
 			@Override
 			public Collection<Visitor> task(Session session) {
-				Query query = null;
-				if (a != null && (mask != null && !mask.isEmpty())) 
-				{
+				Query query;
+				if (a != null && (mask != null && !mask.isEmpty())) {
 					query = session
 							.createQuery(GET_VISITORS_BY_MASK_AND_ASSOCIATION)
-							.setString(MASK_BIND, "%" + mask.toLowerCase() + "%")
+							.setString(MASK_BIND, "%" + mask.toLowerCase(Locale.getDefault()) + "%")
 							.setLong(ASSOCIATION_BIND, a.getId());
-				} 
-				else if (a != null) 
-				{
+				}
+				else if (a != null) {
 					query = session
 							.createQuery(GET_VISITORS_BY_ASSOCIATION)
 							.setLong(ASSOCIATION_BIND, a.getId());
 				} 
-				else if (mask != null && !mask.isEmpty()) 
-				{
+				else if (mask != null && !mask.isEmpty()) {
 					query = session
 							.createQuery(GET_VISITORS_BY_MASK)
-							.setString(MASK_BIND, "%" + mask.toLowerCase() + "%");
+							.setString(MASK_BIND, "%" + mask.toLowerCase(Locale.getDefault()) + "%");
+				}
+				else {
+					throw new IllegalArgumentException("Association or mask shouldn't be null");
 				}
 
 				return (Collection<Visitor>) query.list();

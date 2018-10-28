@@ -1,6 +1,7 @@
 package com.romansun.utils;
 
 import java.io.File;
+import java.util.Locale;
 
 /**
  * Class contains additional useful functions for project
@@ -16,7 +17,7 @@ public class Utils {
 	 */
 	public static String upFirst(String str) {
 		if (str != null && !str.isEmpty() && !str.equals("null")) {
-            return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
+            return str.substring(0, 1).toUpperCase(Locale.getDefault()) + str.substring(1).toLowerCase(Locale.getDefault());
 		} else {
 			return "";
 		}

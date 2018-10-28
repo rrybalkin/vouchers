@@ -3,12 +3,14 @@ package com.romansun.hibernate.dao.impl;
 import com.romansun.hibernate.dao.AssociationDAO;
 import com.romansun.hibernate.entity.Association;
 import com.romansun.hibernate.factory.Invoker;
+import com.romansun.utils.SuppressFBWarnings;
 import org.hibernate.Session;
 
 import java.util.Collection;
 
 import static com.romansun.hibernate.dao.utils.QueryStorage.GET_COUNT_OF_ASSOCIATIONS;
 
+@SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
 public class AssociationDAOImpl implements AssociationDAO {
 
 	@Override

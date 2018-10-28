@@ -52,8 +52,10 @@ public class ReportsSaver {
 		Marshaller marshaller = jc.createMarshaller();
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 		File dstFile = getSaveFile();
-		FileOutputStream out = new FileOutputStream(dstFile);
-		marshaller.marshal(root, out);
+
+		try (FileOutputStream out = new FileOutputStream(dstFile)) {
+			marshaller.marshal(root, out);
+		}
 	}
 	
 	private File getSaveFile() {

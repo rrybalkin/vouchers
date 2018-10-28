@@ -17,7 +17,6 @@ public class MultiPageExcelWriter extends AbstractExcelWriter {
 
 	@Override
 	protected void populateWorkbook(Workbook workbook, Iterator<ReportUnit> data, String reportDate) throws Exception {
-		Sheet firstSheet = workbook.getSheetAt(0);
 		// TODO
 	}
 }

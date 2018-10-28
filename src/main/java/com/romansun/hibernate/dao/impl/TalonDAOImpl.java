@@ -3,6 +3,7 @@ package com.romansun.hibernate.dao.impl;
 import com.romansun.hibernate.dao.TalonDAO;
 import com.romansun.hibernate.entity.Talon;
 import com.romansun.hibernate.factory.Invoker;
+import com.romansun.utils.SuppressFBWarnings;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -10,6 +11,7 @@ import java.util.Collection;
 
 import static com.romansun.hibernate.dao.utils.QueryStorage.*;
 
+@SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC_ANON")
 public class TalonDAOImpl implements TalonDAO {
 
 	@Override

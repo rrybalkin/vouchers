@@ -2,6 +2,7 @@ package com.romansun.gui.controller.impl;
 
 import com.romansun.gui.Dialog;
 import com.romansun.gui.controller.AbstractController;
+import com.romansun.gui.controller.Converters;
 import com.romansun.printing.data.ActualReportData;
 import com.romansun.printing.data.ReportData;
 import com.romansun.printing.data.StoredReportData;
@@ -41,32 +42,12 @@ public class FourthTabController extends AbstractController implements Initializ
 
 		cbEnableEmptyVisitors.getItems().clear();
 		cbEnableEmptyVisitors.getItems().addAll(Boolean.FALSE, Boolean.TRUE);
-		cbEnableEmptyVisitors.setConverter(new StringConverter<Boolean>() {
-			@Override
-			public String toString(Boolean o) {
-				return o ? "Да" : "Нет";
-			}
-
-			@Override
-			public Boolean fromString(String string) {
-				return "ДА".equalsIgnoreCase(string) ? Boolean.TRUE : Boolean.FALSE;
-			}
-		});
+		cbEnableEmptyVisitors.setConverter(Converters.YES_NO_TO_BOOLEAN);
 		cbEnableEmptyVisitors.getSelectionModel().select(0);
 
 		cbReportFormat.getItems().clear();
 		cbReportFormat.getItems().addAll(ReportType.values());
-		cbReportFormat.setConverter(new StringConverter<ReportType>() {
-			@Override
-			public String toString(ReportType object) {
-				return object.name();
-			}
-
-			@Override
-			public ReportType fromString(String string) {
-				return ReportType.valueOf(string);
-			}
-		});
+		cbReportFormat.setConverter(Converters.REPORT_TYPE_CONVERTER);
 		cbReportFormat.getSelectionModel().select(0);
 
 		seeReport.visibleProperty().set(false);
@@ -77,11 +58,11 @@ public class FourthTabController extends AbstractController implements Initializ
 		month = new DateTime().getMonthOfYear();
 		year = new DateTime().getYear();
 
-		cbMonth.setConverter(new MonthConverter());
+		cbMonth.setConverter(Converters.MONTHS_CONVERTER);
 		cbMonth.getItems().addAll(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
 		cbMonth.getSelectionModel().select(month);
 
-		cbYear.setConverter(new YearConverter());
+		cbYear.setConverter(Converters.YEARS_CONVERTER);
 		cbYear.getItems().addAll(year-1, year, year+1);
 		cbYear.getSelectionModel().select(year);
 
@@ -109,7 +90,7 @@ public class FourthTabController extends AbstractController implements Initializ
 	private ComboBox<Integer> cbYear;
 
 	@FXML
-	protected void createReport() {
+	void createReport() {
 		LOG.debug("Start generating report ...");
 		ReportType reportType = cbReportFormat.getSelectionModel().getSelectedItem();
 		try
@@ -121,7 +102,7 @@ public class FourthTabController extends AbstractController implements Initializ
 				String storedReportName = printingReport.getName();
 				reportDate = storedReportName.substring(0, storedReportName.indexOf('.'));
 			} else {
-				reportDate = MonthConverter.getMonthNameByIndex(cbMonth.getSelectionModel().getSelectedItem())
+				reportDate = Converters.MONTHS_CONVERTER.toString(cbMonth.getSelectionModel().getSelectedItem())
 						+ " " + cbYear.getSelectionModel().getSelectedItem();
 			}
 
@@ -151,7 +132,7 @@ public class FourthTabController extends AbstractController implements Initializ
 	}
 
 	@FXML // process click on hyperlink
-	protected void hlAction() {
+	void hlAction() {
 		File file = (File) seeReport.getUserData();
 		try {
 			Desktop.getDesktop().open(file);

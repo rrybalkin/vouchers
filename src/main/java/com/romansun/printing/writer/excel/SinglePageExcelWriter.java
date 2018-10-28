@@ -8,6 +8,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Class for creating and generating report file in type EXCEL
@@ -28,8 +29,9 @@ public class SinglePageExcelWriter extends AbstractExcelWriter {
             Row currentRow = sheet.createRow(rowNum);
             ReportUnit unit = data.next();
 
-            for (String columnAlias : columnIndexes.keySet()) {
-                final Cell cell = currentRow.createCell(columnIndexes.get(columnAlias));
+            for (Map.Entry<String, Integer> columnIndex : columnIndexes.entrySet()) {
+                final Cell cell = currentRow.createCell(columnIndex.getValue());
+                final String columnAlias = columnIndex.getKey();
 
                 // check if cell should contain formula value
                 if (cellFormulas.containsKey(columnAlias)) {

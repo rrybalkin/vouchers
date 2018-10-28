@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="566.0" prefWidth="653.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="com.romansun.gui.controller.impl.MainWindowController">
@@ -30,7 +28,6 @@
         <Menu mnemonicParsing="false" text="Помощь">
           <items>
             <MenuItem mnemonicParsing="false" onAction="#clickOnAbout" text="О программе" />
-            <MenuItem mnemonicParsing="false" onAction="#clickOnSettings" text="Settings..." />
           </items>
         </Menu>
       </menus>

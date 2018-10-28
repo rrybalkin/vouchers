@@ -21,6 +21,7 @@ public class ReportsManager {
 	
 	public ReportsManager(String pathToReports) {
 		this.pathToReports = pathToReports;
+		loadReports();
 	}
 	
 	public void loadReports() {
@@ -29,6 +30,9 @@ public class ReportsManager {
 			File dirReports = new File(pathToReports);
 			if (dirReports.exists() && dirReports.isDirectory()) {
 				File[] xmlFiles = dirReports.listFiles();
+				if (xmlFiles == null) {
+					throw new IllegalArgumentException(pathToReports + " folder does not exist");
+				}
 				for (File xmlReport : xmlFiles) {
 					Report report = parseReport(xmlReport);
 					reports.add(report);
@@ -40,7 +44,6 @@ public class ReportsManager {
 	}
 	
 	public List<Report> getReportsByDate(Integer month, Integer year) {
-		loadReports();
 		List<Report> needReports = new ArrayList<>();
 		for (Report report : reports) {
 			Integer curMonth = report.getMonth();

@@ -108,7 +108,19 @@ public class Visitor {
 		}
 		return false;
 	}
-	
+
+	@Override
+	public int hashCode() {
+		int result = id != null ? id.hashCode() : 0;
+		result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+		result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+		result = 31 * result + (middleName != null ? middleName.hashCode() : 0);
+		result = 31 * result + (description != null ? description.hashCode() : 0);
+		result = 31 * result + (association != null ? association.hashCode() : 0);
+		result = 31 * result + (talon != null ? talon.hashCode() : 0);
+		return result;
+	}
+
 	@Override
     public String toString() {
        return getFIO();
