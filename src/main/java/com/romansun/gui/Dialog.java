@@ -1,5 +1,6 @@
 package com.romansun.gui;
 
+import com.romansun.utils.Messages;
 import javafx.event.Event;
 import javafx.scene.Node;
 import javafx.stage.Window;
@@ -12,15 +13,15 @@ public class Dialog {
     private static boolean show = true;
 
     public static void showError(String message) {
-        if (show) MessageBox.show(null, message, "Error", MessageBox.ICON_ERROR | MessageBox.OK);
+        if (show) MessageBox.show(null, message, Messages.get("dialog.error.title"), MessageBox.ICON_ERROR | MessageBox.OK);
     }
 
     public static void showWarning(String message) {
-        if (show) MessageBox.show(null, message, "Attention", MessageBox.ICON_WARNING | MessageBox.OK);
+        if (show) MessageBox.show(null, message, Messages.get("dialog.warn.title"), MessageBox.ICON_WARNING | MessageBox.OK);
     }
 
     public static void showInfo(String message) {
-        if (show) MessageBox.show(null, message, "Information", MessageBox.ICON_INFORMATION | MessageBox.OK);
+        if (show) MessageBox.show(null, message, Messages.get("dialog.info.title"), MessageBox.ICON_INFORMATION | MessageBox.OK);
     }
 
     public static int showQuestion(String message, Event event) {
@@ -30,10 +31,13 @@ public class Dialog {
         }
         int answer = NO;
         if (show) answer = MessageBox.show(window,
-                message, "Attention", MessageBox.ICON_QUESTION | MessageBox.YES | MessageBox.NO);
+                message, Messages.get("dialog.warn.title"), MessageBox.ICON_QUESTION | MessageBox.YES | MessageBox.NO);
 
         if (show) return (answer == MessageBox.YES) ? YES : NO;
         else return YES;
     }
 
+    public static void showErrorOnException(Exception ex) {
+        showError(Messages.get("dialog.error-happened", ex.getMessage()));
+    }
 }

@@ -5,6 +5,7 @@ import com.romansun.gui.controller.AbstractController;
 import com.romansun.hibernate.entity.Association;
 import com.romansun.hibernate.entity.Talon;
 import com.romansun.hibernate.entity.Visitor;
+import com.romansun.utils.Messages;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -83,17 +84,17 @@ public class SecondTabController extends AbstractController implements Initializ
             try {
                 daoFactory.getTalonDAO().add(talon);
                 visitorsDAO.add(visitor);
-                Dialog.showInfo("New visitor created");
+                Dialog.showInfo(Messages.get("dialog.info.visitor-created"));
                 observable.notifyObservers();
                 LOG.info("New visitor = [" + visitor + "] was successfully added");
             } catch (Exception e) {
-                Dialog.showError("Error while adding new visitor: " + e.getLocalizedMessage());
+                Dialog.showErrorOnException(e);
                 LOG.error("Error while adding new visitor = [" + visitor + "]: ", e);
             } finally {
                 reset("visitor");
             }
         } else {
-            Dialog.showError("Required visitor fields must be filled!");
+            Dialog.showWarning(Messages.get("dialog.warn.visitor-empty-fields"));
         }
     }
 
@@ -107,11 +108,11 @@ public class SecondTabController extends AbstractController implements Initializ
             group.setDescription(description);
             try {
                 daoFactory.getAssociationDAO().add(group);
-                Dialog.showInfo("New group created");
+                Dialog.showInfo(Messages.get("dialog.info.group-created"));
                 observable.notifyObservers();
                 loadGroups();
             } catch (Exception e) {
-                Dialog.showError("Error while creating group: " + e.getLocalizedMessage());
+                Dialog.showErrorOnException(e);
                 LOG.error("Error while creating group: ", e);
             } finally {
                 reset("group");
@@ -123,21 +124,21 @@ public class SecondTabController extends AbstractController implements Initializ
     void deleteGroup(ActionEvent event) {
         Association delGroup = cbDelGroups.getValue();
         if (delGroup != null) {
-            final int answer = Dialog.showQuestion("Are you sure to delete the selected group?", event);
+            final int answer = Dialog.showQuestion(Messages.get("dialog.question.do-group-delete", delGroup.getName()), event);
             if (answer == Dialog.YES) {
                 try {
                     long countVisitors = daoFactory.getVisitorDAO().getCountVisitors(delGroup);
                     if (countVisitors > 0) {
-                        Dialog.showWarning("Group is not empty. Please delete group visitors first!");
+                        Dialog.showWarning(Messages.get("dialog.warning.deleting-group-is-not-empty"));
                     } else {
                         daoFactory.getAssociationDAO().delete(delGroup);
-                        Dialog.showInfo("Group deleted.");
+                        Dialog.showInfo(Messages.get("dialog.info.group-deleted"));
                         observable.notifyObservers();
                         loadGroups();
                         LOG.debug("Group " + delGroup + " deleted with all visitors");
                     }
                 } catch (Exception e) {
-                    Dialog.showError("Error while deleting group: " + e.getMessage());
+                    Dialog.showErrorOnException(e);
                     LOG.error("Error while deleting group: ", e);
                 } finally {
                     lblDelGroup.setText("");
@@ -151,7 +152,7 @@ public class SecondTabController extends AbstractController implements Initializ
         Association delGroup = cbDelGroups.getValue();
         if (delGroup != null) {
             lblDelGroup.setTextFill(Color.RED);
-            lblDelGroup.setText("Delete group: \"" + delGroup.getName() + "\"");
+            lblDelGroup.setText(Messages.get("label.deleting-group", delGroup.getName()));
         }
     }
 

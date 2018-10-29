@@ -1,36 +1,23 @@
 package com.romansun.gui.controller.impl;
 
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.ResourceBundle;
-
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import com.romansun.gui.Dialog;
+import com.romansun.gui.controller.AbstractController;
+import com.romansun.hibernate.entity.Association;
+import com.romansun.hibernate.entity.Talon;
+import com.romansun.hibernate.entity.Visitor;
+import com.romansun.utils.Messages;
+import com.romansun.utils.Utils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TitledPane;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-
 import org.apache.log4j.Logger;
 
-import com.romansun.gui.controller.AbstractController;
-import com.romansun.gui.Dialog;
-import com.romansun.hibernate.entity.Association;
-import com.romansun.hibernate.entity.Talon;
-import com.romansun.hibernate.entity.Visitor;
-import com.romansun.utils.Utils;
+import java.net.URL;
+import java.util.*;
 
 public class FirstTabController extends AbstractController implements Initializable, Observer {
 	private final static Logger LOG = Logger.getLogger(FirstTabController.class);
@@ -61,17 +48,14 @@ public class FirstTabController extends AbstractController implements Initializa
 
 		// Initialize listener for input mask
 		txtMask.caretPositionProperty().addListener(
-				new ChangeListener<Number>() {
-					public void changed(ObservableValue<? extends Number> arg0,
-							Number oldValue, Number newValue) {
-						String mask = txtMask.getText();
-						if (mask != null && !mask.isEmpty()) {
-							loadVisitorsForMask(mask);
-						} else {
-							loadVisitors();
-						}
-					}
-				});
+				(arg01, oldValue, newValue) -> {
+                    String mask = txtMask.getText();
+                    if (mask != null && !mask.isEmpty()) {
+                        loadVisitorsForMask(mask);
+                    } else {
+                        loadVisitors();
+                    }
+                });
 	}
 
 	@FXML
@@ -121,8 +105,8 @@ public class FirstTabController extends AbstractController implements Initializa
 		try {
 			daoFactory.getTalonDAO().update(talon);
 		} catch (Exception e) {
-			Dialog.showError(e.getLocalizedMessage());
-			LOG.error("Error: ", e);
+			Dialog.showErrorOnException(e);
+			LOG.error("Error while adding new talon: " + talon, e);
 		}
 		countLunches.getSelectionModel().selectFirst();
 		countDinners.getSelectionModel().selectFirst();
@@ -130,9 +114,10 @@ public class FirstTabController extends AbstractController implements Initializa
 	}
 
 	@FXML
-	void changeFilter() {
+	void changeGroup() {
 		Association newFilter = filter.getValue();
 		if (chosenFilter != null && newFilter != null && !newFilter.getName().equals(chosenFilter.getName())) {
+			LOG.debug("Changing filter from " + chosenFilter + " to " + newFilter + " ...");
 			chosenFilter = newFilter;
 			loadVisitors();
 		}
@@ -158,13 +143,13 @@ public class FirstTabController extends AbstractController implements Initializa
 				loadVisitors();
 				loadInfoAboutVisitor();
 				clickOnTitledPane();
-				Dialog.showInfo("Visitor updated.");
+				Dialog.showInfo(Messages.get("dialog.info.visitor-updated"));
 			} catch (Exception e) {
-				Dialog.showError("Error while updating visitor: " + e.getLocalizedMessage());
-				LOG.error("Error while updating visitor: ", e);
+				Dialog.showErrorOnException(e);
+				LOG.error("Error while updating visitor: " + chosenVisitor, e);
 			}
 		} else {
-			Dialog.showError("Required visitor fields must be filled!");
+			Dialog.showWarning(Messages.get("dialog.warn.visitor-empty-fields"));
 		}
 	}
 
@@ -172,12 +157,12 @@ public class FirstTabController extends AbstractController implements Initializa
 	void keyPressed(KeyEvent event) {
 		final Visitor selectedVisitor = listVisitors.getSelectionModel().getSelectedItem();
 		if (selectedVisitor == null) {
-			LOG.error("keyPressed event when no selected visitor in the list");
+			LOG.warn("keyPressed event when no selected visitor in the list");
 			return;
 		}
 
 		if (event.getCode() == KeyCode.DELETE) {
-			int answer = Dialog.showQuestion("Are you sure to delete visitor " + selectedVisitor.getFIO() + " ?", event);
+			int answer = Dialog.showQuestion(Messages.get("dialog.question.do-visitor-delete", selectedVisitor.getFIO()), event);
 			if (answer == Dialog.YES) {
 				try {
 					Visitor visitor = listVisitors.getSelectionModel()
@@ -189,12 +174,12 @@ public class FirstTabController extends AbstractController implements Initializa
 						LOG.info("Visitor = " + visitor.getId() + " was deleted");
 					}
 				} catch (Exception e) {
-					Dialog.showError("Error while deleting visitor: " + e.getMessage());
+					Dialog.showErrorOnException(e);
 					LOG.error("Error while deleting visitor: ", e);
 				}
 			}
 		} else if (event.getCode() == KeyCode.L /* Lunches */) {
-			int answer = Dialog.showQuestion("Are you sure to reset lunches for selected visitor " + selectedVisitor.getFIO() + " ?", event);
+			int answer = Dialog.showQuestion(Messages.get("dialog.question.do-visitor-lunches-reset", selectedVisitor.getFIO()), event);
 			if (answer == Dialog.YES) {
 				try {
 					Visitor visitor = listVisitors.getSelectionModel()
@@ -209,12 +194,12 @@ public class FirstTabController extends AbstractController implements Initializa
 						LOG.info("Lunches for visitor = [" + visitor + "] were reset");
 					}
 				} catch (Exception e) {
-					Dialog.showError("Error while reset lunches: " + e.getMessage());
+					Dialog.showErrorOnException(e);
 					LOG.error("Error while doing reset lunches: ", e);
 				}
 			}
 		} else if (event.getCode() == KeyCode.D /* Dinners */) {
-			int answer = Dialog.showQuestion("Are you sure to reset dinners for selected visitor " + selectedVisitor.getFIO() + " ?", event);
+			int answer = Dialog.showQuestion(Messages.get("dialog.question.do-visitor-dinners-reset", selectedVisitor.getFIO()), event);
 			if (answer == Dialog.YES) {
 				try {
 					Visitor visitor = listVisitors.getSelectionModel().getSelectedItem();
@@ -229,7 +214,7 @@ public class FirstTabController extends AbstractController implements Initializa
 						LOG.info("Dinners for visitor = [" + visitor + "] were reset");
 					}
 				} catch (Exception e) {
-					Dialog.showError("Error while reset dinners: " + e.getMessage());
+					Dialog.showErrorOnException(e);
 					LOG.error("Error while doing reset dinners: ", e);
 				}
 			}
@@ -283,9 +268,9 @@ public class FirstTabController extends AbstractController implements Initializa
 				} else {
 					visitors = visitorsDAO.getVisitorsByCriteria(chosenFilter, null);
 				}
-				listVisitors.getItems().addAll(sortCollection(visitors));
+				listVisitors.getItems().addAll(sortVisitors(visitors));
 				LOG.info("Visitors by association = [" + chosenFilter + "] were loaded");
-				lblInfo.setText("All visitors: " + visitors.size());
+				lblInfo.setText(Messages.get("label.all-visitors", visitors.size()));
 			}
 		} catch (Exception e) {
 			LOG.error("Error while loading visitors by association = ["
@@ -299,10 +284,10 @@ public class FirstTabController extends AbstractController implements Initializa
 			Collection<Visitor> visitors = visitorsDAO.getVisitorsByCriteria(
 							((chosenFilter.getId() != -1) ? chosenFilter : null),
 							mask);
-			listVisitors.getItems().addAll(sortCollection(visitors));
+			listVisitors.getItems().addAll(sortVisitors(visitors));
 			
 			LOG.info("Visitors by association = [" + chosenFilter + "] and mask = " + mask + " were loaded");
-			lblInfo.setText("All visitors: " + visitors.size());
+			lblInfo.setText(Messages.get("label.all-visitors", visitors.size()));
 		} catch (Exception e) {
 			LOG.error("Error while loading visitors by association = ["
 					+ chosenFilter + "] and mask = " + mask + ": ", e);
@@ -313,9 +298,9 @@ public class FirstTabController extends AbstractController implements Initializa
 		filter.getItems().clear();
 		cbGroups.getItems().clear();
 		// Create filter "All visitors"
-		Association all = new Association();
+		final Association all = new Association();
 		all.setId(-1L);
-		all.setName("All visitors");
+		all.setName(Messages.get("group.all-visitors"));
 		filter.getItems().add(all);
 		try {
 			Collection<Association> associations = daoFactory.getAssociationDAO().getAll();
@@ -324,7 +309,7 @@ public class FirstTabController extends AbstractController implements Initializa
 			chosenFilter = filter.getValue();
 			cbGroups.getItems().addAll(associations);
 		} catch (Exception e) {
-			LOG.error("Error: ", e);
+			LOG.error("Error while loading filters: ", e);
 		}
 	}
 
@@ -358,7 +343,7 @@ public class FirstTabController extends AbstractController implements Initializa
 		countDinners.getSelectionModel().selectFirst();
 	}
 
-	private List<Visitor> sortCollection(Collection<Visitor> collection) {
+	private List<Visitor> sortVisitors(Collection<Visitor> collection) {
 		List<Visitor> visitors = new ArrayList<>(collection);
 		visitors.sort((v1, v2) -> {
             String fio_1 = v1.getLastName() + " " + v1.getFirstName() + " "

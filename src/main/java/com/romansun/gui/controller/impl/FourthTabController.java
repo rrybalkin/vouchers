@@ -10,13 +10,15 @@ import com.romansun.printing.writer.ReportType;
 import com.romansun.printing.writer.ReportWriter;
 import com.romansun.printing.writer.ReportWriterFactory;
 import com.romansun.reporting.logic.Report;
+import com.romansun.utils.Messages;
+import com.sun.org.apache.regexp.internal.RE;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
-import javafx.util.StringConverter;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 
@@ -24,12 +26,14 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.ResourceBundle;
 
 public class FourthTabController extends AbstractController implements Initializable, Observer {
 	private final static Logger LOG = Logger.getLogger(FourthTabController.class);
 
-	private final static String PRINTING_REPORT_BY_ACTUAL_DATA = "Формирование отчета по текущим актуальным данным";
 	private final static String GREEN_COLOR = "#008009", RED_COLOR = "#d91548";
 
 	private Report printingReport;
@@ -41,8 +45,8 @@ public class FourthTabController extends AbstractController implements Initializ
 		ThirdTabController.addObserver(this);
 
 		cbEnableEmptyVisitors.getItems().clear();
-		cbEnableEmptyVisitors.getItems().addAll(Boolean.FALSE, Boolean.TRUE);
 		cbEnableEmptyVisitors.setConverter(Converters.YES_NO_TO_BOOLEAN);
+		cbEnableEmptyVisitors.getItems().addAll(Boolean.FALSE, Boolean.TRUE);
 		cbEnableEmptyVisitors.getSelectionModel().select(0);
 
 		cbReportFormat.getItems().clear();
@@ -108,26 +112,28 @@ public class FourthTabController extends AbstractController implements Initializ
 
 			ReportWriter writer = ReportWriterFactory.getWriter(reportType);
 			if (writer == null) {
-				throw new RuntimeException("Этот тип отчета в настоящий момент не поддерживается!");
+				Dialog.showWarning(Messages.get("dialog.warn.type-report-is-not-supported"));
+				return;
 			}
 			File report = writer.generateReport(reportType, reportData, reportDate);
 
 			if (report != null && report.exists()) {
 				lblStatus.setTextFill(Color.web(GREEN_COLOR));
-				lblStatus.setText("Отчет успешно сформирован: " + report.getAbsolutePath());
+				lblStatus.setText(Messages.get("label.report-is-ready", report.getAbsolutePath()));
 				seeReport.visibleProperty().set(true);
 				seeReport.setUserData(report.getAbsoluteFile());
 			} else {
-				throw new RuntimeException("Файл с отчетом не найден!");
+				Dialog.showWarning("dialog.warn.report-file-not-found");
+				return;
 			}
 
 			resetReportInfo();
 		}
 		catch (Exception e) {
+			Dialog.showErrorOnException(e);
+			lblStatus.setTextFill(Color.valueOf(RED_COLOR));
+			lblStatus.setText(Messages.get("label.error-on-report-generating"));
 			LOG.error("Error while forming report with reportType = '" + reportType + "': ", e);
-
-			lblStatus.setTextFill(Color.web(RED_COLOR));
-			lblStatus.setText("Во время формирования отчета возникли ошибки: " + e.getMessage());
 		}
 	}
 
@@ -137,7 +143,9 @@ public class FourthTabController extends AbstractController implements Initializ
 		try {
 			Desktop.getDesktop().open(file);
 			lblStatus.setText("");
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
+			Dialog.showErrorOnException(e);
 			LOG.error("Error while tries to open report by address = " + file.getAbsolutePath() + ": ", e);
 		}
 	}
@@ -151,10 +159,10 @@ public class FourthTabController extends AbstractController implements Initializ
 		String costOfDinner = txtCostOfDinner.getText();
 
 		if (costOfLunch == null || costOfLunch.length() == 0) {
-			Dialog.showError("Поле \"Стоимость обеда\" должно быть заполнено!");
+			Dialog.showWarning(Messages.get("dialog.warn.lunch-price-must-be-filled"));
 			return false;
 		} else if (costOfDinner == null || costOfDinner.length() == 0) {
-			Dialog.showError("Поле \"Стоимость ужина\" должно быть заполнено!");
+			Dialog.showWarning(Messages.get("dialog.warn.dinner-price-must-be-filled"));
 			return false;
 		}
 
@@ -164,7 +172,7 @@ public class FourthTabController extends AbstractController implements Initializ
 			LOG.debug("Fields validated: lunches = " + lunches + ", dinners = " + dinners);
 		} catch (NumberFormatException e) {
 			LOG.error("Field costOfLunch = " + costOfLunch + " or costOfDinner = " + costOfDinner + " is incorrect!");
-			Dialog.showError("Поля \"Стоимость обеда\" и \"Стоимость ужина\" должны содержать только числа!");
+			Dialog.showWarning(Messages.get("dialog.warn.prices-must-be-numeric"));
 			return false;
 		}
 
@@ -205,7 +213,7 @@ public class FourthTabController extends AbstractController implements Initializ
 	}
 
 	private void resetReportInfo() {
-		lblReportInfo.setText(PRINTING_REPORT_BY_ACTUAL_DATA);
+		lblReportInfo.setText(Messages.get("label.report-based-on-current-data"));
 		printingReport = null;
 	}
 
@@ -213,7 +221,7 @@ public class FourthTabController extends AbstractController implements Initializ
 	public void update(Observable o, Object obj) {
 		if (obj instanceof Report) {
 			printingReport = (Report) obj;
-			lblReportInfo.setText("Формирование сохраненного отчета " + printingReport.getName());
+			lblReportInfo.setText(Messages.get("label.report-based-on-saved-data", printingReport.getName()));
 		} else {
 			LOG.debug("Argument 'object' in update method is null or isn't instance of clazz 'Report'");
 		}

@@ -1,34 +1,27 @@
 package com.romansun.gui.controller.impl;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.ResourceBundle;
-
-import com.romansun.utils.SuppressFBWarnings;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Scene;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
-
-import org.apache.log4j.Logger;
-
 import com.romansun.cache.EntityCache;
-import com.romansun.utils.Resources;
-import com.romansun.gui.controller.AbstractController;
 import com.romansun.gui.Dialog;
+import com.romansun.gui.controller.AbstractController;
 import com.romansun.hibernate.entity.Visitor;
 import com.romansun.reporting.ReportBuilder;
 import com.romansun.reporting.ReportsSaver;
 import com.romansun.reporting.logic.Report;
+import com.romansun.utils.Messages;
+import com.romansun.utils.Resources;
+import com.romansun.utils.SuppressFBWarnings;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.layout.AnchorPane;
+import org.apache.log4j.Logger;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.*;
 
 @SuppressFBWarnings("DM_EXIT")
 public class MainWindowController extends AbstractController implements Initializable {
@@ -77,8 +70,8 @@ public class MainWindowController extends AbstractController implements Initiali
 
 	@FXML
 	void resetTalons() {
-		int answer = Dialog.showQuestion("Do you really want to reset all talons?", null);
-		if (answer == 1 /*YES*/) {
+		int answer = Dialog.showQuestion(Messages.get("dialog.question.reset-all-talons"), null);
+		if (answer == Dialog.YES) {
 			// Create report
 			Report report;
 			try {
@@ -96,6 +89,7 @@ public class MainWindowController extends AbstractController implements Initiali
 				// Call to observer
 				observable.notifyObservers();
 			} catch (Exception e) {
+				Dialog.showErrorOnException(e);
 				LOG.error("Error while reset talons: " , e);
 			}
 		}
@@ -109,7 +103,7 @@ public class MainWindowController extends AbstractController implements Initiali
 
 	@FXML
 	void clickOnAbout() {
-		Dialog.showInfo("Author: Roman Rybalkin");
+		Dialog.showInfo(Messages.get("dialog.info.app-about"));
 	}
 
 	private AnchorPane loadTab(File tabFile) throws IOException {

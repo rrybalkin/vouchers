@@ -5,6 +5,7 @@ import com.typesafe.config.ConfigFactory;
 import org.apache.log4j.Logger;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -22,6 +23,7 @@ public class Configuration {
     public int excelTemplateHeaders;
     public Map<String, String> excelTemplateColumns;
     public List<String> excelTemplateStatsColumns;
+    public Locale appLocale;
 
     @SuppressWarnings("unchecked")
     private Configuration() {
@@ -38,6 +40,8 @@ public class Configuration {
             this.excelTemplateHeaders = config.getInt("report.template.excel.headers");
             this.excelTemplateColumns = (Map<String, String>) config.getList("report.template.excel.columns").unwrapped().get(0);
             this.excelTemplateStatsColumns = config.getStringList("report.template.excel.stats");
+
+            this.appLocale = config.hasPath("app.locale") ? new Locale(config.getString("app.locale")) : Locale.getDefault();
 
             LOG.info("Reading config file... Done");
         } catch (Exception e) {

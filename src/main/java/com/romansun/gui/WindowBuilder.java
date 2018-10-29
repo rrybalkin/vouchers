@@ -3,6 +3,7 @@ package com.romansun.gui;
 import java.io.File;
 import java.net.URL;
 
+import com.romansun.utils.Messages;
 import com.romansun.utils.SuppressFBWarnings;
 import org.apache.log4j.Logger;
 
@@ -27,7 +28,7 @@ public class WindowBuilder extends Application {
 			AnchorPane mainFrame = FXMLLoader.load(fxmlURL);
 			Scene scene = new Scene(mainFrame);
 			stage.setScene(scene);
-			stage.setTitle("Vouchers");
+			stage.setTitle(Messages.get("app.title"));
 			File icon = Resources.getInstance().getResource(Resources.ICON_IMAGE);
 			stage.getIcons().add(new Image(icon.toURI().toString()));
 			stage.show();

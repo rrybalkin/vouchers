@@ -1,6 +1,8 @@
 package com.romansun.gui.controller;
 
 import com.romansun.printing.writer.ReportType;
+import com.romansun.utils.Configuration;
+import com.romansun.utils.Messages;
 import javafx.util.StringConverter;
 
 import java.time.Month;
@@ -12,14 +14,17 @@ import java.util.Map;
 public class Converters {
 
     public static final StringConverter<Boolean> YES_NO_TO_BOOLEAN = new StringConverter<Boolean>() {
+        private final String yes = Messages.get("common.yes");
+        private final String no = Messages.get("common.no");
+
         @Override
         public String toString(Boolean o) {
-            return o ? "Да" : "Нет";
+            return o ? yes : no;
         }
 
         @Override
         public Boolean fromString(String string) {
-            return "ДА".equalsIgnoreCase(string) ? Boolean.TRUE : Boolean.FALSE;
+            return yes.equalsIgnoreCase(string) ? Boolean.TRUE : Boolean.FALSE;
         }
     };
 
@@ -42,18 +47,19 @@ public class Converters {
 
         private final Map<String, Integer> MONTHS = new HashMap<>();
         {
-            MONTHS.put(Month.JANUARY.getDisplayName(TextStyle.FULL, Locale.getDefault()), 1);
-            MONTHS.put(Month.FEBRUARY.getDisplayName(TextStyle.FULL, Locale.getDefault()), 2);
-            MONTHS.put(Month.MARCH.getDisplayName(TextStyle.FULL, Locale.getDefault()), 3);
-            MONTHS.put(Month.APRIL.getDisplayName(TextStyle.FULL, Locale.getDefault()), 4);
-            MONTHS.put(Month.MAY.getDisplayName(TextStyle.FULL, Locale.getDefault()), 5);
-            MONTHS.put(Month.JUNE.getDisplayName(TextStyle.FULL, Locale.getDefault()), 6);
-            MONTHS.put(Month.JULY.getDisplayName(TextStyle.FULL, Locale.getDefault()), 7);
-            MONTHS.put(Month.AUGUST.getDisplayName(TextStyle.FULL, Locale.getDefault()), 8);
-            MONTHS.put(Month.SEPTEMBER.getDisplayName(TextStyle.FULL, Locale.getDefault()), 9);
-            MONTHS.put(Month.OCTOBER.getDisplayName(TextStyle.FULL, Locale.getDefault()), 10);
-            MONTHS.put(Month.NOVEMBER.getDisplayName(TextStyle.FULL, Locale.getDefault()), 11);
-            MONTHS.put(Month.DECEMBER.getDisplayName(TextStyle.FULL, Locale.getDefault()), 12);
+            final Locale locale = Configuration.getInstance().appLocale;
+            MONTHS.put(Month.JANUARY.getDisplayName(TextStyle.FULL, locale), 1);
+            MONTHS.put(Month.FEBRUARY.getDisplayName(TextStyle.FULL, locale), 2);
+            MONTHS.put(Month.MARCH.getDisplayName(TextStyle.FULL, locale), 3);
+            MONTHS.put(Month.APRIL.getDisplayName(TextStyle.FULL, locale), 4);
+            MONTHS.put(Month.MAY.getDisplayName(TextStyle.FULL, locale), 5);
+            MONTHS.put(Month.JUNE.getDisplayName(TextStyle.FULL, locale), 6);
+            MONTHS.put(Month.JULY.getDisplayName(TextStyle.FULL, locale), 7);
+            MONTHS.put(Month.AUGUST.getDisplayName(TextStyle.FULL, locale), 8);
+            MONTHS.put(Month.SEPTEMBER.getDisplayName(TextStyle.FULL, locale), 9);
+            MONTHS.put(Month.OCTOBER.getDisplayName(TextStyle.FULL, locale), 10);
+            MONTHS.put(Month.NOVEMBER.getDisplayName(TextStyle.FULL, locale), 11);
+            MONTHS.put(Month.DECEMBER.getDisplayName(TextStyle.FULL, locale), 12);
         }
 
         @Override
