@@ -16,7 +16,6 @@ import java.util.Map;
 public class Configuration {
     private final static Logger LOG = Logger.getLogger(Configuration.class);
 
-    public boolean useVisitorsCache;
     public String pathToReports;
     public String reportNameTemplate;
     public String macrosDate;
@@ -30,8 +29,6 @@ public class Configuration {
         LOG.info("Reading config file...");
         try {
             final Config config = ConfigFactory.load();
-
-            this.useVisitorsCache = config.getBoolean("cache.enable");
 
             this.pathToReports = config.getString("report.folder");
             this.reportNameTemplate = config.getString("report.name.template");

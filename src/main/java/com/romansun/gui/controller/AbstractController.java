@@ -1,20 +1,12 @@
 package com.romansun.gui.controller;
 
-import java.io.File;
-import java.time.Month;
-import java.time.format.TextStyle;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-
-import javafx.scene.control.TabPane;
-
-import com.romansun.cache.impl.VisitorsCacheImpl;
-import com.romansun.utils.Configuration;
 import com.romansun.hibernate.dao.VisitorDAO;
 import com.romansun.hibernate.factory.DAOFactory;
-import javafx.util.StringConverter;
+import com.romansun.utils.Configuration;
+import javafx.scene.control.TabPane;
 import org.apache.log4j.Logger;
+
+import java.io.File;
 
 public abstract class AbstractController {
 	private static final Logger LOG = Logger.getLogger(AbstractController.class);
@@ -33,7 +25,7 @@ public abstract class AbstractController {
 			LOG.info("Reports folder created: " + created);
 		}
 		daoFactory = DAOFactory.getInstance();
-		visitorsDAO = config.useVisitorsCache ? new VisitorsCacheImpl() : daoFactory.getVisitorDAO();
+		visitorsDAO = daoFactory.getVisitorDAO();
 	}
 
 

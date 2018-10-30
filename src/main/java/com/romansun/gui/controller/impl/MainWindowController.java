@@ -1,6 +1,5 @@
 package com.romansun.gui.controller.impl;
 
-import com.romansun.cache.EntityCache;
 import com.romansun.gui.Dialog;
 import com.romansun.gui.controller.AbstractController;
 import com.romansun.hibernate.entity.Visitor;
@@ -80,13 +79,7 @@ public class MainWindowController extends AbstractController implements Initiali
 				report = builder.buildReport(new ArrayList<>(visitors));
 				ReportsSaver saver = new ReportsSaver(PATH_TO_REPORTS, report);
 				saver.saveReport();
-				// Reset talons
 				daoFactory.getTalonDAO().resetAllTalons();
-				if (config.useVisitorsCache) {
-					// reload cache
-					((EntityCache) visitorsDAO).reload();
-				}
-				// Call to observer
 				observable.notifyObservers();
 			} catch (Exception e) {
 				Dialog.showErrorOnException(e);

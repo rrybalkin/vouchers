@@ -11,7 +11,6 @@ import com.romansun.printing.writer.ReportWriter;
 import com.romansun.printing.writer.ReportWriterFactory;
 import com.romansun.reporting.logic.Report;
 import com.romansun.utils.Messages;
-import com.sun.org.apache.regexp.internal.RE;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
