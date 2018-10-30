@@ -23,15 +23,16 @@ import java.util.*;
 
 public class ThirdTabController extends AbstractController implements Initializable, Observer {
     private final static Logger LOG = Logger.getLogger(ThirdTabController.class);
+
     private Integer month;
     private Integer year;
     private ReportsManager reportsManager;
 
     {
-        reportsManager = new ReportsManager(PATH_TO_REPORTS);
-        reportsManager.loadReports();
         month = new DateTime().getMonthOfYear();
         year = new DateTime().getYear();
+        reportsManager = new ReportsManager(PATH_TO_REPORTS);
+        reportsManager.loadReports();
     }
 
     private static Observable observable = new Observable() {

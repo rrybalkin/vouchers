@@ -12,7 +12,6 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class ReportsSaver {
 	private String pathToReports;
 	private Report report;

@@ -31,7 +31,10 @@ public class Messages {
         return MessageFormat.format(INSTANCE.messagesBundle.getString(messageKey), args);
     }
 
-    public class UTF8Control extends ResourceBundle.Control {
+    /**
+     * A custom ResourceBundle control for UTF8 encoding.
+     */
+    private static class UTF8Control extends ResourceBundle.Control {
         public ResourceBundle newBundle
                 (String baseName, Locale locale, String format, ClassLoader loader, boolean reload)
                 throws IllegalAccessException, InstantiationException, IOException
