@@ -3,34 +3,24 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="566.0" prefWidth="653.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="com.romansun.gui.controller.impl.MainWindowController">
-  <children>
-    <TabPane fx:id="tabPane" layoutY="24.0" prefHeight="541.0" prefWidth="653.0" tabClosingPolicy="UNAVAILABLE">
-      <tabs>
-        <Tab fx:id="firstTab" text="Работа с посетителями" />
-        <Tab fx:id="secondTab" text="Добавление новых" />
-        <Tab fx:id="thirdTab" text="Предыдущие отчеты" />
-        <Tab fx:id="fourthTab" content="$null" text="Формирование отчета" />
-      </tabs>
-    </TabPane>
-    <MenuBar prefWidth="653.0">
-      <menus>
-        <Menu mnemonicParsing="false" text="Файл">
-          <items>
-            <MenuItem mnemonicParsing="false" onAction="#clickOnClose" text="Закрыть программу" />
-          </items>
-        </Menu>
-        <Menu mnemonicParsing="false" text="Инструменты">
-          <items>
-            <MenuItem mnemonicParsing="false" onAction="#resetTalons" text="Сбросить обеды и ужины" />
-          </items>
-        </Menu>
-        <Menu mnemonicParsing="false" text="Помощь">
-          <items>
-            <MenuItem mnemonicParsing="false" onAction="#clickOnAbout" text="О программе" />
-          </items>
-        </Menu>
-      </menus>
-    </MenuBar>
-  </children>
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="566.0" prefWidth="653.0" xmlns:fx="http://javafx.com/fxml/1"
+            xmlns="http://javafx.com/javafx/2.2" fx:controller="com.rrybalkin.gui.controller.impl.MainWindowController">
+  <TabPane fx:id="tabPane" layoutY="24.0" prefHeight="541.0" prefWidth="653.0" tabClosingPolicy="UNAVAILABLE">
+    <Tab fx:id="firstTab" text="Работа с посетителями"/>
+    <Tab fx:id="secondTab" text="Добавление новых"/>
+    <Tab fx:id="thirdTab" text="Предыдущие отчеты"/>
+    <Tab fx:id="fourthTab" content="$null" text="Формирование отчета"/>
+  </TabPane>
+  <MenuBar prefWidth="653.0">
+    <Menu mnemonicParsing="false" text="Файл">
+      <MenuItem mnemonicParsing="false" onAction="#clickOnClose" text="Закрыть программу"/>
+    </Menu>
+    <Menu mnemonicParsing="false" text="Инструменты">
+      <MenuItem mnemonicParsing="false" onAction="#resetTalons" text="Сбросить обеды и ужины"/>
+    </Menu>
+    <Menu mnemonicParsing="false" text="Помощь">
+      <MenuItem mnemonicParsing="false" onAction="#clickOnAbout" text="О программе"/>
+    </Menu>
+  </MenuBar>
 </AnchorPane>

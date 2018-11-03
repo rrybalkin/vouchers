@@ -8,7 +8,7 @@
 
 <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
             prefHeight="510.0" prefWidth="653.0" xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.romansun.gui.controller.impl.FirstTabController">
+            fx:controller="com.rrybalkin.gui.controller.impl.FirstTabController">
   <SplitPane dividerPositions="0.4608294930875576" focusTraversable="true" prefHeight="510.0" prefWidth="653.0">
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
       <ListView fx:id="listVisitors" layoutX="14.0" layoutY="83.0" onKeyPressed="#keyPressed"

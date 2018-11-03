@@ -15,8 +15,8 @@
         <property name="hibernate.generate_statistics">true</property>
         <property name="hibernate.current_session_context_class">thread</property>
         <!-- Entities mapping -->
-        <mapping class="com.romansun.hibernate.entity.Talon" />
-        <mapping class="com.romansun.hibernate.entity.Visitor" />
-		<mapping class="com.romansun.hibernate.entity.Association" />
+        <mapping class="com.rrybalkin.hibernate.entity.Talon" />
+        <mapping class="com.rrybalkin.hibernate.entity.Visitor" />
+		<mapping class="com.rrybalkin.hibernate.entity.Association" />
     </session-factory>
 </hibernate-configuration>

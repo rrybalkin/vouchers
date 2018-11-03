@@ -9,7 +9,7 @@
 	<property name="javafx.ant.lib" value="lib"/>
 	<property name="javafx.lib.dir" value="lib/JavaFX"/> 
 	
-	<property name="main.class" value="com.romansun.App"/>
+	<property name="main.class" value="com.rrybalkin.App"/>
 	
 	<path id="classpath">
         <fileset dir="./lib" includes="**/*.jar"/>
