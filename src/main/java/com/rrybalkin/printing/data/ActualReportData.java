@@ -11,15 +11,12 @@ import java.util.List;
 public class ActualReportData extends ReportData {
 	private final static Logger LOG = Logger.getLogger(StoredReportData.class);
 	private List<Visitor> visitors;
-	private double priceOfLunch, priceOfDinner;
 	private boolean includeEmptyVisitors;
 	
-	public ActualReportData(List<Visitor> visitors, double priceOfLunch, double priceOfDinner, boolean includeEmptyVisitors) {
+	public ActualReportData(List<Visitor> visitors, boolean includeEmptyVisitors) {
 		super();
 		LOG.info("ActualReportData constructor ...");
 		this.visitors = visitors;
-		this.priceOfLunch = priceOfLunch;
-		this.priceOfDinner = priceOfDinner;
 		this.includeEmptyVisitors = includeEmptyVisitors;
 	}
 	
@@ -54,13 +51,6 @@ public class ActualReportData extends ReportData {
 			
 			unit.setLunches(countOfLunches);
 			unit.setDinners(countOfDinners);
-			
-			double costOfLunches = countOfLunches * priceOfLunch; 
-			unit.setLunchPrice(costOfLunches);
-			double costOfDinners = countOfDinners * priceOfDinner; 
-			unit.setDinnerPrice(costOfDinners);
-			double generalCost = costOfLunches + costOfDinners;
-			unit.setTotalCost(generalCost);
 			
 			units.add(unit);
 		}

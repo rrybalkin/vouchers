@@ -4,7 +4,7 @@ import com.rrybalkin.hibernate.dao.TalonDAO;
 import com.rrybalkin.hibernate.entity.Talon;
 import com.rrybalkin.hibernate.factory.HibernateExecutor;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 import static com.rrybalkin.hibernate.dao.utils.QueryStorage.*;
@@ -44,7 +44,7 @@ public class TalonDAOImpl implements TalonDAO {
 	}
 
 	@Override
-	public Collection<Talon> getAll() {
+	public List<Talon> getAll() {
 		return HibernateExecutor.execute(session -> session.createCriteria(Talon.class).list());
 	}
 

@@ -7,6 +7,7 @@ import com.rrybalkin.hibernate.factory.HibernateExecutor;
 import org.hibernate.Query;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -47,7 +48,7 @@ public class VisitorDAOImpl implements VisitorDAO {
     }
 
     @Override
-    public Collection<Visitor> getAll() {
+    public List<Visitor> getAll() {
         return HibernateExecutor.execute(session -> session.createCriteria(Visitor.class).list());
     }
 

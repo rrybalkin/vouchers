@@ -4,7 +4,7 @@ import com.rrybalkin.hibernate.dao.AssociationDAO;
 import com.rrybalkin.hibernate.entity.Association;
 import com.rrybalkin.hibernate.factory.HibernateExecutor;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 import static com.rrybalkin.hibernate.dao.utils.QueryStorage.GET_COUNT_OF_ASSOCIATIONS;
@@ -44,7 +44,7 @@ public class AssociationDAOImpl implements AssociationDAO {
 	}
 
 	@Override
-	public Collection<Association> getAll() {
+	public List<Association> getAll() {
 		return HibernateExecutor.execute(
 				session -> session.createCriteria(Association.class).list());
 	}

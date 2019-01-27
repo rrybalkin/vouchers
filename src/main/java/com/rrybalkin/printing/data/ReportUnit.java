@@ -19,12 +19,6 @@ public class ReportUnit {
     int lunches;
     @Alias(name = "dinners")
     int dinners;
-    @Alias(name = "lunch price")
-    double lunchPrice;
-    @Alias(name = "dinner price")
-    double dinnerPrice;
-    @Alias(name = "total cost")
-    double totalCost;
 
     public String getFirstName() {
         return firstName;
@@ -72,30 +66,6 @@ public class ReportUnit {
 
     public void setDinners(int dinners) {
         this.dinners = dinners;
-    }
-
-    public double getLunchPrice() {
-        return lunchPrice;
-    }
-
-    public void setLunchPrice(double lunchPrice) {
-        this.lunchPrice = lunchPrice;
-    }
-
-    public double getDinnerPrice() {
-        return dinnerPrice;
-    }
-
-    public void setDinnerPrice(double dinnerPrice) {
-        this.dinnerPrice = dinnerPrice;
-    }
-
-    public double getTotalCost() {
-        return totalCost;
-    }
-
-    public void setTotalCost(double totalCost) {
-        this.totalCost = totalCost;
     }
 
     /**

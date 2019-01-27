@@ -48,18 +48,18 @@ public class Converters {
         private final Map<String, Integer> MONTHS = new HashMap<>();
         {
             final Locale locale = Configuration.getInstance().appLocale;
-            MONTHS.put(Month.JANUARY.getDisplayName(TextStyle.FULL, locale), 1);
-            MONTHS.put(Month.FEBRUARY.getDisplayName(TextStyle.FULL, locale), 2);
-            MONTHS.put(Month.MARCH.getDisplayName(TextStyle.FULL, locale), 3);
-            MONTHS.put(Month.APRIL.getDisplayName(TextStyle.FULL, locale), 4);
-            MONTHS.put(Month.MAY.getDisplayName(TextStyle.FULL, locale), 5);
-            MONTHS.put(Month.JUNE.getDisplayName(TextStyle.FULL, locale), 6);
-            MONTHS.put(Month.JULY.getDisplayName(TextStyle.FULL, locale), 7);
-            MONTHS.put(Month.AUGUST.getDisplayName(TextStyle.FULL, locale), 8);
-            MONTHS.put(Month.SEPTEMBER.getDisplayName(TextStyle.FULL, locale), 9);
-            MONTHS.put(Month.OCTOBER.getDisplayName(TextStyle.FULL, locale), 10);
-            MONTHS.put(Month.NOVEMBER.getDisplayName(TextStyle.FULL, locale), 11);
-            MONTHS.put(Month.DECEMBER.getDisplayName(TextStyle.FULL, locale), 12);
+            MONTHS.put(Month.JANUARY.getDisplayName(TextStyle.FULL_STANDALONE, locale), 1);
+            MONTHS.put(Month.FEBRUARY.getDisplayName(TextStyle.FULL_STANDALONE, locale), 2);
+            MONTHS.put(Month.MARCH.getDisplayName(TextStyle.FULL_STANDALONE, locale), 3);
+            MONTHS.put(Month.APRIL.getDisplayName(TextStyle.FULL_STANDALONE, locale), 4);
+            MONTHS.put(Month.MAY.getDisplayName(TextStyle.FULL_STANDALONE, locale), 5);
+            MONTHS.put(Month.JUNE.getDisplayName(TextStyle.FULL_STANDALONE, locale), 6);
+            MONTHS.put(Month.JULY.getDisplayName(TextStyle.FULL_STANDALONE, locale), 7);
+            MONTHS.put(Month.AUGUST.getDisplayName(TextStyle.FULL_STANDALONE, locale), 8);
+            MONTHS.put(Month.SEPTEMBER.getDisplayName(TextStyle.FULL_STANDALONE, locale), 9);
+            MONTHS.put(Month.OCTOBER.getDisplayName(TextStyle.FULL_STANDALONE, locale), 10);
+            MONTHS.put(Month.NOVEMBER.getDisplayName(TextStyle.FULL_STANDALONE, locale), 11);
+            MONTHS.put(Month.DECEMBER.getDisplayName(TextStyle.FULL_STANDALONE, locale), 12);
         }
 
         @Override

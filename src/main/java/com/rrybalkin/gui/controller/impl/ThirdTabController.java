@@ -83,11 +83,13 @@ public class ThirdTabController extends AbstractController implements Initializa
         txtMask.caretPositionProperty().addListener((o, oldValue, newValue) -> {
             String mask = txtMask.getText();
             Report report = lvReports.getSelectionModel().getSelectedItem();
-            tbReport.getItems().clear();
-            if (mask != null && !mask.isEmpty()) {
-                tbReport.getItems().addAll(filterByMask(report.getVisitors(), mask));
-            } else {
-                tbReport.getItems().addAll(report.getVisitors());
+            if (report != null) {
+                tbReport.getItems().clear();
+                if (mask != null && !mask.isEmpty()) {
+                    tbReport.getItems().addAll(filterByMask(report.getVisitors(), mask));
+                } else {
+                    tbReport.getItems().addAll(report.getVisitors());
+                }
             }
         });
 

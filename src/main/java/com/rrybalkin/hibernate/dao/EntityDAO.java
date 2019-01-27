@@ -1,6 +1,6 @@
 package com.rrybalkin.hibernate.dao;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface EntityDAO<T> {
 	
@@ -12,5 +12,5 @@ public interface EntityDAO<T> {
 	
 	T getById(long id) throws Exception;
 	
-	Collection<T> getAll() throws Exception;
+	List<T> getAll() throws Exception;
 }

@@ -2,12 +2,14 @@ package com.rrybalkin.gui.controller;
 
 import com.rrybalkin.hibernate.dao.VisitorDAO;
 import com.rrybalkin.hibernate.factory.DAOFactory;
+import com.rrybalkin.utils.SuppressFBWarnings;
 import javafx.scene.control.TabPane;
 import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.util.concurrent.atomic.AtomicReference;
 
+@SuppressFBWarnings(value = "MS_SHOULD_BE_FINAL", justification = "Need to have it not final")
 public abstract class AbstractController {
 	private static final Logger LOG = Logger.getLogger(AbstractController.class);
 

@@ -16,16 +16,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
@@ -43,16 +42,6 @@ public class FourthTabController extends AbstractController implements Initializ
 	public void initialize(URL url, ResourceBundle resource) {
 		ThirdTabController.addObserver(this);
 
-		cbEnableEmptyVisitors.getItems().clear();
-		cbEnableEmptyVisitors.setConverter(Converters.YES_NO_TO_BOOLEAN);
-		cbEnableEmptyVisitors.getItems().addAll(Boolean.FALSE, Boolean.TRUE);
-		cbEnableEmptyVisitors.getSelectionModel().select(0);
-
-		cbReportFormat.getItems().clear();
-		cbReportFormat.getItems().addAll(ReportType.values());
-		cbReportFormat.setConverter(Converters.REPORT_TYPE_CONVERTER);
-		cbReportFormat.getSelectionModel().select(0);
-
 		seeReport.visibleProperty().set(false);
 
 		lblReportInfo.setTextFill(Color.web(GREEN_COLOR));
@@ -66,7 +55,7 @@ public class FourthTabController extends AbstractController implements Initializ
 		cbMonth.getSelectionModel().select(month);
 
 		cbYear.setConverter(Converters.YEARS_CONVERTER);
-		cbYear.getItems().addAll(year-1, year, year+1);
+		cbYear.getItems().addAll(year-1, year);
 		cbYear.getSelectionModel().select(year);
 
 		cbMonth.valueProperty().addListener((o, oldValue, newValue) -> month = newValue);
@@ -74,17 +63,9 @@ public class FourthTabController extends AbstractController implements Initializ
 	}
 
 	@FXML
-	private ComboBox<Boolean> cbEnableEmptyVisitors;
-	@FXML
-	private ComboBox<ReportType> cbReportFormat;
-	@FXML
 	private Label lblReportInfo;
 	@FXML
 	private Label lblStatus;
-	@FXML
-	private TextField txtCostOfLunch;
-	@FXML
-	private TextField txtCostOfDinner;
 	@FXML
 	private Hyperlink seeReport;
 	@FXML
@@ -94,12 +75,16 @@ public class FourthTabController extends AbstractController implements Initializ
 
 	@FXML
 	void createReport() {
-		LOG.debug("Start generating report ...");
-		ReportType reportType = cbReportFormat.getSelectionModel().getSelectedItem();
+		LOG.info("Start generating report ...");
+		ReportType reportType = ReportType.XLS;
 		try
 		{
-			if (!validate()) return;
-			ReportData reportData = buildReportData();
+			if (!validate()) {
+				LOG.warn("Validation failed, break generating process.");
+				return;
+			}
+
+			final ReportData reportData = buildReportData();
 			String reportDate;
 			if (printingReport != null) {
 				String storedReportName = printingReport.getName();
@@ -109,7 +94,7 @@ public class FourthTabController extends AbstractController implements Initializ
 						+ " " + cbYear.getSelectionModel().getSelectedItem();
 			}
 
-			ReportWriter writer = ReportWriterFactory.getWriter(reportType);
+			final ReportWriter writer = ReportWriterFactory.getWriter(reportType);
 			if (writer == null) {
 				Dialog.showWarning(Messages.get("dialog.warn.type-report-is-not-supported"));
 				return;
@@ -154,27 +139,13 @@ public class FourthTabController extends AbstractController implements Initializ
 	 * @return boolean true - validation is passed, false - validation is failed
 	 */
 	private boolean validate() {
-		String costOfLunch = txtCostOfLunch.getText();
-		String costOfDinner = txtCostOfDinner.getText();
-
-		if (costOfLunch == null || costOfLunch.length() == 0) {
-			Dialog.showWarning(Messages.get("dialog.warn.lunch-price-must-be-filled"));
-			return false;
-		} else if (costOfDinner == null || costOfDinner.length() == 0) {
-			Dialog.showWarning(Messages.get("dialog.warn.dinner-price-must-be-filled"));
+		final Integer selMonth = cbMonth.getSelectionModel().getSelectedItem();
+		final Integer selYear = cbYear.getSelectionModel().getSelectedItem();
+		final LocalDate now = LocalDate.now();
+		if ((selMonth > now.getMonthOfYear() && selYear == now.getYear()) || selYear > now.getYear()) {
+			Dialog.showWarning(Messages.get("dialog.warn.report-date-must-be-present"));
 			return false;
 		}
-
-		try {
-			double lunches = Double.parseDouble(costOfLunch);
-			double dinners = Double.parseDouble(costOfDinner);
-			LOG.debug("Fields validated: lunches = " + lunches + ", dinners = " + dinners);
-		} catch (NumberFormatException e) {
-			LOG.error("Field costOfLunch = " + costOfLunch + " or costOfDinner = " + costOfDinner + " is incorrect!");
-			Dialog.showWarning(Messages.get("dialog.warn.prices-must-be-numeric"));
-			return false;
-		}
-
 		return true;
 	}
 
@@ -185,19 +156,10 @@ public class FourthTabController extends AbstractController implements Initializ
 	private ReportData buildReportData() throws Exception {
 		ReportData reportData;
 
-		boolean includeEmptyVisitors = cbEnableEmptyVisitors.getSelectionModel().getSelectedItem();
-		double costOfLunch = Double.parseDouble(txtCostOfLunch.getText());
-		double costOfDinner = Double.parseDouble(txtCostOfDinner.getText());
-
 		if (printingReport != null) {
-			reportData = new StoredReportData(printingReport, costOfLunch, costOfDinner, includeEmptyVisitors);
+			reportData = new StoredReportData(printingReport, false);
 		} else {
-			reportData = new ActualReportData(
-					new ArrayList<>(daoFactory.getVisitorDAO().getAll()),
-					costOfLunch,
-					costOfDinner,
-					includeEmptyVisitors
-			);
+			reportData = new ActualReportData(daoFactory.getVisitorDAO().getAll(), false);
 		}
 
 		// sorting report data

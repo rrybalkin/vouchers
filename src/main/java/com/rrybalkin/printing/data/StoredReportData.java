@@ -11,15 +11,12 @@ public class StoredReportData extends ReportData {
 	private final static Logger LOG = Logger.getLogger(StoredReportData.class);
 
 	private Report report;
-	private double priceOfLunch, priceOfDinner;
 	private boolean includeEmptyVisitors;
 	
-	public StoredReportData(Report report, double priceOfLunch, double priceOfDinner, boolean includeEmptyVisitors) {
+	public StoredReportData(Report report, boolean includeEmptyVisitors) {
 		super();
 		LOG.info("StoredReportData constructor ...");
 		this.report = report;
-		this.priceOfLunch = priceOfLunch;
-		this.priceOfDinner = priceOfDinner;
 		this.includeEmptyVisitors = includeEmptyVisitors;
 	}
 
@@ -45,15 +42,9 @@ public class StoredReportData extends ReportData {
 					LOG.debug("Visitor = " + visitor.getFIO() + " doesn't have lunches or dinners - ignore!");
 					continue;
 				}
-				
-				double costOfLunches = countOfLunches * priceOfLunch;
-				double costOfDinners = countOfDinners * priceOfDinner;
-				double generalCost = costOfLunches + costOfDinners;
+
 				unit.setLunches(countOfLunches);
 				unit.setDinners(countOfDinners);
-				unit.setLunchPrice(costOfLunches);
-				unit.setDinnerPrice(costOfDinners);
-				unit.setTotalCost(generalCost);
 				
 				units.add(unit);
 			} else {
