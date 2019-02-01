@@ -6,7 +6,6 @@ import com.rrybalkin.hibernate.entity.Visitor;
 import com.rrybalkin.hibernate.factory.HibernateExecutor;
 import org.hibernate.Query;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -53,7 +52,7 @@ public class VisitorDAOImpl implements VisitorDAO {
     }
 
     @Override
-    public Collection<Visitor> getVisitorsByCriteria(final Association a, final String mask) {
+    public List<Visitor> getVisitorsByCriteria(final Association a, final String mask) {
         return HibernateExecutor.execute(session -> {
             Query query;
             if (a != null && (mask != null && !mask.isEmpty())) {
@@ -73,7 +72,7 @@ public class VisitorDAOImpl implements VisitorDAO {
                 throw new IllegalArgumentException("Association or mask shouldn't be null");
             }
 
-            return (Collection<Visitor>) query.list();
+            return query.list();
         });
     }
 

@@ -18,7 +18,8 @@ public class Configuration {
 
     public String pathToReports;
     public String reportNameTemplate;
-    public String macrosDate;
+    public String reportFolderTemplate;
+    public String macrosDate, macrosGroup, macrosTime;
     public int excelTemplateHeaders;
     public Map<String, String> excelTemplateColumns;
     public List<String> excelTemplateStatsColumns;
@@ -33,7 +34,10 @@ public class Configuration {
 
             this.pathToReports = config.getString("report.folder");
             this.reportNameTemplate = config.getString("report.name.template");
+            this.reportFolderTemplate = config.getString("report.folderName.template");
             this.macrosDate = config.getString("report.macros.date");
+            this.macrosGroup = config.getString("report.macros.group");
+            this.macrosTime = config.getString("report.macros.time");
 
             this.excelTemplateHeaders = config.getInt("report.template.excel.headers");
             this.excelTemplateColumns = (Map<String, String>) config.getList("report.template.excel.columns").unwrapped().get(0);

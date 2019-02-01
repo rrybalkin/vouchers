@@ -18,7 +18,6 @@ public class ReportWriterFactory {
 
 		final ReportWriter excelReportWriter = new SinglePageExcelWriter();
 		reportWriters.put(ReportType.XLS, excelReportWriter);
-		reportWriters.put(ReportType.XLSX, excelReportWriter);
 	}
 
 	/**

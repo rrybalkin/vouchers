@@ -58,7 +58,7 @@ public class ThirdTabController extends AbstractController implements Initializa
         cbMonth.getSelectionModel().select(month);
 
         cbYear.setConverter(Converters.YEARS_CONVERTER);
-        cbYear.getItems().addAll(year - 1, year, year + 1);
+        cbYear.getItems().addAll(year - 1, year);
         cbYear.getSelectionModel().select(year);
 
         cbMonth.valueProperty().addListener((o, oldValue, newValue) -> {

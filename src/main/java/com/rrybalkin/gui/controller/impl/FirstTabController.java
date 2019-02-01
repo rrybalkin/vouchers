@@ -258,7 +258,7 @@ public class FirstTabController extends AbstractController implements Initializa
 	private void loadVisitors() {
 		listVisitors.getItems().clear();
 		try {
-			Collection<Visitor> visitors;
+			List<Visitor> visitors;
 			String mask = txtMask.getText();
 			if (mask != null && mask.length() != 0) {
 				loadVisitorsForMask(mask);
@@ -281,7 +281,7 @@ public class FirstTabController extends AbstractController implements Initializa
 	private void loadVisitorsForMask(String mask) {
 		listVisitors.getItems().clear();
 		try {
-			Collection<Visitor> visitors = visitorsDAO.getVisitorsByCriteria(
+			List<Visitor> visitors = visitorsDAO.getVisitorsByCriteria(
 							((chosenFilter.getId() != -1) ? chosenFilter : null),
 							mask);
 			listVisitors.getItems().addAll(sortVisitors(visitors));
@@ -303,11 +303,12 @@ public class FirstTabController extends AbstractController implements Initializa
 		all.setName(Messages.get("group.all-visitors"));
 		filter.getItems().add(all);
 		try {
-			Collection<Association> associations = daoFactory.getAssociationDAO().getAll();
-			filter.getItems().addAll(associations);
+			List<Association> groups = daoFactory.getAssociationDAO().getAll();
+			groups = sortGroups(groups);
+			filter.getItems().addAll(groups);
 			filter.getSelectionModel().selectFirst();
 			chosenFilter = filter.getValue();
-			cbGroups.getItems().addAll(associations);
+			cbGroups.getItems().addAll(groups);
 		} catch (Exception e) {
 			LOG.error("Error while loading filters: ", e);
 		}
@@ -341,18 +342,6 @@ public class FirstTabController extends AbstractController implements Initializa
 		countLunches.getSelectionModel().selectFirst();
 		countDinners.getItems().addAll(counts);
 		countDinners.getSelectionModel().selectFirst();
-	}
-
-	private List<Visitor> sortVisitors(Collection<Visitor> collection) {
-		List<Visitor> visitors = new ArrayList<>(collection);
-		visitors.sort((v1, v2) -> {
-            String fio_1 = v1.getLastName() + " " + v1.getFirstName() + " "
-                    + v1.getMiddleName();
-            String fio_2 = v2.getLastName() + " " + v2.getFirstName() + " "
-                    + v2.getMiddleName();
-            return fio_1.compareTo(fio_2);
-        });
-		return visitors;
 	}
 
 	@Override

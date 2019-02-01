@@ -17,7 +17,7 @@ import javafx.scene.paint.Color;
 import org.apache.log4j.Logger;
 
 import java.net.URL;
-import java.util.Collection;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
@@ -172,7 +172,8 @@ public class SecondTabController extends AbstractController implements Initializ
 
     private void loadGroups() {
         try {
-            Collection<Association> associations = daoFactory.getAssociationDAO().getAll();
+            List<Association> associations = daoFactory.getAssociationDAO().getAll();
+            associations = sortGroups(associations);
             cbGroup.getItems().clear();
             cbGroup.getItems().setAll(associations);
             cbGroup.getSelectionModel().selectFirst();

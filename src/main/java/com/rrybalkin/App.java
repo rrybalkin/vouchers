@@ -10,6 +10,9 @@ public class App {
 	private final static Logger LOG = Logger.getLogger(App.class);
 	static {
 		PropertyConfigurator.configure(Resources.getResource(Resources.LOG4J_CONFIG).getPath());
+
+		System.setProperty("file.encoding", "UTF-8");
+		LOG.info("Default encoding set to UTF-8");
 	}
 
 	public static void main(String[] args) {

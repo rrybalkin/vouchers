@@ -14,7 +14,7 @@ public class InfoVisitor {
 		String[] splitFio = fio.split(" ");
 		this.lastName = splitFio[0];
 		this.firstName = splitFio[1];
-		this.middleName = splitFio.length > 2 ? splitFio[3] : "";
+		this.middleName = splitFio.length > 3 ? splitFio[3] : "";
 		this.group = "";
 		this.lunches = lunches;
 		this.dinners = dinners;

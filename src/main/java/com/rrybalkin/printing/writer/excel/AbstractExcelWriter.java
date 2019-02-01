@@ -5,23 +5,24 @@ import com.rrybalkin.printing.writer.ReportType;
 import com.rrybalkin.printing.writer.ReportWriter;
 import com.rrybalkin.utils.Configuration;
 import com.rrybalkin.utils.Resources;
-import com.rrybalkin.utils.Utils;
 import org.apache.log4j.Logger;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellReference;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+import static com.rrybalkin.utils.Utils.createFolder;
+import static com.rrybalkin.utils.Utils.createUniqueFile;
 
 public abstract class AbstractExcelWriter implements ReportWriter {
     private static final Logger LOG = Logger.getLogger(AbstractExcelWriter.class);
 
     final Configuration config = Configuration.getInstance();
 
+    private ReportType reportType;
     private File reportsFolder;
 
     // columns in template and their indexes
@@ -36,6 +37,8 @@ public abstract class AbstractExcelWriter implements ReportWriter {
     }
 
     AbstractExcelWriter() {
+        this.reportType = ReportType.XLS;
+
         File reportsFolder = new File(config.pathToReports);
         if (!reportsFolder.exists() && !reportsFolder.mkdirs()) {
             throw new IllegalArgumentException("Folder by path=" + config.pathToReports + " does not exist");
@@ -45,7 +48,7 @@ public abstract class AbstractExcelWriter implements ReportWriter {
     }
 
     @Override
-    public File generateReport(ReportType reportType, Iterator<ReportUnit> data, String reportDate) {
+    public File generateReport(Iterator<ReportUnit> data, String reportDate, String reportGroup) {
         LOG.info("Start generating report from data at " + reportDate + " ...");
         try {
             Workbook wb = createNewWorkbook(reportType);
@@ -55,8 +58,12 @@ public abstract class AbstractExcelWriter implements ReportWriter {
             populateWorkbook(wb, data, reportDate);
 
             // Write the output to a file
-            final String reportName = generateReportName(reportDate);
-            File report = Utils.createUniqueFile(reportsFolder, reportName, reportType.name().toLowerCase(Locale.getDefault()));
+            final String reportName = generateReportName(reportDate, reportGroup);
+            File report = createUniqueFile(
+                    generateReportFolder(reportDate),
+                    reportName,
+                    reportType.name().toLowerCase(Locale.getDefault())
+            );
             try (FileOutputStream fileOut = new FileOutputStream(report)) {
                 wb.write(fileOut);
             }
@@ -70,8 +77,30 @@ public abstract class AbstractExcelWriter implements ReportWriter {
 
     protected abstract void populateWorkbook(Workbook workbook, Iterator<ReportUnit> data, String reportDate) throws Exception;
 
-    private String generateReportName(String reportDate) {
-        return config.reportNameTemplate.replace(config.macrosDate, reportDate);
+    private File generateReportFolder(String reportDate) {
+        String name = config.reportFolderTemplate;
+        name = name.replace(config.macrosDate, reportDate);
+        name = name.replace(config.macrosTime, new SimpleDateFormat("dd.MM.yyyy_HHmm").format(new Date()));
+        return createFolder(reportsFolder, name);
+    }
+
+    private String[] specialSymbols = new String[]{".", ",", ":", ";", "\\", "/", "*", "'", "\""};
+    private String generateReportName(String reportDate, String reportGroup) {
+        String name = config.reportNameTemplate;
+        name = name.replace(config.macrosDate, reportDate);
+
+        boolean hasSpecialSymbol = true;
+        for (String symbol : specialSymbols) {
+            do {
+                if (reportGroup.contains(symbol)) {
+                    reportGroup = reportGroup.replace(symbol, "");
+                } else {
+                    hasSpecialSymbol = false;
+                }
+            } while (hasSpecialSymbol);
+        }
+        name = name.replace(config.macrosGroup, reportGroup);
+        return name;
     }
 
     private Workbook createNewWorkbook(ReportType reportType) throws IOException, InvalidFormatException {

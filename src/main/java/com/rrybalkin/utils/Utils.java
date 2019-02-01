@@ -22,6 +22,15 @@ public class Utils {
 			return "";
 		}
 	}
+
+	public static File createFolder(File parentFolder, String folderName) {
+		File folder = new File(parentFolder.getAbsolutePath() + File.separator + folderName);
+		boolean created = folder.mkdir();
+		if (!created && !folder.exists()) {
+			throw new IllegalStateException("Can't create report folder " + folderName);
+		}
+		return folder;
+	}
 	
 	/**
 	 * Method for creating unique file within folder;.

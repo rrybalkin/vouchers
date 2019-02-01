@@ -1,19 +1,19 @@
 package com.rrybalkin.printing.writer;
 
+import com.rrybalkin.printing.data.ReportUnit;
+
 import java.io.File;
 import java.util.Iterator;
-
-import com.rrybalkin.printing.data.ReportUnit;
 
 public interface ReportWriter {
 
 	/**
 	 * Method for generating file report based on provided data.
 	 *
-	 * @param reportType a report type - XLS, XLSX, etc.
 	 * @param data data of generating report
-	 * @param date date of generation report (format = "month YYYY")
+	 * @param reportDate date of generation report (format = "month YYYY")
+	 * @param reportGroup report group of visitors, used as a part of name
 	 * @return generated report file
 	 */
-	File generateReport(ReportType reportType, Iterator<ReportUnit> data, String date);
+	File generateReport(Iterator<ReportUnit> data, String reportDate, String reportGroup);
 }

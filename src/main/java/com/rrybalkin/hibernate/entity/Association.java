@@ -1,12 +1,14 @@
 package com.rrybalkin.hibernate.entity;
 
+import com.rrybalkin.utils.Messages;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "Associations")
 public class Association implements Comparable<Association> {
-    public static final String NO_GROUP = "No group";
+    public static final String NO_GROUP = Messages.get("group.no-group");
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
