@@ -89,9 +89,7 @@ public class Visitor {
 	public boolean equals(Object o) {
 		if (o instanceof Visitor) {
 			Visitor that = (Visitor) o;
-			if (Objects.equals(this.id, that.id)) {
-				return true;
-			}
+			return Objects.equals(this.id, that.id);
 		}
 		return false;
 	}

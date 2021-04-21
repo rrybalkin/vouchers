@@ -26,7 +26,7 @@ public class ThirdTabController extends AbstractController implements Initializa
 
     private Integer month;
     private Integer year;
-    private ReportsManager reportsManager;
+    private final ReportsManager reportsManager;
 
     {
         month = new DateTime().getMonthOfYear();
@@ -35,7 +35,7 @@ public class ThirdTabController extends AbstractController implements Initializa
         reportsManager.loadReports();
     }
 
-    private static Observable observable = new Observable() {
+    private static final Observable observable = new Observable() {
         public void notifyObservers(Object arg) {
             setChanged();
             super.notifyObservers(arg);
@@ -73,9 +73,11 @@ public class ThirdTabController extends AbstractController implements Initializa
 
         // Initialize table for report
         TableColumn columnFIO = tbReport.getColumns().get(0);
-        TableColumn columnLunches = tbReport.getColumns().get(1);
-        TableColumn columnDinners = tbReport.getColumns().get(2);
+        TableColumn columnBreakfasts = tbReport.getColumns().get(1);
+        TableColumn columnLunches = tbReport.getColumns().get(2);
+        TableColumn columnDinners = tbReport.getColumns().get(3);
         columnFIO.setCellValueFactory((new PropertyValueFactory<InfoVisitor, String>("FIO")));
+        columnBreakfasts.setCellValueFactory((new PropertyValueFactory<InfoVisitor, Integer>("breakfasts")));
         columnLunches.setCellValueFactory((new PropertyValueFactory<InfoVisitor, Integer>("lunches")));
         columnDinners.setCellValueFactory((new PropertyValueFactory<InfoVisitor, Integer>("dinners")));
 

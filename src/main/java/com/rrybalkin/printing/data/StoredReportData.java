@@ -27,28 +27,31 @@ public class StoredReportData extends ReportData {
 		units = new ArrayList<>();
 		
 		List<InfoVisitor> visitors = report.getVisitors();
-		for (InfoVisitor visitor : visitors) {
+		for (InfoVisitor v : visitors) {
 			ReportUnit unit = new ReportUnit();
 
-			if (visitor.validate()) {
-				unit.setFirstName(visitor.getFirstName());
-				unit.setLastName(visitor.getLastName());
-				unit.setMiddleName(visitor.getMiddleName());
-				unit.setGroup(visitor.getGroup());
+			if (v.validate()) {
+				unit.setFirstName(v.getFirstName());
+				unit.setLastName(v.getLastName());
+				unit.setMiddleName(v.getMiddleName());
+				unit.setGroup(v.getGroup());
 
-				int countOfLunches = visitor.getLunches();
-				int countOfDinners = visitor.getDinners();
-				if ((countOfLunches == 0 && countOfDinners == 0) && !includeEmptyVisitors) {
-					LOG.debug("Visitor = " + visitor.getFIO() + " doesn't have lunches or dinners - ignore!");
+				int countOfBreakfasts = v.getBreakfasts();
+				int countOfLunches = v.getLunches();
+				int countOfDinners = v.getDinners();
+				if ((countOfBreakfasts == 0 && countOfLunches == 0 && countOfDinners == 0)
+						&& !includeEmptyVisitors) {
+					LOG.debug("Visitor " + v.getFIO() + " doesn't have breakfasts/lunches/dinners - ignore!");
 					continue;
 				}
 
+				unit.setBreakfasts(countOfBreakfasts);
 				unit.setLunches(countOfLunches);
 				unit.setDinners(countOfDinners);
 				
 				units.add(unit);
 			} else {
-				LOG.warn("Information about visitor = " + visitor.getFIO() + " is incorrect!");
+				LOG.warn("Information about visitor = " + v.getFIO() + " is incorrect!");
 			}
 		}
 		

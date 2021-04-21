@@ -7,24 +7,27 @@ public class InfoVisitor {
 	private final String lastName;
 	private final String middleName;
 	private final String group;
+	private final Integer breakfasts;
 	private final Integer lunches;
 	private final Integer dinners;
 
-	public InfoVisitor(String fio, Integer lunches, Integer dinners) {
+	public InfoVisitor(String fio, Integer breakfasts, Integer lunches, Integer dinners) {
 		String[] splitFio = fio.split(" ");
 		this.lastName = splitFio[0];
 		this.firstName = splitFio[1];
 		this.middleName = splitFio.length > 3 ? splitFio[3] : "";
 		this.group = "";
+		this.breakfasts = breakfasts;
 		this.lunches = lunches;
 		this.dinners = dinners;
 	}
 
-	public InfoVisitor(String firstName, String lastName, String middleName, String group, Integer lunches, Integer dinners) {
+	public InfoVisitor(String firstName, String lastName, String middleName, String group, Integer breakfasts, Integer lunches, Integer dinners) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.middleName = middleName;
 		this.group = group;
+		this.breakfasts = breakfasts;
 		this.lunches = lunches;
 		this.dinners = dinners;
 	}
@@ -45,6 +48,10 @@ public class InfoVisitor {
 		return group;
 	}
 
+	public Integer getBreakfasts() {
+		return breakfasts;
+	}
+
 	public Integer getLunches() {
 		return lunches;
 	}
@@ -60,6 +67,7 @@ public class InfoVisitor {
 	public boolean validate() {
 		return StringUtils.isNotEmpty(firstName)
 				&& StringUtils.isNotEmpty(lastName)
+				&& breakfasts != null
 				&& lunches != null
 				&& dinners != null;
 	}

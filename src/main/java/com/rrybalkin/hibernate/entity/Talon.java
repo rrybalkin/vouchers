@@ -16,6 +16,9 @@ public class Talon {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="talon_id")
 	private Long talonId;
+
+	@Column(name="count_breakfast")
+	private int breakfasts;
 	
 	@Column(name="count_lunch")
 	private int lunches;
@@ -30,20 +33,28 @@ public class Talon {
 	public void setId(Long talon_id) {
 		this.talonId = talon_id;
 	}
-	
+
+	public int getBreakfasts() {
+		return breakfasts;
+	}
+
+	public void setBreakfasts(int breakfasts) {
+		this.breakfasts = breakfasts;
+	}
+
 	public int getLunches() {
 		return lunches;
 	}
 
-	public void setLunches(int count_launch) {
-		this.lunches = count_launch;
+	public void setLunches(int lunches) {
+		this.lunches = lunches;
 	}
 
 	public int getDinners() {
 		return dinners;
 	}
 
-	public void setDinners(int count_dinner) {
-		this.dinners = count_dinner;
+	public void setDinners(int dinners) {
+		this.dinners = dinners;
 	}
 }

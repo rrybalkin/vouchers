@@ -3,27 +3,28 @@
         xmlns:tns="http://www.example.org/SaveFormalSchema" elementFormDefault="qualified">
     <complexType name="ReportType">
         <sequence>
-            <element name="Visitors" type="tns:VisitorsType" minOccurs="1" maxOccurs="1"></element>
+            <element name="Visitors" type="tns:VisitorsType" minOccurs="1" maxOccurs="1"/>
         </sequence>
-        <attribute name="month" type="int"></attribute>
-        <attribute name="year" type="int"></attribute>
+        <attribute name="month" type="int"/>
+        <attribute name="year" type="int"/>
     </complexType>
     <complexType name="VisitorType">
         <sequence>
-            <element name="FIO" type="string"></element>
-            <element name="Lunches" type="int"></element>
-            <element name="Dinners" type="int"></element>
+            <element name="FIO" type="string"/>
+            <element name="Breakfasts" type="int"/>
+            <element name="Lunches" type="int"/>
+            <element name="Dinners" type="int"/>
         </sequence>
     </complexType>
     <complexType name="VisitorsType">
         <sequence>
-            <element name="Visitor" type="tns:VisitorType" minOccurs="1" maxOccurs="unbounded"></element>
+            <element name="Visitor" type="tns:VisitorType" minOccurs="1" maxOccurs="unbounded"/>
         </sequence>
     </complexType>
     <complexType name="RootType">
         <sequence>
-            <element name="Report" type="tns:ReportType" minOccurs="1" maxOccurs="1"></element>
+            <element name="Report" type="tns:ReportType" minOccurs="1" maxOccurs="1"/>
         </sequence>
     </complexType>
-    <element name="Root" type="tns:RootType"></element>
+    <element name="Root" type="tns:RootType"/>
 </schema>

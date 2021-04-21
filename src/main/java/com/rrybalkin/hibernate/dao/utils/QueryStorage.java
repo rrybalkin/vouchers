@@ -32,7 +32,11 @@ public abstract class QueryStorage {
                     "  WHERE t.talonId = :" + TALON_BIND;
     public static final String RESET_ALL_TALONS =
             "UPDATE Talon t" +
-                    "  SET t.lunches = 0, t.dinners = 0";
+                    "  SET t.breakfasts = 0, t.lunches = 0, t.dinners = 0";
+    public static final String RESET_BREAKFASTS_BY_TALON =
+        "UPDATE Talon t " +
+            "  SET t.breakfasts = 0" +
+            "  WHERE t.talonId = :" + TALON_BIND;
     public static final String RESET_LUNCHES_BY_TALON =
             "UPDATE Talon t " +
                     "  SET t.lunches = 0" +
@@ -41,6 +45,8 @@ public abstract class QueryStorage {
             "UPDATE Talon t " +
                     "  SET t.dinners = 0" +
                     "  WHERE t.talonId = :" + TALON_BIND;
+    public static final String GET_COUNT_OF_BREAKFASTS =
+        "SELECT SUM(t.breakfasts) FROM Talon t";
     public static final String GET_COUNT_OF_LUNCHES =
             "SELECT SUM(t.lunches) FROM Talon t";
     public static final String GET_COUNT_OF_DINNERS =

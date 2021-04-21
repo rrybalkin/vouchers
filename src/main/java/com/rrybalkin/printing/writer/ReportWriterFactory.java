@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class ReportWriterFactory {
 
-	private static Map<ReportType, ReportWriter> reportWriters;
+	private static final Map<ReportType, ReportWriter> reportWriters;
 	static {
 		reportWriters = new HashMap<>();
 

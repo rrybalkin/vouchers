@@ -51,4 +51,11 @@ public abstract class ReportData implements Iterator<ReportUnit> {
 	}
 	
 	protected abstract void extractData();
+
+	@Override
+	public String toString() {
+		return "ReportData{" +
+				"units=" + units +
+				'}';
+	}
 }

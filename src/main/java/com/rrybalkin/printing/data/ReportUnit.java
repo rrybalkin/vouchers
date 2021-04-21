@@ -15,6 +15,8 @@ public class ReportUnit {
     String middleName;
     @Alias(name = "group")
     String group;
+    @Alias(name = "breakfasts")
+    int breakfasts;
     @Alias(name = "lunches")
     int lunches;
     @Alias(name = "dinners")
@@ -50,6 +52,14 @@ public class ReportUnit {
 
     public void setGroup(String group) {
         this.group = group;
+    }
+
+    public int getBreakfasts() {
+        return breakfasts;
+    }
+
+    public void setBreakfasts(int breakfasts) {
+        this.breakfasts = breakfasts;
     }
 
     public int getLunches() {
@@ -90,5 +100,18 @@ public class ReportUnit {
     @Retention(value = RetentionPolicy.RUNTIME)
     public @interface Alias {
         String name();
+    }
+
+    @Override
+    public String toString() {
+        return "ReportUnit{" +
+            "firstName='" + firstName + '\'' +
+            ", lastName='" + lastName + '\'' +
+            ", middleName='" + middleName + '\'' +
+            ", group='" + group + '\'' +
+            ", breakfasts=" + breakfasts +
+            ", lunches=" + lunches +
+            ", dinners=" + dinners +
+            '}';
     }
 }

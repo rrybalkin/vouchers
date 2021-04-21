@@ -32,6 +32,7 @@ public class ReportsSaver {
 		for (InfoVisitor info : infoVisitors) {
 			VisitorType visitor = new VisitorType();
 			visitor.setFIO(info.getFIO());
+			visitor.setBreakfasts(info.getBreakfasts());
 			visitor.setLunches(info.getLunches());
 			visitor.setDinners(info.getDinners());
 			

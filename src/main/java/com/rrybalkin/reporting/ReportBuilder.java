@@ -28,6 +28,7 @@ public class ReportBuilder {
 					v.getLastName(),
 					v.getMiddleName(),
 					v.getAssociation().getName(),
+					v.getTalon().getBreakfasts(),
 					v.getTalon().getLunches(),
 					v.getTalon().getDinners()
 			);
@@ -41,7 +42,7 @@ public class ReportBuilder {
 
 	private String getName() {
 		final DateTime dt = today();
-		return String.valueOf(dt.getDayOfMonth()) +
+		return dt.getDayOfMonth() +
 				"_" +
 				dt.monthOfYear().getAsText(new Locale("ru")) +
 				"_" +

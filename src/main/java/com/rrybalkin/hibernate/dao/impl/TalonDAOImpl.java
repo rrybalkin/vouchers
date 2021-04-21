@@ -55,15 +55,27 @@ public class TalonDAOImpl implements TalonDAO {
 	}
 
 	@Override
-	public void resetLunchById(final long id) {
+	public void resetBreakfastById(long id) {
+		HibernateExecutor.execute(
+				session -> session.createQuery(RESET_BREAKFASTS_BY_TALON).setLong(TALON_BIND, id).executeUpdate());
+	}
+
+	@Override
+	public void resetLunchById(long id) {
 		HibernateExecutor.execute(
 				session -> session.createQuery(RESET_LUNCHES_BY_TALON).setLong(TALON_BIND, id).executeUpdate());
 	}
 
 	@Override
-	public void resetDinnerById(final long id) {
+	public void resetDinnerById(long id) {
 		HibernateExecutor.execute(
 				session -> session.createQuery(RESET_DINNERS_BY_TALON).setLong(TALON_BIND, id).executeUpdate());
+	}
+
+	@Override
+	public int getCountBreakfasts() {
+		return HibernateExecutor.execute(
+				session -> (Integer) session.createQuery(GET_COUNT_OF_BREAKFASTS).uniqueResult());
 	}
 
 	@Override

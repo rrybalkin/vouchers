@@ -10,8 +10,8 @@ import java.util.List;
 
 public class ActualReportData extends ReportData {
 	private final static Logger LOG = Logger.getLogger(StoredReportData.class);
-	private List<Visitor> visitors;
-	private boolean includeEmptyVisitors;
+	private final List<Visitor> visitors;
+	private final boolean includeEmptyVisitors;
 	
 	public ActualReportData(List<Visitor> visitors, boolean includeEmptyVisitors) {
 		super();
@@ -27,11 +27,13 @@ public class ActualReportData extends ReportData {
 		units = new ArrayList<>();
 		
 		for (Visitor visitor : visitors) {
+			int countOfBreakfasts = visitor.getTalon().getBreakfasts();
 			int countOfLunches = visitor.getTalon().getLunches();
 			int countOfDinners = visitor.getTalon().getDinners();
-			
-			if ((countOfLunches == 0 && countOfDinners == 0) && !includeEmptyVisitors) {
-				LOG.debug("Visitor = " + visitor.getFIO() + " doesn't have lunches or dinners - ignore!");
+
+			if ((countOfBreakfasts == 0 && countOfLunches == 0 && countOfDinners == 0)
+					&& !includeEmptyVisitors) {
+				LOG.debug("Visitor " + visitor.getFIO() + " doesn't have breakfasts/lunches/dinners - ignore!");
 				continue;
 			}
 			
@@ -48,7 +50,8 @@ public class ActualReportData extends ReportData {
 			if (!Association.NO_GROUP.equals(groupName)) {
 				unit.setGroup(groupName);
 			}
-			
+
+			unit.setBreakfasts(countOfBreakfasts);
 			unit.setLunches(countOfLunches);
 			unit.setDinners(countOfDinners);
 			

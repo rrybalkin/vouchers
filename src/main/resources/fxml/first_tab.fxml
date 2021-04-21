@@ -1,88 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.collections.FXCollections?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-<?import java.lang.*?>
-
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="510.0" prefWidth="653.0" xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.rrybalkin.gui.controller.impl.FirstTabController">
-  <SplitPane dividerPositions="0.4608294930875576" focusTraversable="true" prefHeight="510.0" prefWidth="653.0">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="510.0" prefWidth="653.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="com.rrybalkin.gui.controller.impl.FirstTabController">
+  <SplitPane dividerPositions="0.4608294930875576" focusTraversable="true" layoutX="-1.0" prefHeight="510.0" prefWidth="653.0">
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-      <ListView fx:id="listVisitors" layoutX="14.0" layoutY="83.0" onKeyPressed="#keyPressed"
-                onMouseClicked="#chooseVisitor" prefHeight="404.0" prefWidth="267.0"/>
-      <TextField fx:id="txtMask" layoutX="14.0" layoutY="41.0" prefHeight="33.0" prefWidth="267.0"/>
-      <ComboBox id="filterGroup" fx:id="filter" layoutX="112.0" layoutY="13.0" onAction="#changeGroup" prefHeight="21.0" prefWidth="169.0">
-      </ComboBox>
-      <Label layoutX="14.0" layoutY="18.0" text="Фильтровать по:"/>
-      <Label fx:id="lblInfo" layoutX="14.0" layoutY="486.0"/>
+      <ListView fx:id="listVisitors" layoutX="14.0" layoutY="83.0" onKeyPressed="#keyPressed" onMouseClicked="#chooseVisitor" prefHeight="404.0" prefWidth="267.0" />
+      <TextField fx:id="txtMask" layoutX="14.0" layoutY="41.0" prefHeight="33.0" prefWidth="267.0" />
+      <ComboBox id="filterGroup" fx:id="filter" layoutX="112.0" layoutY="13.0" onAction="#changeGroup" prefHeight="21.0" prefWidth="169.0" />
+      <Label layoutX="14.0" layoutY="18.0" text="Фильтровать по:" />
+      <Label fx:id="lblInfo" layoutX="14.0" layoutY="486.0" />
     </AnchorPane>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="508.0" prefWidth="337.0">
-      <TitledPane animated="false" collapsible="false" prefHeight="144.0" prefWidth="348.0"
-                  text="Информация о посетителе">
+      <TitledPane animated="false" collapsible="false" prefHeight="166.0" prefWidth="350.0" text="Информация о посетителе">
         <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="115.0" prefWidth="344.0">
-          <Label fx:id="lblFIO" layoutX="13.0" layoutY="6.0" text="ФИО:">
+          <Label fx:id="lblFIO" layoutX="13.0" layoutY="5.0" text="ФИО:">
             <font>
-              <Font size="14.0" fx:id="x1"/>
+              <Font size="14.0" fx:id="x1" />
             </font>
           </Label>
-          <Label fx:id="lblGroup" font="$x1" layoutX="13.0" layoutY="33.0" text="Группа:"/>
-          <Label fx:id="lblLunches" font="$x1" layoutX="14.0" layoutY="61.0" text="Колличество обедов:"/>
-          <Label fx:id="lblDinners" font="$x1" layoutX="14.0" layoutY="87.0" text="Колличество ужинов:"/>
+          <Label fx:id="lblGroup" font="$x1" layoutX="13.0" layoutY="29.0" text="Группа:" />
+          <Label fx:id="lblBreakfasts" font="$x1" layoutX="13.0" layoutY="53.0" text="Колличество завтраков:" />
+          <Label fx:id="lblLunches" font="$x1" layoutX="13.0" layoutY="77.0" text="Колличество обедов:" />
+          <Label fx:id="lblDinners" font="$x1" layoutX="13.0" layoutY="100.0" text="Колличество ужинов:" />
         </AnchorPane>
       </TitledPane>
-      <TitledPane animated="false" collapsible="false" layoutY="144.0" prefHeight="141.0" prefWidth="348.0"
-                  text="Добавление обедов и ужинов">
-        <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-          <Label font="$x1" layoutX="13.0" layoutY="13.0" text="Колличество обедов:"/>
-          <Label font="$x1" layoutX="14.0" layoutY="51.0" text="Колличество ужинов:"/>
-          <Button fx:id="btnAdd" disable="true" layoutX="136.0" layoutY="88.0" mnemonicParsing="false"
-                  onAction="#addTalon" text="Добавить"/>
-          <ComboBox fx:id="countLunches" disable="true" layoutX="161.0" layoutY="13.0">
+      <TitledPane animated="false" collapsible="false" layoutX="1.0" layoutY="166.0" prefHeight="186.0" prefWidth="348.0" text="Добавление обедов и ужинов">
+        <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="127.0" prefWidth="342.0">
+          <Label font="$x1" layoutX="13.0" layoutY="3.0" text="Колличество завтраков:" />
+          <Label font="$x1" layoutX="13.0" layoutY="35.0" text="Колличество обедов:" />
+          <Label font="$x1" layoutX="13.0" layoutY="63.0" text="Колличество ужинов:" />
+          <Button fx:id="btnAdd" disable="true" layoutX="140.0" layoutY="95.0" mnemonicParsing="false" onAction="#addTalon" text="Добавить" />
+          <ComboBox fx:id="countBreakfasts" disable="true" layoutX="174.0" layoutY="2.0">
             <items>
-              <FXCollections fx:factory="observableArrayList">
-                <String fx:value="Item 1"/>
-                <String fx:value="Item 2"/>
-                <String fx:value="Item 3"/>
-              </FXCollections>
+              <FXCollections fx:factory="observableArrayList" />
             </items>
           </ComboBox>
-          <ComboBox fx:id="countDinners" disable="true" layoutX="161.0" layoutY="51.0">
+          <ComboBox fx:id="countLunches" disable="true" layoutX="174.0" layoutY="33.0">
             <items>
-              <FXCollections fx:factory="observableArrayList">
-                <String fx:value="Item 1"/>
-                <String fx:value="Item 2"/>
-                <String fx:value="Item 3"/>
-              </FXCollections>
+              <FXCollections fx:factory="observableArrayList" />
+            </items>
+          </ComboBox>
+          <ComboBox fx:id="countDinners" disable="true" layoutX="174.0" layoutY="61.0">
+            <items>
+              <FXCollections fx:factory="observableArrayList" />
             </items>
           </ComboBox>
         </AnchorPane>
       </TitledPane>
-      <TitledPane fx:id="titledPane" animated="false" disable="true" expanded="false" layoutY="285.0"
-                  onMouseClicked="#clickOnTitledPane" prefHeight="223.0" prefWidth="348.0"
-                  text="Изменение данных о пользователе">
-        <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-          <Label layoutX="14.0" layoutY="134.0" text="Группа:"/>
-          <TextField fx:id="txtLastName" layoutX="14.0" layoutY="26.0" prefWidth="200.0"/>
-          <Label layoutX="14.0" layoutY="6.0" text="*Фамимлия:"/>
-          <TextField fx:id="txtFirstName" layoutX="14.0" layoutY="68.0" prefWidth="200.0"/>
-          <Label layoutX="14.0" layoutY="48.0" text="*Имя:"/>
-          <TextField fx:id="txtMiddleName" layoutX="14.0" layoutY="110.0" prefWidth="200.0"/>
-          <Label layoutX="14.0" layoutY="90.0" text="Отчество:"/>
-          <ComboBox id="cbGroup" fx:id="cbGroups" layoutX="14.0" layoutY="152.0" prefHeight="21.0"
-                    prefWidth="198.0">
+      <TitledPane fx:id="titledPane" animated="false" disable="true" expanded="false" layoutY="330.0" onMouseClicked="#clickOnTitledPane" prefHeight="178.0" prefWidth="348.0" text="Изменение данных о пользователе">
+        <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="170.0" prefWidth="342.0">
+          <Label layoutX="18.0" layoutY="94.0" text="Группа:" />
+          <TextField fx:id="txtLastName" layoutX="131.0" layoutY="6.0" prefWidth="200.0" />
+          <Label layoutX="18.0" layoutY="5.0" text="*Фамилия:" />
+          <TextField fx:id="txtFirstName" layoutX="131.0" layoutY="36.0" prefWidth="200.0" />
+          <Label layoutX="17.0" layoutY="37.0" text="*Имя:" />
+          <TextField fx:id="txtMiddleName" layoutX="131.0" layoutY="68.0" prefWidth="200.0" />
+          <Label layoutX="18.0" layoutY="70.0" text="Отчество:" />
+          <ComboBox id="cbGroup" fx:id="cbGroups" layoutX="16.0" layoutY="117.0" prefHeight="21.0" prefWidth="198.0">
             <items>
-              <FXCollections fx:factory="observableArrayList">
-                <String fx:value="Item 1"/>
-                <String fx:value="Item 2"/>
-                <String fx:value="Item 3"/>
-              </FXCollections>
+              <FXCollections fx:factory="observableArrayList"/>
             </items>
           </ComboBox>
-          <Button fx:id="btnSave" layoutX="243.0" layoutY="81.0" mnemonicParsing="false"
-                  onAction="#updateVisitor" prefHeight="33.0" prefWidth="86.0" text="Сохранить"/>
+          <Button layoutX="242.0" layoutY="115.0" mnemonicParsing="false" onAction="#updateVisitor" prefHeight="33.0" prefWidth="86.0" text="Сохранить" />
         </AnchorPane>
       </TitledPane>
     </AnchorPane>

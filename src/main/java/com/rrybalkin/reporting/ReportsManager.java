@@ -17,7 +17,7 @@ import java.util.List;
 public class ReportsManager {
 	
 	private List<Report> reports;
-	private String pathToReports;
+	private final String pathToReports;
 	
 	public ReportsManager(String pathToReports) {
 		this.pathToReports = pathToReports;
@@ -70,7 +70,7 @@ public class ReportsManager {
 		
 		List<InfoVisitor> infoVisitors = new ArrayList<>();
 		for (VisitorType v : visitors) {
-			InfoVisitor infoVisitor = new InfoVisitor(v.getFIO(), v.getLunches(), v.getDinners());
+			InfoVisitor infoVisitor = new InfoVisitor(v.getFIO(), v.getBreakfasts(), v.getLunches(), v.getDinners());
 			
 			infoVisitors.add(infoVisitor);
 		}

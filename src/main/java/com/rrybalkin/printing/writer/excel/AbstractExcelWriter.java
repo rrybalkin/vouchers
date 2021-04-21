@@ -22,8 +22,8 @@ public abstract class AbstractExcelWriter implements ReportWriter {
 
     final Configuration config = Configuration.getInstance();
 
-    private ReportType reportType;
-    private File reportsFolder;
+    private final ReportType reportType;
+    private final File reportsFolder;
 
     // columns in template and their indexes
     Map<String, Integer> columnIndexes;
@@ -84,7 +84,7 @@ public abstract class AbstractExcelWriter implements ReportWriter {
         return createFolder(reportsFolder, name);
     }
 
-    private String[] specialSymbols = new String[]{".", ",", ":", ";", "\\", "/", "*", "'", "\""};
+    private final String[] specialSymbols = new String[]{".", ",", ":", ";", "\\", "/", "*", "'", "\""};
     private String generateReportName(String reportDate, String reportGroup) {
         String name = config.reportNameTemplate;
         name = name.replace(config.macrosDate, reportDate);

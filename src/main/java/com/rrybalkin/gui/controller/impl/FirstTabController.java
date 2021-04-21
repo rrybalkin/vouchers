@@ -36,6 +36,7 @@ public class FirstTabController extends AbstractController implements Initializa
 		// remember the initial labels text
 		this.lblFIOText = lblFIO.getText();
 		this.lblGroupText = lblGroup.getText();
+		this.lblBreakfastsText = lblBreakfasts.getText();
 		this.lblLunchesText = lblLunches.getText();
 		this.lblDinnersText = lblDinners.getText();
 
@@ -71,11 +72,16 @@ public class FirstTabController extends AbstractController implements Initializa
 	private Label lblGroup;
 	private String lblGroupText;
 	@FXML
+	private Label lblBreakfasts;
+	private String lblBreakfastsText;
+	@FXML
 	private Label lblLunches;
 	private String lblLunchesText;
 	@FXML
 	private Label lblDinners;
 	private String lblDinnersText;
+	@FXML
+	private ComboBox<Integer> countBreakfasts;
 	@FXML
 	private ComboBox<Integer> countLunches;
 	@FXML
@@ -97,9 +103,11 @@ public class FirstTabController extends AbstractController implements Initializa
 
 	@FXML
 	void addTalon() {
+		Integer breakfasts = countBreakfasts.getValue();
 		Integer lunches = countLunches.getValue();
 		Integer dinners = countDinners.getValue();
 		Talon talon = chosenVisitor.getTalon();
+		talon.setBreakfasts(talon.getBreakfasts() + breakfasts);
 		talon.setDinners(talon.getDinners() + dinners);
 		talon.setLunches(talon.getLunches() + lunches);
 		try {
@@ -108,6 +116,7 @@ public class FirstTabController extends AbstractController implements Initializa
 			Dialog.showErrorOnException(e);
 			LOG.error("Error while adding new talon: " + talon, e);
 		}
+		countBreakfasts.getSelectionModel().selectFirst();
 		countLunches.getSelectionModel().selectFirst();
 		countDinners.getSelectionModel().selectFirst();
 		loadInfoAboutVisitor();
@@ -178,7 +187,26 @@ public class FirstTabController extends AbstractController implements Initializa
 					LOG.error("Error while deleting visitor: ", e);
 				}
 			}
-		} else if (event.getCode() == KeyCode.L /* Lunches */) {
+		} else if (event.getCode() == KeyCode.P /* Breakfasts */) {
+			int answer = Dialog.showQuestion(Messages.get("dialog.question.do-visitor-breakfasts-reset", selectedVisitor.getFIO()), event);
+			if (answer == Dialog.YES) {
+				try {
+					Visitor visitor = listVisitors.getSelectionModel().getSelectedItem();
+					if (visitor != null) {
+						daoFactory.getTalonDAO().resetBreakfastById(visitor.getTalon().getId());
+						loadVisitors();
+						if (chosenVisitor != null && chosenVisitor.equals(visitor)) {
+							chosenVisitor.getTalon().setBreakfasts(0);
+							loadInfoAboutVisitor();
+						}
+						LOG.info("Breakfasts for visitor = [" + visitor + "] were reset");
+					}
+				} catch (Exception e) {
+					Dialog.showErrorOnException(e);
+					LOG.error("Error while doing reset lunches: ", e);
+				}
+			}
+		} else if (event.getCode() == KeyCode.J /* Lunches */) {
 			int answer = Dialog.showQuestion(Messages.get("dialog.question.do-visitor-lunches-reset", selectedVisitor.getFIO()), event);
 			if (answer == Dialog.YES) {
 				try {
@@ -198,7 +226,7 @@ public class FirstTabController extends AbstractController implements Initializa
 					LOG.error("Error while doing reset lunches: ", e);
 				}
 			}
-		} else if (event.getCode() == KeyCode.D /* Dinners */) {
+		} else if (event.getCode() == KeyCode.E /* Dinners */) {
 			int answer = Dialog.showQuestion(Messages.get("dialog.question.do-visitor-dinners-reset", selectedVisitor.getFIO()), event);
 			if (answer == Dialog.YES) {
 				try {
@@ -238,7 +266,7 @@ public class FirstTabController extends AbstractController implements Initializa
 
 	@FXML
 	void clickOnTitledPane() {
-		Boolean expanded = titledPane.expandedProperty().get();
+		boolean expanded = titledPane.expandedProperty().get();
 		if (expanded) {
 			// Set data in Fields
 			if (chosenVisitor != null) {
@@ -321,11 +349,13 @@ public class FirstTabController extends AbstractController implements Initializa
 					+ chosenVisitor.getMiddleName());
 			lblGroup.setText(lblGroupText + " " + chosenVisitor.getAssociation().getName());
 			Talon talon = chosenVisitor.getTalon();
+			lblBreakfasts.setText(lblBreakfastsText + " " + talon.getBreakfasts());
 			lblLunches.setText(lblLunchesText + " " + talon.getLunches());
 			lblDinners.setText(lblDinnersText + " " + talon.getDinners());
 
 			titledPane.setDisable(false);
 			btnAdd.setDisable(false);
+			countBreakfasts.setDisable(false);
 			countLunches.setDisable(false);
 			countDinners.setDisable(false);
 		}
@@ -336,12 +366,11 @@ public class FirstTabController extends AbstractController implements Initializa
 		for (int i = 0; i <= MAX_COUNT; i++) {
 			counts.add(i);
 		}
-		countLunches.getItems().clear();
-		countDinners.getItems().clear();
-		countLunches.getItems().addAll(counts);
-		countLunches.getSelectionModel().selectFirst();
-		countDinners.getItems().addAll(counts);
-		countDinners.getSelectionModel().selectFirst();
+		for (ComboBox<Integer> cb : Arrays.asList(countBreakfasts, countLunches, countDinners)) {
+			cb.getItems().clear();
+			cb.getItems().addAll(counts);
+			cb.getSelectionModel().selectFirst();
+		}
 	}
 
 	@Override
