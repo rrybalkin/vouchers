@@ -10,7 +10,7 @@
     <properties>
         <spring.version>4.2.2.RELEASE</spring.version>
         <hibernate.version>5.0.1.Final</hibernate.version>
-        <apache.poi.version>3.12</apache.poi.version>
+        <apache.poi.version>4.1.1</apache.poi.version>
     </properties>
 
     <dependencies>
